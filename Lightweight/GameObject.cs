@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Lightweight
 {
-    internal abstract class GameObject
+    public abstract class GameObject
     {
         protected Texture2D texture;
         protected Vector2 position;
