@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-    internal class IShoot
+    internal interface IShoot
     {
     }
 }
