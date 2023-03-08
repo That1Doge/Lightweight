@@ -9,6 +9,12 @@ namespace Lightweight
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        int windowWidth;
+        int windowHeight;
+        private Texture2D floorTile;
+        private Texture2D wall;
+        
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -18,15 +24,17 @@ namespace Lightweight
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            windowWidth = _graphics.PreferredBackBufferWidth;
+            windowHeight = _graphics.PreferredBackBufferHeight;
+            
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            floorTile = Content.Load<Texture2D>("floor_tile");
+            wall = Content.Load<Texture2D>("starter_wall");
             // TODO: use this.Content to load your game content here
         }
 
@@ -43,9 +51,18 @@ namespace Lightweight
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
             // TODO: Add your drawing code here
 
+            //Creates floor tile object
+            Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
+            Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
+
+            //This draws the tiles across the screen
+            floorTileObject.Draw(_spriteBatch);
+
+            _spriteBatch.End();  
             base.Draw(gameTime);
         }
     }
