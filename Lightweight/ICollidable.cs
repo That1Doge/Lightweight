@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-    internal interface IShoot
+    internal interface ICollidable
     {
-
+       public bool Intersects(GameObject thing);
     }
 }
