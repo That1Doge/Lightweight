@@ -67,10 +67,14 @@ namespace Lightweight
         {
             // keyboard state information
             KeyboardState kb = Keyboard.GetState();
+
+            // direction
             direction = Vector2.Zero;
 
+            // doesn't take input while rolling
             if(!isRolling )
             {
+                // WASD changes direction
                 if (kb.IsKeyDown(Keys.W))
                 {
                     direction.Y -= 1f;
@@ -93,9 +97,11 @@ namespace Lightweight
                     direction = Vector2.Normalize(direction);
                 }
 
+                // increments position
                 position += direction * speed;
             }
 
+            // animation transition switch
             switch (playerState)
             {
                 case PlayerState.FaceLeft:
@@ -161,6 +167,8 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceLeft;
                     }
+
+                    // automatically moves according to roll direction
                     position.X -= speed;
                     break;
                 case PlayerState.RollRight:
@@ -168,6 +176,8 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceRight;
                     }
+
+                    // automatically moves according to roll direction
                     position.X += speed;
                     break;
             }
