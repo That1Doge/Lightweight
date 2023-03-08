@@ -8,5 +8,6 @@ namespace Lightweight
 {
     internal class IShoot
     {
+
     }
 }
