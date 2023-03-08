@@ -23,8 +23,20 @@ namespace Lightweight
 
     public class Player : GameObject, IShoot, IMove, ITakeDamage
     {
-        // player state enum
-        private PlayerState playerState;
+        int playerHealth;
+        int playerDefense;
+
+        public int PlayerHealth
+        {
+            get { return playerHealth; }
+            set { playerHealth = value; }
+        }
+
+        public int PlayerDefense
+        {
+            get { return playerDefense; }
+            set { playerDefense = value; }
+        }
 
         // Sprite sheet data
         private int numSprites;
@@ -258,6 +270,12 @@ namespace Lightweight
                 Vector2.One,                            // no scaling
                 flip,                                   // flip
                 0.0f);                                  // layer depth
+        }
+        public void ITakeDamage(int damage, int defense)
+        {
+            //damage taken is reduced by defense of player,
+            //possibly modified by armor or similar attributes
+            this.playerHealth = playerHealth - (damage - defense);
         }
     }
 }

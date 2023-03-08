@@ -8,6 +8,6 @@ namespace Lightweight
 {
     internal interface ITakeDamage
     {
-
+        void ITakeDamage(int damage, int damageReduction);
     }
 }

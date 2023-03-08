@@ -8,5 +8,11 @@ namespace Lightweight
 {
     internal interface IShoot
     {
+        /// <summary>
+        /// Instantiate a new bullet object at this object's position
+        /// moving in the direction of the target object
+        /// </summary>
+        /// <param name="target">The object that the bullet is directed towards</param>
+        public void Shoot(GameObject target);
     }
 }
