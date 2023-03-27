@@ -9,11 +9,16 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
+    /// <summary>
+    /// Class that handles what the Menu Buttons look like, what text they have,
+    ///     and what position they are at
+    /// </summary>
     internal class MenuButton : GameObject
     {
         // Fields for the menu buttons
         private MouseState prevMState;
         private Rectangle rect;
+        private SpriteFont text;
 
         /// <summary>
         /// Parameterized constructor for the button, giving it the looks of the button
@@ -21,12 +26,13 @@ namespace Lightweight
         /// <param name="texture">The image for the button</param>
         /// <param name="rect">the size of the button</param>
         /// <param name="position">the position of the button</param>
-        public MenuButton(Texture2D texture, Rectangle rect, Vector2 position) : 
+        public MenuButton(Texture2D texture, SpriteFont text, Rectangle rect, Vector2 position) : 
             base(texture, position)
         {
             this.texture = texture;
             this.rect = rect;
             this.position = position;
+            this.text = text;
         }
 
         /// <summary>
@@ -62,12 +68,17 @@ namespace Lightweight
         /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb)
         {
-            // Draws the button with its texture, at the positon, with a hitbox of a rectangle
+            // Draws the button with its texture, at the positon, with a hitbox of a rectangle, and the text above it
             sb.Draw(
                 texture,
                 position,
                 rect,
                 Color.White);
+            sb.DrawString(
+                text,
+                "test",
+                position,
+                Color.Black);
         }
 
         /// <summary>
