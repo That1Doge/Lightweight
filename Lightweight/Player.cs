@@ -17,17 +17,17 @@ namespace Lightweight
         int playerHealth;
         int playerDefense;
 
-    //    public int PlayerHealth
-    //    {
-    //        get { return playerHealth; }
-    //        set { playerHealth = value; }
-    //    }
+        public int PlayerHealth
+        {
+            get { return playerHealth; }
+            set { playerHealth = value; }
+        }
 
-    //    public int PlayerDefense
-    //    {
-    //        get { return playerDefense; }
-    //        set { playerDefense = value; }
-    //    }
+        public int PlayerDefense
+        {
+            get { return playerDefense; }
+            set { playerDefense = value; }
+        }
 
         public float Speed { get { return speed; } set { speed = value; } }
 
