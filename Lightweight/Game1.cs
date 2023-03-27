@@ -29,6 +29,8 @@ namespace Lightweight
         private MenuStates menuState;
         private MenuButton button;
         private SpriteFont buttonText;
+        private Player player;
+        private Texture2D horizontalWall;
 
         public Game1()
         {
@@ -69,12 +71,12 @@ namespace Lightweight
             {
                 case MenuStates.MainMenu:
                     // Tests the menu state 
-                    /*
+                    
                     if(Keyboard.GetState().IsKeyDown(Keys.W))
                     {
                         menuState = MenuStates.Gameplay;
                     }
-                    */
+                    
 
 
                     break;
@@ -121,20 +123,20 @@ namespace Lightweight
                     break;
                 case MenuStates.Gameplay:
                     //Creates floor tile object
-                    Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
-                        windowHeight, windowWidth);
-                    Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
-                        windowHeight, windowWidth);
+                    //Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
+                        //windowHeight, windowWidth);
+                    //Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
+                        //windowHeight, windowWidth);
             //Creates floor tile/wall objects
-            Tile floorTileObject = new Tile(floorTile, new Rectangle(100, 80, 16, 16), windowHeight, windowWidth);
-            Wall walls = new Wall(wall, new Rectangle(100, 80, 12, 50), windowHeight, windowWidth);
+                    Tile floorTileObject = new Tile(floorTile, new Rectangle(100, 80, 16, 16), windowHeight, windowWidth);
+                    Wall walls = new Wall(wall, new Rectangle(100, 80, 12, 50), windowHeight, windowWidth);
             
 
-            //This draws the tiles/walls across the screen
-            floorTileObject.Draw(_spriteBatch);
-            player.Draw(_spriteBatch);
+                    //This draws the tiles/walls across the screen
+                    floorTileObject.Draw(_spriteBatch);
+                    player.Draw(_spriteBatch);
 
-            walls.Draw(_spriteBatch);
+                    walls.Draw(_spriteBatch);
 
             
                     //This draws the tiles across the screen

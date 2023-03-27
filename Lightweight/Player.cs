@@ -14,14 +14,18 @@ namespace Lightweight
 {
     public class Player : IShoot, IMove, ITakeDamage
     {
+        
         int playerHealth;
         int playerDefense;
-        float speed;
-        
+        //float speed;
+       
+
+        /*
         public float Speed
         {
             get { return speed; }
         }
+        */
 
         public int PlayerHealth
         {
@@ -61,7 +65,7 @@ namespace Lightweight
         {
             PlayerController.Update(gt);
 
-            position += PlayerController.Direction * speed
+            position += PlayerController.Direction * this.Speed
                 * (float)gt.ElapsedGameTime.TotalSeconds;
 
             anims.Update(gt, PlayerController.PlayerState);
@@ -89,7 +93,7 @@ namespace Lightweight
             throw new NotImplementedException();
         }
 
-
+        /*
         public void Shoot(GameObject bullet)
         {
 
@@ -100,5 +104,6 @@ namespace Lightweight
         {
 
         }
+        */
     }
 }
