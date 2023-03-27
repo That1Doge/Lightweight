@@ -49,6 +49,18 @@
 /processorParam:TextureFormat=Color
 /build:PNG/Mage/High_Jump/roll.png
 
+#begin PNG/Mage/Idle/idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PNG/Mage/Idle/idle.png
+
 #begin PNG/Mage/Run/run.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -28,6 +28,7 @@ namespace Lightweight
         private static PlayerState playerState;
         private static bool isRolling;
         private static KeyboardState kb;
+        private static KeyboardState prevKb;
         public static Vector2 Direction { get { return direction; } }
         public static PlayerState PlayerState { get { return playerState; } }
 
@@ -41,6 +42,12 @@ namespace Lightweight
         {
             playerState = PlayerState.FaceRight;
         }
+
+        public static bool SingleKeyPress(Keys key)
+        {
+            return prevKb.IsKeyUp(key) && kb.IsKeyDown(key);
+        }
+
         public static void Update(GameTime gt)
         {
             kb = Keyboard.GetState();

@@ -16,6 +16,7 @@ namespace Lightweight
     {
         int playerHealth;
         int playerDefense;
+        int scraps;
 
         public int PlayerHealth
         {
@@ -32,11 +33,12 @@ namespace Lightweight
         public float Speed { get { return speed; } set { speed = value; } }
 
         private Vector2 position = new Vector2(100, 100);
-        private float speed = 200f;
+        private float speed;
         private PlayerAnimator anims = new PlayerAnimator();
 
         public Player()
-        {        
+        {
+            scraps = 10;
         }
 
         public void LoadAnims(ContentManager content)
@@ -59,6 +61,11 @@ namespace Lightweight
                 * (float)gt.ElapsedGameTime.TotalSeconds;
 
             anims.Update(gt, PlayerController.PlayerState);
+
+            if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
+            if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
+            if (scraps <= 0) scraps = 10;
+            speed = 1f/scraps * 1000f;
         }
 
         public void Draw(SpriteBatch sb)
