@@ -16,7 +16,7 @@ namespace Lightweight
             : base(texture, rectangle, windowHeight, windowWidth)
         {
             this.texture = texture;
-            this.rectangle = new Rectangle(0, 0, 16, 16);
+            this.rectangle = rectangle;
         }
 
         public override void Update() 
@@ -24,19 +24,22 @@ namespace Lightweight
         
         }
 
+        //total possible amount of tiles in default window size: 50x30
         public override void Draw(SpriteBatch sb) 
         {
-            for (int i = 0; i < (windowWidth / 16); i++)
+            int ogXCoord = this.X;
+
+            for (int i = 0; i < ((windowWidth - 180) / 15); i++)
             {
-                if (i != 0)
+                if (i != 0) 
                 {
                     this.Y += 16;
                 }
-                for (int x = 0; x < (windowHeight / 16); x++)
+                for (int x = 0; x < ((windowHeight - 200) / 16); x++)
                 {
                     if (x == 0)
                     {
-                        this.X = 0;
+                        this.X = ogXCoord;
                     }
                     sb.Draw(this.texture, this.rectangle, Color.White);
                     this.X += 16;
