@@ -13,7 +13,7 @@ namespace Lightweight
         int windowHeight;
         private Texture2D floorTile;
         private Texture2D wall;
-        
+        private Player player;
 
         public Game1()
         {
@@ -26,7 +26,7 @@ namespace Lightweight
         {
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
-            
+            player = new Player();
             base.Initialize();
         }
 
@@ -36,6 +36,8 @@ namespace Lightweight
             floorTile = Content.Load<Texture2D>("floor_tile");
             wall = Content.Load<Texture2D>("starter_wall");
             // TODO: use this.Content to load your game content here
+
+            player.LoadAnims(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -44,6 +46,7 @@ namespace Lightweight
                 Exit();
 
             // TODO: Add your update logic here
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -61,6 +64,7 @@ namespace Lightweight
 
             //This draws the tiles across the screen
             floorTileObject.Draw(_spriteBatch);
+            player.Draw(_spriteBatch);
 
             _spriteBatch.End();  
             base.Draw(gameTime);

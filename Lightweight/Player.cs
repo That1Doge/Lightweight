@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -11,17 +12,7 @@ using System.Xml.Serialization;
 
 namespace Lightweight
 {
-    public enum PlayerState
-    {
-        FaceLeft,
-        FaceRight,
-        WalkLeft,
-        WalkRight,
-        RollLeft,
-        RollRight
-    }
-
-    public class Player : GameObject, IShoot, IMove, ITakeDamage
+    public class Player : IShoot, IMove, ITakeDamage
     {
         int playerHealth;
         int playerDefense;
@@ -38,244 +29,58 @@ namespace Lightweight
             set { playerDefense = value; }
         }
 
-        // Sprite sheet data
-        private int numSprites;
-        private int spriteWidth;
-        private int spriteHeight;
+        public float Speed { get { return speed; } set { speed = value; } }
 
-        // Animation data
-        private int currentFrame;
-        private double fps;
-        private double frameTime;
-        private double timeCounter;
+        private Vector2 position = new Vector2(100, 100);
+        private float speed = 200f;
+        private PlayerAnimator anims = new PlayerAnimator();
 
-        // roll data
-        private bool isRolling;
-
-        // moving data
-        private Vector2 direction;
-        private int speed;
-
-        public Player(Texture2D texture, Vector2 position)
-            : base(texture, position)
-        {
-
-            // setting up sprite data
-            spriteWidth = 100;
-            spriteHeight = 100;
-            numSprites = 10;
-
-            // setting up animation data
-            fps = 8;
-            frameTime = 1 / fps;
-            timeCounter = 0;
-            currentFrame = 1;
-
-            // speed data
-            speed = 10;
+        public Player()
+        {        
         }
 
-        public override void Update()
+        public void LoadAnims(ContentManager content)
         {
-            // keyboard state information
-            KeyboardState kb = Keyboard.GetState();
-
-            // direction
-            direction = Vector2.Zero;
-
-            // doesn't take input while rolling
-            if(!isRolling )
-            {
-                // WASD changes direction
-                if (kb.IsKeyDown(Keys.W))
-                {
-                    direction.Y -= 1f;
-                }
-                if (kb.IsKeyDown(Keys.S))
-                {
-                    direction.Y += 1f;
-                }
-                if (kb.IsKeyDown(Keys.D))
-                {
-                    direction.X += 1f;
-                }
-                if (kb.IsKeyDown(Keys.A))
-                {
-                    direction.X -= 1f;
-                }
-
-                if (direction != Vector2.Zero)
-                {
-                    direction = Vector2.Normalize(direction);
-                }
-
-                // increments position
-                position += direction * speed;
-            }
-
-            // animation transition switch
-            switch (playerState)
-            {
-                case PlayerState.FaceLeft:
-                    if(kb.IsKeyDown(Keys.A) || kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.S))
-                    {
-                        playerState = PlayerState.WalkLeft;
-                    }
-                    else if (kb.IsKeyDown(Keys.D))
-                    {
-                        playerState = PlayerState.FaceRight;
-                    }
-                    else if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
-                    {
-                        playerState = PlayerState.RollLeft;
-                    }
-                    break;
-                case PlayerState.FaceRight:
-                    if (kb.IsKeyDown(Keys.A))
-                    {
-                        playerState = PlayerState.FaceLeft;
-                    }
-                    else if (kb.IsKeyDown(Keys.D) || kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.S))
-                    {
-                        playerState = PlayerState.WalkRight;
-                    }
-                    else if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
-                    {
-                        playerState = PlayerState.RollRight;
-                    }
-                    break;
-                case PlayerState.WalkLeft:
-                    if (kb.IsKeyDown(Keys.D))
-                    {
-                        playerState = PlayerState.FaceRight;
-                    }
-                    else if (!kb.IsKeyDown(Keys.A) && !kb.IsKeyDown(Keys.W) && !kb.IsKeyDown(Keys.S))
-                    {
-                        playerState = PlayerState.FaceLeft;
-                    }
-                    else if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
-                    {
-                        playerState = PlayerState.RollLeft;
-                        isRolling = true;
-                    }
-                    break;
-                case PlayerState.WalkRight:
-                    if (kb.IsKeyDown(Keys.A))
-                    {
-                        playerState = PlayerState.FaceLeft;
-                    }
-                    else if (!kb.IsKeyDown(Keys.D) && !kb.IsKeyDown(Keys.W) && !kb.IsKeyDown(Keys.S))
-                    {
-                        playerState = PlayerState.FaceRight;
-                    }
-                    else if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.Space))
-                    {
-                        playerState = PlayerState.RollRight;
-                        isRolling = true;
-                    }
-                    break;
-                case PlayerState.RollLeft:
-                    if (!isRolling)
-                    {
-                        playerState = PlayerState.FaceLeft;
-                    }
-
-                    // automatically moves according to roll direction
-                    position.X -= speed;
-                    break;
-                case PlayerState.RollRight:
-                    if (!isRolling)
-                    {
-                        playerState = PlayerState.FaceRight;
-                    }
-
-                    // automatically moves according to roll direction
-                    position.X += speed;
-                    break;
-            }
+            anims.AddAnimation(PlayerState.RunRight, new Animation(
+                content.Load<Texture2D>("PNG/Mage/Run/run"), 8));
+            anims.AddAnimation(PlayerState.RunLeft, new Animation(
+                content.Load<Texture2D>("PNG/Mage/Run/run"), 8, SpriteEffects.FlipHorizontally));
+            anims.AddAnimation(PlayerState.RollRight, new Animation(
+                content.Load<Texture2D>("PNG/Mage/High_Jump/roll"), 10, SpriteEffects.None, false));
+            anims.AddAnimation(PlayerState.RollLeft, new Animation(
+                content.Load<Texture2D>("PNG/Mage/High_Jump/roll"), 10, SpriteEffects.FlipHorizontally, false));
         }
 
-        private void UpdateAnimation(GameTime gameTime)
+        public void Update(GameTime gt)
         {
-            // Elapsed time - duration of the last game frame
-            timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            PlayerController.Update(gt);
 
-            // Checks if enough time has passed to move to next frame
-            if (timeCounter >= frameTime)
-            {
-                // increases current frame
-                currentFrame++;
+            position += PlayerController.Direction * speed
+                * (float)gt.ElapsedGameTime.TotalSeconds;
 
-                // moves to 1st frame if on last sprite
-                if (currentFrame >= numSprites)
-                {
-                    if (isRolling) { isRolling = false; }
-                    currentFrame = 1;
-                }
-            }
-
-            // resets time counter
-            timeCounter -= frameTime;
+            anims.Update(gt, PlayerController.PlayerState);
         }
 
-        private void DrawIdle(SpriteBatch sb, SpriteEffects flip)
+        public void Draw(SpriteBatch sb)
         {
-            sb.Draw(
-                texture,                                // sprite sheet
-                position,                               // position
-                new Rectangle(
-                    currentFrame * spriteWidth,         // - from left edge
-                    0,                                  // - top of sprite sheet
-                    spriteWidth,                        // - width
-                    spriteHeight),                      // - height
-                Color.White,                            // no change in color
-                0.0f,                                   // no rotation
-                Vector2.Zero,                           // start at origin of sprite sheet
-                Vector2.One,                            // no scaling
-                flip,                                   // flip
-                0.0f);                                  // layer depth
+            anims.Draw(sb, position);
         }
-
-        private void DrawWalking(SpriteBatch sb, SpriteEffects flip)
-        {
-            sb.Draw(
-                texture,                                // sprite sheet
-                position,                               // position
-                new Rectangle(
-                    currentFrame * spriteWidth,         // - from left edge
-                    spriteHeight,                       // - 2nd row of sprite sheet
-                    spriteWidth,                        // - width
-                    spriteHeight),                      // - height
-                Color.White,                            // no change in color
-                0.0f,                                   // no rotation
-                Vector2.Zero,                           // start at origin of sprite sheet
-                Vector2.One,                            // no scaling
-                flip,                                   // flip
-                0.0f);                                  // layer depth
-        }
-
-        private void DrawRoll(SpriteBatch sb, SpriteEffects flip)
-        {
-            sb.Draw(
-                texture,                                // sprite sheet
-                position,                               // position
-                new Rectangle(
-                    currentFrame * spriteWidth,         // - from left edge
-                    spriteHeight * 2,                       // - 3rd row of sprite sheet
-                    spriteWidth,                        // - width
-                    spriteHeight),                      // - height
-                Color.White,                            // no change in color
-                0.0f,                                   // no rotation
-                Vector2.Zero,                           // start at origin of sprite sheet
-                Vector2.One,                            // no scaling
-                flip,                                   // flip
-                0.0f);                                  // layer depth
-        }
+        
         public void ITakeDamage(int damage, int defense)
         {
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             this.playerHealth = playerHealth - (damage - defense);
+        }   
+
+        public void Shoot(GameObject target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Move(Direction direction)
+        {
+            throw new NotImplementedException();
         }
     }
 }
