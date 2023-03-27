@@ -13,6 +13,7 @@ namespace Lightweight
         int windowHeight;
         private Texture2D floorTile;
         private Texture2D wall;
+        private Texture2D horizontalWall;
         
 
         public Game1()
@@ -35,6 +36,7 @@ namespace Lightweight
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floorTile = Content.Load<Texture2D>("floor_tile");
             wall = Content.Load<Texture2D>("starter_wall");
+            horizontalWall = Content.Load<Texture2D>("starter_wall_horizontal");
             // TODO: use this.Content to load your game content here
         }
 
@@ -57,11 +59,14 @@ namespace Lightweight
 
             //Creates floor tile object
             Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
-            Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
+            Wall verticalWalls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
+            Wall horizontalWalls = new Wall(horizontalWall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
 
             //This draws the tiles across the screen
             floorTileObject.Draw(_spriteBatch);
+            verticalWalls.Draw(_spriteBatch);
 
+            
             _spriteBatch.End();  
             base.Draw(gameTime);
         }

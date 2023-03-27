@@ -16,7 +16,7 @@ namespace Lightweight
             : base(texture, rectangle, windowHeight, windowWidth)
         {
             this.texture = texture;
-            this.rectangle = new Rectangle(0, 0, 16, 16);
+            this.rectangle = rectangle;
         }
 
         public override void Update() 
@@ -26,13 +26,13 @@ namespace Lightweight
 
         public override void Draw(SpriteBatch sb) 
         {
-            for (int i = 0; i < (windowWidth / 16); i++)
+            for (int i = 0; i < 26; i++)
             {
                 if (i != 0)
                 {
                     this.Y += 16;
                 }
-                for (int x = 0; x < (windowHeight / 16); x++)
+                for (int x = 0; x < 26; x++)
                 {
                     if (x == 0)
                     {

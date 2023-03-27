@@ -57,7 +57,25 @@ namespace Lightweight
         /// <param name="sb">Spritebatch</param>
         public override void Draw(SpriteBatch sb) 
         {
-            sb.Draw(this.texture, this.rectangle, Color.White);
+            for (int x = 0; x < 10; x++)
+            {
+                sb.Draw(this.texture, this.rectangle, Color.White);
+                this.Y += this.rectangle.Height - 10;
+            }
+            this.Y += 15;
+            this.X += 5;
+            for (int y = 0; y < 21; y++) 
+            {
+                sb.Draw(this.texture, this.rectangle, null, Color.White, 4.71f, Vector2.Zero, SpriteEffects.None, 0.0f);
+                this.X += this.rectangle.Width + 25;
+            }
+            this.X += 18;
+            this.Y -= 5;
+            for (int x = 0; x < 10; x++)
+            {
+                sb.Draw(this.texture, this.rectangle, null, Color.White, 3.15f, Vector2.Zero, SpriteEffects.FlipVertically, 0.0f);
+                this.Y -= this.rectangle.Height - 10;
+            }
         }
     }
 }
