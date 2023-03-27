@@ -124,10 +124,11 @@ namespace Lightweight
                 case MenuStates.Gameplay:
                     //Creates floor tile object
                     //Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
-                        //windowHeight, windowWidth);
+                    //windowHeight, windowWidth);
                     //Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
-                        //windowHeight, windowWidth);
-            //Creates floor tile/wall objects
+                    //windowHeight, windowWidth);
+                    //Creates floor tile/wall objects
+                    GraphicsDevice.Clear(Color.CornflowerBlue);
                     Tile floorTileObject = new Tile(floorTile, new Rectangle(100, 80, 16, 16), windowHeight, windowWidth);
                     Wall walls = new Wall(wall, new Rectangle(100, 80, 12, 50), windowHeight, windowWidth);
             
@@ -140,7 +141,7 @@ namespace Lightweight
 
             
                     //This draws the tiles across the screen
-                    floorTileObject.Draw(_spriteBatch);
+                    //floorTileObject.Draw(_spriteBatch);
                     break;
                 case MenuStates.Pause:
 
