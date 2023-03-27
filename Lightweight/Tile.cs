@@ -21,7 +21,7 @@ namespace Lightweight
 
         public override void Update() 
         { 
-        
+            
         }
 
         //total possible amount of tiles in default window size: 50x30

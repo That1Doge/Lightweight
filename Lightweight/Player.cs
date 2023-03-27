@@ -16,6 +16,12 @@ namespace Lightweight
     {
         int playerHealth;
         int playerDefense;
+        float speed;
+        
+        public float Speed
+        {
+            get { return speed; }
+        }
 
         public int PlayerHealth
         {
@@ -81,6 +87,18 @@ namespace Lightweight
         public void Move(Direction direction)
         {
             throw new NotImplementedException();
+        }
+
+
+        public void Shoot(GameObject bullet)
+        {
+
+        }
+
+
+        public void Move(Direction dir)
+        {
+
         }
     }
 }
