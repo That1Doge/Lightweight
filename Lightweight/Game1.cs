@@ -57,12 +57,12 @@ namespace Lightweight
 
             // TODO: Add your drawing code here
 
-            //Creates floor tile object
+            //Creates floor tile/wall objects
             Tile floorTileObject = new Tile(floorTile, new Rectangle(100, 80, 16, 16), windowHeight, windowWidth);
             Wall walls = new Wall(wall, new Rectangle(100, 80, 12, 50), windowHeight, windowWidth);
             
 
-            //This draws the tiles across the screen
+            //This draws the tiles/walls across the screen
             floorTileObject.Draw(_spriteBatch);
             walls.Draw(_spriteBatch);
 
