@@ -20,6 +20,18 @@
 /processorParam:TextureFormat=Compressed
 /build:arial-12.spritefont
 
+#begin buttonPlaceholder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:buttonPlaceholder.png
+
 #begin corner.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -31,6 +31,8 @@ namespace Lightweight
         private SpriteFont buttonText;
         private Player player;
         private Texture2D horizontalWall;
+        private Rectangle buttonRectangle;
+        private Texture2D buttonTexture;
 
         public Game1()
         {
@@ -55,7 +57,11 @@ namespace Lightweight
             wall = Content.Load<Texture2D>("starter_wall");
             buttonText = Content.Load<SpriteFont>("arial-12");
             horizontalWall = Content.Load<Texture2D>("starter_wall_horizontal");
+            buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
+
             // TODO: use this.Content to load your game content here
+            button = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 , 
+                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
 
             player.LoadAnims(Content);
         }
@@ -105,7 +111,7 @@ namespace Lightweight
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Red);
+            GraphicsDevice.Clear(Color.SlateGray);
             _spriteBatch.Begin();
 
             // TODO: Add your drawing code here
@@ -114,7 +120,12 @@ namespace Lightweight
             switch (menuState)
             {
                 case MenuStates.MainMenu:
+                    button.Draw(_spriteBatch);
 
+                    if(button.ButtonClicked())
+                    {
+                        menuState = MenuStates.Gameplay;
+                    }
                     break;
                 case MenuStates.InstructionMenu:
 
@@ -123,12 +134,13 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Gameplay:
-                    //Creates floor tile object
-                    //Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
-                    //windowHeight, windowWidth);
-                    //Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
-                    //windowHeight, windowWidth);
-                    //Creates floor tile/wall objects
+                    /*Creates floor tile object
+                        Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
+                        windowHeight, windowWidth);
+                        Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
+                        windowHeight, windowWidth);
+                        Creates floor tile/wall objects
+                    */
                     GraphicsDevice.Clear(Color.CornflowerBlue);
                     Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
                     Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
