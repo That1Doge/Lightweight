@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 
 namespace Lightweight
 {
     internal interface ICollidable
     {
-       public bool Intersect(Rectangle rect);
+       public bool Intersects(GameObject thing);
     }
 }
