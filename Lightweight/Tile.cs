@@ -29,13 +29,13 @@ namespace Lightweight
         {
             int ogXCoord = this.X;
 
-            for (int i = 0; i < ((windowWidth - 180) / 15); i++)
+            for (int i = 0; i < (windowWidth / 15); i++)
             {
                 if (i != 0) 
                 {
                     this.Y += 16;
                 }
-                for (int x = 0; x < ((windowHeight - 200) / 16); x++)
+                for (int x = 0; x < ((windowHeight) / 16); x++)
                 {
                     if (x == 0)
                     {
