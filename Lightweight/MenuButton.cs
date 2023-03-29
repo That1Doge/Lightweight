@@ -84,7 +84,7 @@ namespace Lightweight
                 text,
                 buttonText,
                 //new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + text.MeasureString(buttonText).X - 7, rect.Y + text.MeasureString(buttonText).Y - 10),
+                new Vector2(rect.X + text.MeasureString(buttonText).X - 10, rect.Y + text.MeasureString(buttonText).Y - 10),
                 Color.Black);
         }
 

@@ -27,13 +27,16 @@ namespace Lightweight
         private Texture2D floorTile;
         private Texture2D wall;
         private MenuStates menuState;
-        private MenuButton button;
+        private MenuButton playButton;
+        private MenuButton optionsButton;
+        private MenuButton quitButton;
         private SpriteFont buttonText;
         private Player player;
         private Rectangle buttonRectangle;
         private Texture2D buttonTexture;
         private Wall walls;
         private Tile floorTileObject;
+
 
         public Game1()
         {
@@ -60,8 +63,13 @@ namespace Lightweight
             buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
 
             // TODO: use this.Content to load your game content here
-            button = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
+            // Loads all of the Main Menu buttons
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
                 windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
+            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
 
             player.LoadAnims(Content);
         }
@@ -82,8 +90,6 @@ namespace Lightweight
                     {
                         menuState = MenuStates.Gameplay;
                     }
-                    
-
 
                     break;
                 case MenuStates.InstructionMenu:
@@ -120,12 +126,23 @@ namespace Lightweight
             switch (menuState)
             {
                 case MenuStates.MainMenu:
-                    button.Draw(_spriteBatch, "PLAY");
-
-                    if(button.ButtonClicked())
+                    // Draws buttons to the Main Menu, and detects if the buttons are clicked and what to do if they are
+                    playButton.Draw(_spriteBatch, "PLAY");
+                    optionsButton.Draw(_spriteBatch, "OPTIONS");
+                    quitButton.Draw(_spriteBatch, "QUIT");
+                    if(playButton.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;
                     }
+                    else if(optionsButton.ButtonClicked())
+                    {
+
+                    }
+                    else if(quitButton.ButtonClicked())
+                    {
+                        Exit();
+                    }
+
                     break;
                 case MenuStates.InstructionMenu:
 
