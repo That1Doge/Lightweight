@@ -31,9 +31,9 @@ namespace Lightweight
         /// </summary>
         /// <param name="thing">any object that intersects with the level object</param>
         /// <returns></returns>
-        public bool Intersects(GameObject thing) 
+        public bool Intersect(Rectangle rectangle) 
         { 
-            if (this.Intersects(thing)) 
+            if (this.rectangle.Intersects(rectangle)) 
             {
                 return true;
             }

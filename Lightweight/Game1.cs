@@ -30,7 +30,8 @@ namespace Lightweight
         private MenuButton button;
         private SpriteFont buttonText;
         private Player player;
-        private Texture2D horizontalWall;
+        Tile floorTileObject;
+        Wall walls;
 
         public Game1()
         {
@@ -54,7 +55,6 @@ namespace Lightweight
             floorTile = Content.Load<Texture2D>("floor_tile");
             wall = Content.Load<Texture2D>("starter_wall");
             buttonText = Content.Load<SpriteFont>("arial-12");
-            horizontalWall = Content.Load<Texture2D>("starter_wall_horizontal");
             // TODO: use this.Content to load your game content here
 
             player.LoadAnims(Content);
@@ -77,8 +77,6 @@ namespace Lightweight
                         menuState = MenuStates.Gameplay;
                     }
                     
-
-
                     break;
                 case MenuStates.InstructionMenu:
                     
@@ -130,9 +128,9 @@ namespace Lightweight
                     //windowHeight, windowWidth);
                     //Creates floor tile/wall objects
                     GraphicsDevice.Clear(Color.CornflowerBlue);
-                    Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
-                    Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
-            
+                    floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
+                    walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
+                    
 
                     //This draws the tiles/walls across the screen
                     floorTileObject.Draw(_spriteBatch);
