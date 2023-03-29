@@ -21,7 +21,9 @@ namespace Lightweight
         private SpriteFont text;
         private Texture2D texture;
 
-
+        /// <summary>
+        /// Gets the rectangle of the button
+        /// </summary>
         public Rectangle Rectangle
         {
             get { return rect; }
