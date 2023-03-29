@@ -33,6 +33,12 @@ namespace Lightweight
         // signals when animation ended
         public bool Ended => !active;
 
+        // fps
+        private float fps;
+
+        // changes fps to reflect speed
+        public float Fps { get { return fps; } set { fps = value; } }
+
         // flip
         private SpriteEffects flip;
 
@@ -43,7 +49,8 @@ namespace Lightweight
             this.numFrames = numFrames;
             this.flip = flip;
             this.loop = loop;
-            frameTime = 1 / fps;
+            this.fps = fps;
+            frameTime = 1 / this.fps;
 
             int frameWidth = spriteSheet.Width / numFrames;
             int frameHeight = spriteSheet.Height;
@@ -62,6 +69,7 @@ namespace Lightweight
         public void Update(GameTime gt)
         {
             if(!active) return;
+            frameTime = 1 / fps;
             totalTime += (float)gt.ElapsedGameTime.TotalSeconds;
             if(totalTime >= frameTime)
             {

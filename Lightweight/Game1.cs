@@ -139,9 +139,11 @@ namespace Lightweight
 
                     walls.Draw(_spriteBatch);
 
-            
+
                     //This draws the tiles across the screen
                     //floorTileObject.Draw(_spriteBatch);
+
+                    _spriteBatch.DrawString(buttonText, player.Scraps.ToString(), Vector2.Zero, Color.White);
                     break;
                 case MenuStates.Pause:
 

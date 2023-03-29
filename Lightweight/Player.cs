@@ -18,6 +18,8 @@ namespace Lightweight
         int playerHealth;
         int playerDefense;
         int scraps;
+        private Rectangle hitBox;
+        private Texture2D hitBoxTex;
 
         public int PlayerHealth
         {
@@ -31,6 +33,8 @@ namespace Lightweight
             set { playerDefense = value; }
         }
 
+        public int Scraps => scraps;
+
         public float Speed { get { return speed; } set { speed = value; } }
 
         private Vector2 position = new Vector2(100, 100);
@@ -40,18 +44,20 @@ namespace Lightweight
         public Player()
         {
             scraps = 10;
+            hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
         }
 
         public void LoadAnims(ContentManager content)
         {
             anims.AddAnimation(PlayerState.RunRight, new Animation(
-                content.Load<Texture2D>("PNG/Mage/Run/run"), 8));
+                content.Load<Texture2D>("PNG/Mage/Run/run"), 6));
             anims.AddAnimation(PlayerState.RunLeft, new Animation(
-                content.Load<Texture2D>("PNG/Mage/Run/run"), 8, SpriteEffects.FlipHorizontally));
+                content.Load<Texture2D>("PNG/Mage/Run/run"), 6, SpriteEffects.FlipHorizontally));
             anims.AddAnimation(PlayerState.RollRight, new Animation(
                 content.Load<Texture2D>("PNG/Mage/High_Jump/roll"), 10, SpriteEffects.None, false));
             anims.AddAnimation(PlayerState.RollLeft, new Animation(
                 content.Load<Texture2D>("PNG/Mage/High_Jump/roll"), 10, SpriteEffects.FlipHorizontally, false));
+            hitBoxTex = content.Load<Texture2D>("hitbox");
         }
 
         public void Update(GameTime gt)
@@ -61,17 +67,20 @@ namespace Lightweight
             position += PlayerController.Direction * this.Speed
                 * (float)gt.ElapsedGameTime.TotalSeconds;
 
-            anims.Update(gt, PlayerController.PlayerState);
+            hitBox.X = (int)position.X + 5;
+            hitBox.Y = (int)position.Y + 10;
 
             if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
             if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
-            if (scraps <= 0) scraps = 10;
+            if (scraps <= 0) scraps = 1;
             speed = 1f/scraps * 1000f;
+            anims.Update(gt, PlayerController.PlayerState, (1f / scraps) * 128); ;
         }
 
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, position);
+            sb.Draw(hitBoxTex, hitBox, Color.Pink);
         }
         
         public void ITakeDamage(int damage, int defense)

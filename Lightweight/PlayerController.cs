@@ -50,6 +50,7 @@ namespace Lightweight
 
         public static void Update(GameTime gt)
         {
+            prevKb = kb;
             kb = Keyboard.GetState();
 
             if (!isRolling) direction = Vector2.Zero;

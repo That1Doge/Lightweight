@@ -20,11 +20,12 @@ namespace Lightweight
             if (lastKey == null) { lastKey = key; }
         }
 
-        public void Update(GameTime gt, object key)
+        public void Update(GameTime gt, object key, float fps)
         {
             if(animations.ContainsKey(key))
             {
                 animations[key].Start();
+                animations[key].Fps = fps;
                 animations[key].Update(gt);
                 if (key is (object)PlayerState.RollLeft 
                     or (object)PlayerState.RollRight)
