@@ -80,12 +80,33 @@ namespace Lightweight
                 texture,
                 rect,
                 Color.White);
+
+            if (buttonText.Length > 4)
+            {
+                sb.DrawString(
+               text,
+               buttonText,
+               //new Vector2(rect.X, rect.Y),
+               new Vector2(rect.X + buttonText.Length / 2 + 15, rect.Y + text.MeasureString(buttonText).Y / 2 - 2),
+               Color.Black);
+            }
+            else
+            {
+                sb.DrawString(
+                text,
+                buttonText,
+                //new Vector2(rect.X, rect.Y),
+                new Vector2(rect.X + text.MeasureString(buttonText).X / 2 + 10, rect.Y + text.MeasureString(buttonText).Y / 2 - 2),
+                Color.Black);
+            }
+            /*
             sb.DrawString(
                 text,
                 buttonText,
                 //new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + text.MeasureString(buttonText).X - 10, rect.Y + text.MeasureString(buttonText).Y - 10),
+                new Vector2(rect.X + text.MeasureString(buttonText).X/2, rect.Y + text.MeasureString(buttonText).Y / 2),
                 Color.Black);
+            */
         }
 
         /// <summary>
