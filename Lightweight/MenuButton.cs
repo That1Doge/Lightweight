@@ -13,12 +13,21 @@ namespace Lightweight
     /// Class that handles what the Menu Buttons look like, what text they have,
     ///     and what position they are at
     /// </summary>
-    internal class MenuButton : GameObject
+    internal class MenuButton
     {
         // Fields for the menu buttons
         private MouseState prevMState;
         private Rectangle rect;
         private SpriteFont text;
+        private Texture2D texture;
+
+        /// <summary>
+        /// Gets the rectangle of the button
+        /// </summary>
+        public Rectangle Rectangle
+        {
+            get { return rect; }
+        }
 
         /// <summary>
         /// Parameterized constructor for the button, giving it the looks of the button
@@ -26,12 +35,10 @@ namespace Lightweight
         /// <param name="texture">The image for the button</param>
         /// <param name="rect">the size of the button</param>
         /// <param name="position">the position of the button</param>
-        public MenuButton(Texture2D texture, SpriteFont text, Rectangle rect, Vector2 position) : 
-            base(texture, position)
+        public MenuButton(Texture2D texture, SpriteFont text, Rectangle rect)
         {
             this.texture = texture;
             this.rect = rect;
-            this.position = position;
             this.text = text;
         }
 
@@ -66,28 +73,29 @@ namespace Lightweight
         /// Method that draws the button
         /// </summary>
         /// <param name="sb"></param>
-        public override void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, string buttonText)
         {
             // Draws the button with its texture, at the positon, with a hitbox of a rectangle, and the text above it
             sb.Draw(
                 texture,
-                position,
                 rect,
                 Color.White);
             sb.DrawString(
                 text,
-                "test",
-                position,
+                buttonText,
+                //new Vector2(rect.X, rect.Y),
+                new Vector2(rect.X + text.MeasureString(buttonText).X - 10, rect.Y + text.MeasureString(buttonText).Y - 10),
                 Color.Black);
         }
 
         /// <summary>
         /// Update for the button by frame
         /// </summary>
-        public override void Update()
+        public void Update()
         {
            // Checks if the button is clicked every frame
             this.ButtonClicked();
         }
+        
     }
 }

@@ -21,12 +21,18 @@ namespace Lightweight
         private Rectangle hitBox;
         private Texture2D hitBoxTex;
 
+        /// <summary>
+        /// A get and set property for the player health
+        /// </summary>
         public int PlayerHealth
         {
             get { return playerHealth; }
             set { playerHealth = value; }
         }
 
+        /// <summary>
+        /// A get and set property for the player defense
+        /// </summary>
         public int PlayerDefense
         {
             get { return playerDefense; }

@@ -27,10 +27,16 @@ namespace Lightweight
         private Texture2D floorTile;
         private Texture2D wall;
         private MenuStates menuState;
-        private MenuButton button;
+        private MenuButton playButton;
+        private MenuButton optionsButton;
+        private MenuButton quitButton;
         private SpriteFont buttonText;
         private Player player;
-        private Texture2D horizontalWall;
+        private Rectangle buttonRectangle;
+        private Texture2D buttonTexture;
+        private Wall walls;
+        private Tile floorTileObject;
+
 
         public Game1()
         {
@@ -54,8 +60,16 @@ namespace Lightweight
             floorTile = Content.Load<Texture2D>("floor_tile");
             wall = Content.Load<Texture2D>("starter_wall");
             buttonText = Content.Load<SpriteFont>("arial-12");
-            horizontalWall = Content.Load<Texture2D>("starter_wall_horizontal");
+            buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
+
             // TODO: use this.Content to load your game content here
+            // Loads all of the Main Menu buttons
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
+                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
+            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
 
             player.LoadAnims(Content);
         }
@@ -76,8 +90,6 @@ namespace Lightweight
                     {
                         menuState = MenuStates.Gameplay;
                     }
-                    
-
 
                     break;
                 case MenuStates.InstructionMenu:
@@ -98,13 +110,14 @@ namespace Lightweight
             }
             // TODO: Add your update logic here
             player.Update(gameTime);
-
+            
+            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Red);
+            GraphicsDevice.Clear(Color.SlateGray);
             _spriteBatch.Begin();
 
             // TODO: Add your drawing code here
@@ -113,6 +126,22 @@ namespace Lightweight
             switch (menuState)
             {
                 case MenuStates.MainMenu:
+                    // Draws buttons to the Main Menu, and detects if the buttons are clicked and what to do if they are
+                    playButton.Draw(_spriteBatch, "PLAY");
+                    optionsButton.Draw(_spriteBatch, "OPTIONS");
+                    quitButton.Draw(_spriteBatch, "QUIT");
+                    if(playButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.Gameplay;
+                    }
+                    else if(optionsButton.ButtonClicked())
+                    {
+
+                    }
+                    else if(quitButton.ButtonClicked())
+                    {
+                        Exit();
+                    }
 
                     break;
                 case MenuStates.InstructionMenu:
@@ -122,26 +151,32 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Gameplay:
-                    //Creates floor tile object
-                    //Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
-                    //windowHeight, windowWidth);
-                    //Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
-                    //windowHeight, windowWidth);
-                    //Creates floor tile/wall objects
-                    GraphicsDevice.Clear(Color.CornflowerBlue);
-                    Tile floorTileObject = new Tile(floorTile, new Rectangle(100, 80, 16, 16), windowHeight, windowWidth);
-                    Wall walls = new Wall(wall, new Rectangle(100, 80, 12, 50), windowHeight, windowWidth);
+                    /*Creates floor tile object
+                        Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), 
+                        windowHeight, windowWidth);
+                        Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), 
+                        windowHeight, windowWidth);
+                        Creates floor tile/wall objects
+                    */
+                    GraphicsDevice.Clear(Color.Black);
+                    floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
+                    walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
             
 
                     //This draws the tiles/walls across the screen
                     floorTileObject.Draw(_spriteBatch);
                     player.Draw(_spriteBatch);
-
                     walls.Draw(_spriteBatch);
 
 
                     //This draws the tiles across the screen
                     //floorTileObject.Draw(_spriteBatch);
+                    _spriteBatch.DrawString(
+                        buttonText,
+                        $"Scraps: {player.Scraps}",
+                        new Vector2(15, 10),
+                        Color.Black);
+
 
                     _spriteBatch.DrawString(buttonText, player.Scraps.ToString(), Vector2.Zero, Color.White);
                     break;
