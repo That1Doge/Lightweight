@@ -141,7 +141,7 @@ namespace Lightweight
                         windowHeight, windowWidth);
                         Creates floor tile/wall objects
                     */
-                    GraphicsDevice.Clear(Color.CornflowerBlue);
+                    GraphicsDevice.Clear(Color.Black);
                     Tile floorTileObject = new Tile(floorTile, new Rectangle(0, 0, 16, 16), windowHeight, windowWidth);
                     Wall walls = new Wall(wall, new Rectangle(0, 0, 12, 50), windowHeight, windowWidth);
             
