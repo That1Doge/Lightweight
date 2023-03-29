@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
+    /// <summary>
+    /// This object can shoot bullets
+    /// </summary>
     internal interface IShoot
     {
         /// <summary>
@@ -14,5 +17,9 @@ namespace Lightweight
         /// </summary>
         /// <param name="target">The object that the bullet is directed towards</param>
         public void Shoot(GameObject target);
+
+        // 1. finish functional IShoot interface
+        // 2. create bullet class instantiated by IShoot
+        // 3. implement into Player (and Enemy) classes
     }
 }

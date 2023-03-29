@@ -13,6 +13,10 @@ namespace Lightweight
         Up, 
         Down
     }
+
+    /// <summary>
+    /// This object can move
+    /// </summary>
     internal interface IMove
     {
         /// <summary>
