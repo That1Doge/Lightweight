@@ -60,7 +60,7 @@ namespace Lightweight
             buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
 
             // TODO: use this.Content to load your game content here
-            button = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 , 
+            button = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
                 windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
 
             player.LoadAnims(Content);
@@ -120,7 +120,7 @@ namespace Lightweight
             switch (menuState)
             {
                 case MenuStates.MainMenu:
-                    button.Draw(_spriteBatch);
+                    button.Draw(_spriteBatch, "PLAY");
 
                     if(button.ButtonClicked())
                     {
@@ -151,9 +151,15 @@ namespace Lightweight
                     player.Draw(_spriteBatch);
                     walls.Draw(_spriteBatch);
 
-            
+
                     //This draws the tiles across the screen
                     //floorTileObject.Draw(_spriteBatch);
+                    _spriteBatch.DrawString(
+                        buttonText,
+                        $"Scraps: {player.Scraps}",
+                        new Vector2(15, 10),
+                        Color.Black);
+
                     break;
                 case MenuStates.Pause:
 

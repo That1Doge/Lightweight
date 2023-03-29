@@ -19,16 +19,30 @@ namespace Lightweight
         int playerDefense;
         int scraps;
 
+        /// <summary>
+        /// A get and set property for the player health
+        /// </summary>
         public int PlayerHealth
         {
             get { return playerHealth; }
             set { playerHealth = value; }
         }
 
+        /// <summary>
+        /// A get and set property for the player defense
+        /// </summary>
         public int PlayerDefense
         {
             get { return playerDefense; }
             set { playerDefense = value; }
+        }
+
+        /// <summary>
+        /// A get only property for scraps
+        /// </summary>
+        public int Scraps
+        {
+            get { return scraps; }
         }
 
         public float Speed { get { return speed; } set { speed = value; } }

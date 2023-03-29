@@ -73,7 +73,7 @@ namespace Lightweight
         /// Method that draws the button
         /// </summary>
         /// <param name="sb"></param>
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, string buttonText)
         {
             // Draws the button with its texture, at the positon, with a hitbox of a rectangle, and the text above it
             sb.Draw(
@@ -82,8 +82,9 @@ namespace Lightweight
                 Color.White);
             sb.DrawString(
                 text,
-                "test",
-                new Vector2(rect.X, rect.Y),
+                buttonText,
+                //new Vector2(rect.X, rect.Y),
+                new Vector2(rect.X + text.MeasureString(buttonText).X - 7, rect.Y + text.MeasureString(buttonText).Y - 10),
                 Color.Black);
         }
 
