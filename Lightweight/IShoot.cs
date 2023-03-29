@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,11 +18,8 @@ namespace Lightweight
         /// Instantiate a new bullet object at this object's position
         /// moving in the direction of the target object
         /// </summary>
-        /// <param name="target">The object that the bullet is directed towards</param>
-        public void Shoot(GameObject target);
-
-        // 1. finish functional IShoot interface
-        // 2. create bullet class instantiated by IShoot
-        // 3. implement into Player (and Enemy) classes
+        /// <param name="texture">The texture to apply to the bullet</param>
+        /// <param name="position">The position at which to spawnn a bullet</param>
+        public void Shoot(Texture2D texture, Vector2 position);
     }
 }

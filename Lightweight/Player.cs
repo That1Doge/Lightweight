@@ -96,9 +96,20 @@ namespace Lightweight
             this.playerHealth = playerHealth - (damage - defense);
         }   
 
-        public void Shoot(GameObject target)
+        public void Shoot(Texture2D texture, Vector2 position)
         {
-            throw new NotImplementedException();
+            // get current mouse position
+            MouseState mouseState = Mouse.GetState();
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+
+            // calculate direction to mouse position
+            Vector2 direction = Vector2.Normalize(mousePosition - position);
+
+            // instantiate bullet at the player's position with the calculated direction
+            Bullet bullet = new Bullet(texture, position, direction);
+
+            // TODO: implement bullets list and add bullet to list
+            // bullets.Add(bullet);
         }
 
         public void Move(Direction direction)
@@ -107,12 +118,6 @@ namespace Lightweight
         }
 
         /*
-        public void Shoot(GameObject bullet)
-        {
-
-        }
-
-
         public void Move(Direction dir)
         {
 
