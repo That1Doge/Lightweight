@@ -28,12 +28,10 @@ namespace Lightweight
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="rectangle"></param>
-        public GameObject(Texture2D texture, Rectangle rectangle, int windowHeight, int windowWidth) 
+        public GameObject(Texture2D texture, Rectangle rectangle) 
         {
             this.texture = texture;
             this.rectangle = rectangle;
-            this.windowWidth = windowWidth;
-            this.windowHeight = windowHeight;
         }
 
         public abstract void Update();

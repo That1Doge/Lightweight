@@ -6,7 +6,7 @@ using System;
 /// <summary>
 /// bullet projectile object
 /// </summary>
-public class Bullet : GameObject, ICollidable
+public class Bullet : GameObject
 {
     /// <summary>
     /// Direction vector for the path of the bullet
