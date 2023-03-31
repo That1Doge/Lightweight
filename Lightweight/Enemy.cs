@@ -4,8 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+    /// <summary>
+    /// Enemy Class 
+    /// Creates a single instance of a enemy
+    /// </summary>
     public class Enemy : ITakeDamage
     {
         private int enemyHealth;

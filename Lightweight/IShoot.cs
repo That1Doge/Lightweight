@@ -7,10 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     /// <summary>
-    /// This object can shoot bullets
+    /// Shoot interface 
+    /// This object can shoot
     /// </summary>
     internal interface IShoot
     {

@@ -6,13 +6,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+
     internal class Wall : GameObject, ICollidable
     {
+        //Field used in class
         Rectangle hitBox;
+
+        /// <summary>
+        /// X position property
+        /// </summary>
         public int X { get { return this.rectangle.X; } set { this.rectangle.X = value; } }
+
+        /// <summary>
+        /// Y position property
+        /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
+
+        /// <summary>
+        /// Hitbox property
+        /// </summary>
         public Rectangle HitBox { get { return hitBox; } }
 
         /// <summary>

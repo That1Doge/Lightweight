@@ -125,7 +125,7 @@ namespace Lightweight
                             }
                             else
                             {
-                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 12, walls[walls.Count - 1].Y - 43, 12, 50)));
+                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 17, walls[walls.Count - 1].Y - 43, 12, 50)));
                             }
                             break;
                     }
@@ -137,7 +137,7 @@ namespace Lightweight
                         case 0:
                             if (x == 0)
                             {
-                                walls.Add(new Wall(topWall, new Rectangle(0, 0, 50, 12)));
+                                walls.Add(new Wall(topWall, new Rectangle(5, 0, 50, 12)));
                             }
                             else
                             {
@@ -263,11 +263,7 @@ namespace Lightweight
                 case MenuStates.Gameplay:
                     GraphicsDevice.Clear(Color.Black);
 
-                    
-                    
-                    
-
-                    //This draws the tiles/walls across the screen
+                    //This draws the tiles/walls, and player across the screen
                     foreach (Tile tile in floorTiles) 
                     {
                         tile.Draw(_spriteBatch);
@@ -283,8 +279,6 @@ namespace Lightweight
                         $"Scraps: {player.Scraps}",
                         new Vector2(15, 10),
                         Color.Black);
-
-                    _spriteBatch.DrawString(buttonText, player.Scraps.ToString(), Vector2.Zero, Color.White);
                     break;
                 case MenuStates.Pause:
 

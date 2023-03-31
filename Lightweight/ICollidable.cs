@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Security.Cryptography.X509Certificates;
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
 
 namespace Lightweight
 {
+    /// <summary>
+    /// Collidable Interface
+    /// Object that is collidable 
+    /// </summary>
     internal interface ICollidable
     {
        public Rectangle HitBox { get; }

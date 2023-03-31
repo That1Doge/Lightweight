@@ -6,8 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+    /// <summary>
+    /// Tile Class 
+    /// Creates a single instance of a tile
+    /// </summary>
     internal class Tile : GameObject
     {
         /// <summary>

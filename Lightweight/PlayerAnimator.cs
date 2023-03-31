@@ -7,8 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
 namespace Lightweight
 {
+    /// <summary>
+    /// Player Animator Class
+    /// Animates the player sprite
+    /// </summary>
     internal class PlayerAnimator
     {
         private Dictionary<object, Animation> animations = new();

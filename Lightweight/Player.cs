@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 
 namespace Lightweight
 {
-    public class Player : IShoot, IMove, ITakeDamage, ICollidable
+    public class Player : IMove, ITakeDamage, ICollidable
     {
         //Fields used in class
         int playerHealth;
