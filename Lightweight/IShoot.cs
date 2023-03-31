@@ -19,7 +19,8 @@ namespace Lightweight
         /// moving in the direction of the target object
         /// </summary>
         /// <param name="texture">The texture to apply to the bullet</param>
-        /// <param name="position">The position at which to spawnn a bullet</param>
-        public void Shoot(Texture2D texture, Vector2 position);
+        /// <param name="origin">The position for the bullet to move towards</param>
+        /// <param name="target">The position for the bullet to move towards</param>
+        public void Shoot(Texture2D texture, Vector2 origin, Vector2 target);
     }
 }

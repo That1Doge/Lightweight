@@ -29,6 +29,9 @@ namespace Lightweight
         private static bool isRolling;
         private static KeyboardState kb;
         private static KeyboardState prevKb;
+        private static MouseState prevMouse;
+        private static MouseState mouse;
+
         public static Vector2 Direction { get { return direction; } }
         public static PlayerState PlayerState { get { return playerState; } }
 
@@ -52,6 +55,24 @@ namespace Lightweight
         {
             prevKb = kb;
             kb = Keyboard.GetState();
+            
+            /* TODO: Implement Shoot() method call
+            // update mouse states
+            prevMouse = mouse;
+            mouse = Mouse.GetState();
+
+            // if LMB clicked, shoot bullet at mouse position
+            if (mouse.LeftButton == ButtonState.Pressed &&
+                prevMouse.LeftButton == ButtonState.Released)
+            {
+                // get current mouse position
+                Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
+
+                // shoot from player position
+                Player.Shoot(Player.BulletTex, Player.Position, mousePosition);
+            }
+            */
+
 
             if (!isRolling) direction = Vector2.Zero;
             if (kb.GetPressedKeyCount() > 0 && !isRolling)

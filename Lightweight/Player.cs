@@ -20,6 +20,16 @@ namespace Lightweight
         int scraps;
         private Rectangle hitBox;
         private Texture2D hitBoxTex;
+        private Texture2D bulletTex;
+
+        public Texture2D BulletTex
+        { get { return bulletTex; } }
+
+        /// <summary>
+        /// List of active bullets
+        /// TODO: possibly move to separate class
+        /// </summary>
+        private List<Bullet> bullets;
 
         /// <summary>
         /// A get and set property for the player health
@@ -80,7 +90,7 @@ namespace Lightweight
             if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
             if (scraps <= 0) scraps = 1;
             speed = 1f/scraps * 1000f;
-            anims.Update(gt, PlayerController.PlayerState, (1f / scraps) * 128); ;
+            anims.Update(gt, PlayerController.PlayerState, (1f / scraps) * 128);
         }
 
         public void Draw(SpriteBatch sb)
@@ -96,20 +106,21 @@ namespace Lightweight
             this.playerHealth = playerHealth - (damage - defense);
         }   
 
-        public void Shoot(Texture2D texture, Vector2 position)
+        /// <summary>
+        /// Player shoots a bullet in the direction specified
+        /// </summary>
+        /// <param name="texture">Texture for the bullet</param>
+        /// <param name="target">Coordinates of the target</param>
+        public void Shoot(Texture2D texture, Vector2 origin, Vector2 target)
         {
-            // get current mouse position
-            MouseState mouseState = Mouse.GetState();
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-
             // calculate direction to mouse position
-            Vector2 direction = Vector2.Normalize(mousePosition - position);
+            Vector2 direction = Vector2.Normalize(origin - target);
 
             // instantiate bullet at the player's position with the calculated direction
-            Bullet bullet = new Bullet(texture, position, direction);
+            Bullet bullet = new Bullet(texture, origin, direction);
 
-            // TODO: implement bullets list and add bullet to list
-            // bullets.Add(bullet);
+            // implement bullets list and add bullet to list
+            bullets.Add(bullet);
         }
 
         public void Move(Direction direction)
