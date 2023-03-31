@@ -7,6 +7,11 @@ using System.Transactions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     public abstract class GameObject
@@ -28,12 +33,10 @@ namespace Lightweight
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="rectangle"></param>
-        public GameObject(Texture2D texture, Rectangle rectangle, int windowHeight, int windowWidth) 
+        public GameObject(Texture2D texture, Rectangle rectangle) 
         {
             this.texture = texture;
             this.rectangle = rectangle;
-            this.windowWidth = windowWidth;
-            this.windowHeight = windowHeight;
         }
 
         public abstract void Update();

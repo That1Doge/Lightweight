@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
 namespace Lightweight
 {
     /// <summary>
     /// Class that handles what the Menu Buttons look like, what text they have,
-    ///     and what position they are at
+    /// and what position they are at
     /// </summary>
     internal class MenuButton
     {

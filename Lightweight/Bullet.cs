@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 /// <summary>
-/// bullet projectile object
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Bullet Class 
+/// Creates projectile bullet
 /// </summary>
-public class Bullet : GameObject, ICollidable
+public class Bullet : GameObject
 {
     /// <summary>
     /// Direction vector for the path of the bullet
@@ -30,6 +32,11 @@ public class Bullet : GameObject, ICollidable
         isAlive = true;
     }
 
+    /// <summary>
+    /// Collision method for bullet
+    /// </summary>
+    /// <param name="target">Desired target</param>
+    /// <returns></returns>
     public bool Intersect(Rectangle target)
     {
         // Check if position is inside rectangle bounds
@@ -66,6 +73,10 @@ public class Bullet : GameObject, ICollidable
         }
     }
 
+    /// <summary>
+    /// Draws bullet to window
+    /// </summary>
+    /// <param name="spriteBatch"></param>
     public override void Draw(SpriteBatch spriteBatch)
     {
         // don't draw if bullet isn't active

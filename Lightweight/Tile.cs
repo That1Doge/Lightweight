@@ -6,46 +6,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+    /// <summary>
+    /// Tile Class 
+    /// Creates a single instance of a tile
+    /// </summary>
     internal class Tile : GameObject
     {
+        /// <summary>
+        /// X position property
+        /// </summary>
         public int X { get { return this.rectangle.X; } set { this.rectangle.X = value; } }
+
+        /// <summary>
+        /// Y position property
+        /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
-        public Tile(Texture2D texture, Rectangle rectangle, int windowWidth, int windowHeight)
-            : base(texture, rectangle, windowHeight, windowWidth)
+
+        /// <summary>
+        /// Tile parameterized constructor
+        /// </summary>
+        /// <param name="texture">Desired tile texture</param>
+        /// <param name="rectangle">Desired rectangle</param>
+        public Tile(Texture2D texture, Rectangle rectangle)
+            : base(texture, rectangle)
         {
             this.texture = texture;
             this.rectangle = rectangle;
         }
 
+        /// <summary>
+        /// Update override for tile class
+        /// </summary>
         public override void Update() 
         { 
             
         }
 
-        //total possible amount of tiles in default window size: 50x30
+        /// <summary>
+        /// Draws tile to window
+        /// </summary>
+        /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb) 
         {
-            int ogXCoord = this.X;
-
-            for (int i = 0; i < (windowWidth / 15); i++)
-            {
-                if (i != 0) 
-                {
-                    this.Y += 16;
-                }
-                for (int x = 0; x < ((windowHeight) / 16); x++)
-                {
-                    if (x == 0)
-                    {
-                        this.X = ogXCoord;
-                    }
-                    sb.Draw(this.texture, this.rectangle, Color.White);
-                    this.X += 16;
-                }
-            }
-            
+            sb.Draw(this.texture, this.rectangle, Color.White);
         }
     }
 }

@@ -12,9 +12,9 @@ using System.Xml.Serialization;
 
 namespace Lightweight
 {
-    public class Player : IShoot, IMove, ITakeDamage
+    public class Player : IMove, ITakeDamage, ICollidable
     {
-        
+        //Fields used in class
         int playerHealth;
         int playerDefense;
         int scraps;
@@ -48,6 +48,13 @@ namespace Lightweight
             get { return playerDefense; }
             set { playerDefense = value; }
         }
+        
+        /// <summary>
+        /// Returns hitbox of player (for collision)
+        /// </summary>
+        public Rectangle HitBox { get { return hitBox; } }
+        public int X { get { return (int)position.X; } set { position.X = value; } }
+        public int Y { get { return (int)position.Y; } set { position.Y = value; } }
 
         public int Scraps => scraps;
 
@@ -98,7 +105,19 @@ namespace Lightweight
             anims.Draw(sb, position);
             sb.Draw(hitBoxTex, hitBox, Color.Pink);
         }
-        
+
+        public bool Intersect(Rectangle rect)
+        {
+            if (hitBox.Intersects(rect))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void ITakeDamage(int damage, int defense)
         {
             //damage taken is reduced by defense of player,
