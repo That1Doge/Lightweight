@@ -125,7 +125,7 @@ namespace Lightweight
                             }
                             else
                             {
-                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 17, walls[walls.Count - 1].Y - 43, 12, 50)));
+                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 12, walls[walls.Count - 1].Y - 43, 12, 50)));
                             }
                             break;
                     }
