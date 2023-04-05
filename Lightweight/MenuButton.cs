@@ -14,6 +14,16 @@ using System.Threading.Tasks;
 namespace Lightweight
 {
     /// <summary>
+    /// Enumerator for where the text is being aligned horizontally
+    /// </summary>
+    public enum TextHorizontal { LeftAligned, CenterAligned, RightAligned }
+    
+    /// <summary>
+    /// Enumerator for where the text is being aligned vertically
+    /// </summary>
+    public enum TextVertical { TopAligned, CenterAligned, BottomAligned }
+
+    /// <summary>
     /// Class that handles what the Menu Buttons look like, what text they have,
     /// and what position they are at
     /// </summary>
@@ -73,54 +83,48 @@ namespace Lightweight
             }
         }
 
+
         /// <summary>
-        /// Method that draws the button
+        /// Draws the button with its text center aligned
         /// </summary>
-        /// <param name="sb"></param>
-        public void Draw(SpriteBatch sb, string buttonText)
+        /// <param name="spriteBatch">game's sprite batch</param>
+        /// <param name="value">what is displayed on the button</param>
+        /// <param name="renderArea">the rectangle the text is going in</param>
+        /// <param name="h">horizontal alignment of text</param>
+        /// <param name="v">vertical alignment of text</param>
+        public void Render(SpriteBatch spriteBatch, string value, Rectangle renderArea,
+        TextHorizontal h = TextHorizontal.CenterAligned, TextVertical v = TextVertical.CenterAligned)
         {
-            // Draws the button with its texture, at the positon, with a hitbox of a rectangle, and the text above it
-            sb.Draw(
+
+            var location = new Vector2(renderArea.X, renderArea.Y);
+
+            var size = text.MeasureString(value);
+
+            switch (h)
+            {
+                case TextHorizontal.CenterAligned:
+                    location.X += (renderArea.Width - size.X) / 1.9f;
+                    break;
+                case TextHorizontal.RightAligned:
+                    location.X += renderArea.Width - size.X;
+                    break;
+            }
+
+            switch (v)
+            {
+                case TextVertical.CenterAligned:
+                    location.Y += (renderArea.Height - size.Y) / 1.9f;
+                    break;
+                case TextVertical.BottomAligned:
+                    location.Y += renderArea.Height - size.Y;
+                    break;
+            }
+            spriteBatch.Draw(
                 texture,
                 rect,
                 Color.White);
-
-            if (buttonText.Length > 4)
-            {
-                sb.DrawString(
-               text,
-               buttonText,
-               //new Vector2(rect.X, rect.Y),
-               new Vector2(rect.X + buttonText.Length / 2 + 15, rect.Y + text.MeasureString(buttonText).Y / 2 - 2),
-               Color.Black);
-            }
-            else
-            {
-                sb.DrawString(
-                text,
-                buttonText,
-                //new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + text.MeasureString(buttonText).X / 2 + 10, rect.Y + text.MeasureString(buttonText).Y / 2 - 2),
-                Color.Black);
-            }
-            /*
-            sb.DrawString(
-                text,
-                buttonText,
-                //new Vector2(rect.X, rect.Y),
-                new Vector2(rect.X + text.MeasureString(buttonText).X/2, rect.Y + text.MeasureString(buttonText).Y / 2),
-                Color.Black);
-            */
+            spriteBatch.DrawString(text, value, location, Color.Black);
         }
 
-        /// <summary>
-        /// Update for the button by frame
-        /// </summary>
-        public void Update()
-        {
-           // Checks if the button is clicked every frame
-            this.ButtonClicked();
-        }
-        
     }
 }

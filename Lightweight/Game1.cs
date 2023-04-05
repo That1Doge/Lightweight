@@ -36,10 +36,17 @@ namespace Lightweight
         private MenuButton playButton;
         private MenuButton optionsButton;
         private MenuButton quitButton;
+        private MenuButton menuButton;
+        private MenuButton retryButton;
+        private MenuButton optionsBack;
+        private MenuButton instructionsButton;
+        private MenuButton instructionsBack;
+        private MenuButton pauseBack;
         private SpriteFont buttonText;
-        private Player player;
         private Rectangle buttonRectangle;
         private Texture2D buttonTexture;
+        private KeyboardState prevState;
+        private Player player;
         private List<Tile> floorTiles;
         private List<Wall> walls;
         int yPosTile;
@@ -76,13 +83,27 @@ namespace Lightweight
             topWall = Content.Load<Texture2D>("top_wall");
 
             // TODO: use this.Content to load your game content here
-            // Loads all of the Main Menu buttons
+            // Loads all of the Menu buttons
             playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
                 windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
             optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
             quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
+
+            // Loads all of the Options buttons
+            optionsBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(20, 20, 
+                buttonTexture.Width, buttonTexture.Height));
+
+            // Loads all of the Pause buttons
+            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+
+            // Game over buttons loaded here
+            menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
+            retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
 
             //Creates floor tiles and adds them to a list
             for (int i = 0; i < (windowHeight / 16); i++) 
@@ -163,28 +184,45 @@ namespace Lightweight
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || 
+            //    Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
+
 
             // Switch statement that changes the Menu States depending on what action is done
             switch(menuState)
             {
+                
                 case MenuStates.MainMenu:
                     // Tests the menu state 
+                    //if(Keyboard.GetState().IsKeyDown(Keys.W))
+                    //{
+                    //    menuState = MenuStates.Gameplay;
+                    //}
                     
-                    if(Keyboard.GetState().IsKeyDown(Keys.W))
+                    if (playButton.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;
                     }
-                    
+                    else if (optionsButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.OptionsMenu;
+                    }
+                    else if (quitButton.ButtonClicked())
+                    {
+                        Exit();
+                    }
 
                     break;
                 case MenuStates.InstructionMenu:
                     
                     break;
                 case MenuStates.OptionsMenu:
-                    
+                    if(optionsBack.ButtonClicked())
+                    {
+                        menuState = MenuStates.MainMenu;
+                    }
+
                     break;
                 case MenuStates.Gameplay:
 
@@ -208,19 +246,47 @@ namespace Lightweight
                             player.Y += 5;
                         }
                     }
+
+                    // Accesses pause menu
+                    if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
+                        prevState.IsKeyUp(Keys.Escape))
+                    {
+                        menuState = MenuStates.Pause;
+                    }
+
+                    if(Keyboard.GetState().IsKeyDown(Keys.M))
+                    {
+                        menuState = MenuStates.GameOver;
+                    }
                     break;
                 case MenuStates.Pause:
+                    if((Keyboard.GetState().IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
+                        || pauseBack.ButtonClicked())
+                    {
+                        menuState = MenuStates.Gameplay;
+                    }
 
                     break;
                 case MenuStates.GameOver:
+
+                    if (menuButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.MainMenu;
+                    }
+                    else if (retryButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.Gameplay;
+                    }
 
                     break;
             }
             // TODO: Add your update logic here
             player.Update(gameTime);
-            
+
             
             base.Update(gameTime);
+
+            prevState = Keyboard.GetState();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -235,29 +301,17 @@ namespace Lightweight
             {
 
                 case MenuStates.MainMenu:
-                    
-                    // Draws buttons to the Main Menu, and detects if the buttons are clicked and what to do if they are
-                    playButton.Draw(_spriteBatch, "PLAY");
-                    optionsButton.Draw(_spriteBatch, "OPTIONS");
-                    quitButton.Draw(_spriteBatch, "QUIT");
-                    if(playButton.ButtonClicked())
-                    {
-                        menuState = MenuStates.Gameplay;
-                    }
-                    else if(optionsButton.ButtonClicked())
-                    {
-
-                    }
-                    else if(quitButton.ButtonClicked())
-                    {
-                        Exit();
-                    }
+                    // Draws buttons to the play screen
+                    playButton.Render(_spriteBatch, "PLAY", playButton.Rectangle);
+                    optionsButton.Render(_spriteBatch, "OPTIONS", optionsButton.Rectangle);
+                    quitButton.Render(_spriteBatch, "QUIT", quitButton.Rectangle);
 
                     break;
                 case MenuStates.InstructionMenu:
 
                     break;
                 case MenuStates.OptionsMenu:
+                    optionsBack.Render(_spriteBatch, "BACK", optionsBack.Rectangle);
 
                     break;
                 case MenuStates.Gameplay:
@@ -281,9 +335,15 @@ namespace Lightweight
                         Color.Black);
                     break;
                 case MenuStates.Pause:
+                    pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
 
                     break;
                 case MenuStates.GameOver:
+                    GraphicsDevice.Clear(Color.DarkRed);
+
+                    // Draws the Game Over buttons needed
+                    menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
+                    retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
 
                     break;
             }
