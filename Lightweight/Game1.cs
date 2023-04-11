@@ -47,9 +47,8 @@ namespace Lightweight
         private Texture2D buttonTexture;
         private KeyboardState prevState;
         private Player player;
-        private List<Tile> floorTiles;
         private List<Wall> walls;
-        int yPosTile;
+        private LevelManager levelManager;
 
 
         public Game1()
@@ -64,11 +63,10 @@ namespace Lightweight
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
             player = new Player();
-            floorTiles = new List<Tile>();
             walls = new List<Wall>();
-            yPosTile = 0;
             menuState = MenuStates.MainMenu;
             base.Initialize();
+
         }
 
         protected override void LoadContent()
@@ -105,22 +103,9 @@ namespace Lightweight
             retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
 
-            //Creates floor tiles and adds them to a list
-            for (int i = 0; i < (windowHeight / 16); i++) 
-            {
-                for (int x = 0; x < ((windowWidth) / 15); x++) 
-                { 
-                    if (x == 0) 
-                    {
-                        floorTiles.Add(new Tile(floorTile, new Rectangle(0, yPosTile, 16, 16)));   
-                    }
-                    else 
-                    {
-                        floorTiles.Add(new Tile(floorTile, new Rectangle(floorTiles[x - 1].X + 16, yPosTile, 16, 16)));
-                    }
-                }
-                yPosTile += 16;
-            }
+            levelManager = new LevelManager(floorTile, topWall, windowHeight, windowWidth);
+
+            levelManager.BuildLevel();
 
             //Creates walls and adds them to a list
             for (int i = 0; i < 4; i++) 
@@ -318,10 +303,8 @@ namespace Lightweight
                     GraphicsDevice.Clear(Color.Black);
 
                     //This draws the tiles/walls, and player across the screen
-                    foreach (Tile tile in floorTiles) 
-                    {
-                        tile.Draw(_spriteBatch);
-                    }
+                    levelManager.Draw(_spriteBatch);
+
                     player.Draw(_spriteBatch);
                     foreach (Wall wall in walls)
                     {
