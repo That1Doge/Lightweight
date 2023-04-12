@@ -35,9 +35,9 @@ namespace Lightweight
         public void LoadLevel(string filename) 
         {
             StreamReader input = new StreamReader(filename);
-            string line = input.ReadLine();
+            string line = "";
             yPosTile = 0;
-            while (line != null)
+            while ((line = input.ReadLine()) != null)
             {
                 string[] split = line.Split(',');
 
@@ -60,18 +60,11 @@ namespace Lightweight
                 else if (attempt < 14)
                 {
                     string tilesToRead = line;
-                    char[] tilesRead = new char[tilesToRead.Length];
-
-                    for (int i = 1; i < tilesRead.Length; i++)
+                    for (int i = 1; i < 24; i++) 
                     {
-                        tilesRead[i] = tilesToRead[i];
-                    }
-
-                    floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-
-                    for (int i = 1; i < 23; i++) 
-                    { 
-                        switch (tilesRead[i]) 
+                        floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+                        //TODO -- Add random enemy spawns, to traps 
+                        switch (tilesToRead[i - 1])
                         {
                             case 'X':
                                 floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
@@ -80,13 +73,19 @@ namespace Lightweight
                                 floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
                                 break;
                         }
+
                     }
                     floorTiles.Add(new Tile(tileTexture, new Rectangle(768, yPosTile, 32, 32), false));
                     yPosTile += 32;
                     attempt++;
                 }
-                line = input.ReadLine();
+                floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+                for (int i = 1; i < 25; i++)
+                {
+                    floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                }
             }
+            input.Close();
         }
 
         public void BuildLevel() 

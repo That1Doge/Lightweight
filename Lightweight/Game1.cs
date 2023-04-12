@@ -114,8 +114,8 @@ namespace Lightweight
 
             levelManager = new LevelManager(floorTile, trapTexture, topWall, windowHeight, windowWidth);
 
-            levelManager.BuildLevel();
-            //levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+            //levelManager.BuildLevel();
+            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
 
             //Creates walls and adds them to a list
             for (int i = 0; i < 4; i++) 
