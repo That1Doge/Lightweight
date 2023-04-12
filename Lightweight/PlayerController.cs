@@ -61,22 +61,22 @@ namespace Lightweight
             prevKb = kb;
             kb = Keyboard.GetState();
             
-            /* TODO: Implement Shoot() method call
+            // TODO: Implement Shoot() method call
             // update mouse states
             prevMouse = mouse;
             mouse = Mouse.GetState();
 
-            // if LMB clicked, shoot bullet at mouse pos
+            // if LMB clicked, shoot bullet at mouse position
             if (mouse.LeftButton == ButtonState.Pressed &&
                 prevMouse.LeftButton == ButtonState.Released)
             {
-                // get current mouse pos
+                // get current mouse position
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
 
-                // shoot from player pos
-                Player.Shoot(Player.BulletTex, Player.Position, mousePosition);
+                // shoot from player position
+                Player.Shoot(new Vector2(0, 0), mousePosition);
             }
-            */
+            
 
 
             if (!isRolling) direction = Vector2.Zero;

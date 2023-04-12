@@ -25,12 +25,6 @@ namespace Lightweight
         { get { return bulletTex; } }
 
         /// <summary>
-        /// List of active bullets
-        /// TODO: possibly move to separate class
-        /// </summary>
-        private List<Bullet> bullets;
-
-        /// <summary>
         /// A get and set property for the player health
         /// </summary>
         public int PlayerHealth
@@ -131,16 +125,16 @@ namespace Lightweight
         /// </summary>
         /// <param name="texture">Texture for the bullet</param>
         /// <param name="target">Coordinates of the target</param>
-        public void Shoot(Texture2D texture, Vector2 origin, Vector2 target)
+        public void Shoot(Vector2 origin, Vector2 target)
         {
             // calculate direction to mouse pos
             Vector2 direction = Vector2.Normalize(origin - target);
 
-            // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(texture, origin, direction);
+            // instantiate bullet at the player's position with the calculated direction
+            Bullet bullet = new Bullet(origin, direction);
 
             // implement bullets list and add bullet to list
-            bullets.Add(bullet);
+            BulletManager.Add(bullet);
         }
 
         public void Move(Direction direction)

@@ -51,7 +51,6 @@ namespace Lightweight
         private List<Wall> walls;
         private LevelManager levelManager;
 
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -81,6 +80,8 @@ namespace Lightweight
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
+
+            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain_circle1");
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
