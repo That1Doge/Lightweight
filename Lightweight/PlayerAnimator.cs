@@ -14,18 +14,14 @@ using System.Threading.Tasks;
 namespace Lightweight
 {
     /// <summary>
-    /// Player Animator Class
+    /// Player Anims Class
     /// Animates the player sprite
     /// </summary>
-    internal class PlayerAnimator
+    internal class PlayerAnimator : Animator
     {
-        private Dictionary<object, Animation> animations = new();
-        private object lastKey;
-
-        public void AddAnimation(object key, Animation animation)
+        public PlayerAnimator() 
+            : base()
         {
-            animations.Add(key, animation);
-            if (lastKey == null) { lastKey = key; }
         }
 
         public void Update(GameTime gt, object key, float fps)

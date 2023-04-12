@@ -66,14 +66,14 @@ namespace Lightweight
             prevMouse = mouse;
             mouse = Mouse.GetState();
 
-            // if LMB clicked, shoot bullet at mouse position
+            // if LMB clicked, shoot bullet at mouse pos
             if (mouse.LeftButton == ButtonState.Pressed &&
                 prevMouse.LeftButton == ButtonState.Released)
             {
-                // get current mouse position
+                // get current mouse pos
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
 
-                // shoot from player position
+                // shoot from player pos
                 Player.Shoot(Player.BulletTex, Player.Position, mousePosition);
             }
             */

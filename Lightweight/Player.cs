@@ -48,6 +48,8 @@ namespace Lightweight
             set { playerDefense = value; }
         }
         
+        public Vector2 Position { get { return position; } }
+
         /// <summary>
         /// Returns hitbox of player (for collision)
         /// </summary>
@@ -87,7 +89,7 @@ namespace Lightweight
             PlayerController.Update(gt);
 
             position += PlayerController.Direction * this.Speed
-                * (float)gt.ElapsedGameTime.TotalSeconds;
+                * (float)gt.ElapsedGameTime.TotalSeconds * 1000f;
 
             hitBox.X = (int)position.X + 5;
             hitBox.Y = (int)position.Y + 10;
@@ -95,7 +97,7 @@ namespace Lightweight
             if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
             if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
             if (scraps <= 0) scraps = 1;
-            speed = 1f/scraps * 1000f;
+            speed = 1f/scraps;
             anims.Update(gt, PlayerController.PlayerState, (1f / scraps) * 128);
         }
 
@@ -131,10 +133,10 @@ namespace Lightweight
         /// <param name="target">Coordinates of the target</param>
         public void Shoot(Texture2D texture, Vector2 origin, Vector2 target)
         {
-            // calculate direction to mouse position
+            // calculate direction to mouse pos
             Vector2 direction = Vector2.Normalize(origin - target);
 
-            // instantiate bullet at the player's position with the calculated direction
+            // instantiate bullet at the player's pos with the calculated direction
             Bullet bullet = new Bullet(texture, origin, direction);
 
             // implement bullets list and add bullet to list
