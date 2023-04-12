@@ -66,8 +66,8 @@ public class Bullet : GameObject
         position += direction;
 
         // if the bullet has gone off-screen, remove from game
-        if (position.X < 0 || position.X > windowWidth ||
-            position.Y < 0 || position.Y > windowHeight)
+        if (position.X < 0 || position.X > Game1.WindowWidth ||
+            position.Y < 0 || position.Y > Game1.WindowHeight)
         {
             isAlive = false;
         }

@@ -25,8 +25,8 @@ namespace Lightweight
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        int windowWidth;
-        int windowHeight;
+        private static int windowWidth;
+        private static int windowHeight;
         private Texture2D floorTile;
         private Texture2D leftWall;
         private Texture2D rightWall;
@@ -53,6 +53,9 @@ namespace Lightweight
         private Player player;
         private List<Wall> walls;
         private LevelManager levelManager;
+
+        public static int WindowWidth { get { return windowWidth; } }
+        public static int WindowHeight { get { return windowHeight; } }
 
         public Game1()
         {
@@ -264,10 +267,10 @@ namespace Lightweight
                     }
 
                     // update bullets
-                    foreach (Bullet bullet in BulletManager.Bullets)
+                    /*foreach (Bullet bullet in BulletManager.Bullets)
                     {
                         bullet.Update();
-                    }
+                    }*/
 
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
