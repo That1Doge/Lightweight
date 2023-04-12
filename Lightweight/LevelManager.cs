@@ -21,6 +21,7 @@ namespace Lightweight
         Texture2D trapTexture;
         Random rng = new Random();
         int trapChance;
+        int attempt = 0;
 
         public List<Tile> FloorTiles { get { return floorTiles; } set { floorTiles = value; } } 
 
@@ -35,9 +36,56 @@ namespace Lightweight
         {
             StreamReader input = new StreamReader(filename);
             string line = input.ReadLine();
+            yPosTile = 0;
             while (line != null)
             {
                 string[] split = line.Split(',');
+
+                if (attempt == 0)
+                {
+                    string[] symbols = new string[split.Length];
+                    for (int i = 0; i < symbols.Length; i++) 
+                    {
+                        symbols[i] = split[i];
+                    }
+
+                    floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+                    for (int i = 1; i < 25; i++) 
+                    {
+                        floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                    }
+                    yPosTile += 32;
+                    attempt++;
+                }
+                else if (attempt < 14)
+                {
+                    string tilesToRead = line;
+                    char[] tilesRead = new char[tilesToRead.Length];
+
+                    for (int i = 1; i < tilesRead.Length; i++)
+                    {
+                        tilesRead[i] = tilesToRead[i];
+                    }
+
+                    floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+
+                    for (int i = 1; i < 23; i++) 
+                    { 
+                        switch (tilesRead[i]) 
+                        {
+                            case 'X':
+                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                                break;
+                            case 'O':
+                                floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
+                                break;
+                        }
+                    }
+                    floorTiles.Add(new Tile(tileTexture, new Rectangle(768, yPosTile, 32, 32), false));
+                    yPosTile += 32;
+                    attempt++;
+                }
+                line = input.ReadLine();
             }
         }
 
