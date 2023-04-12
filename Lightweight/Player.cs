@@ -91,6 +91,7 @@ namespace Lightweight
 
             if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
             if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
+            if (PlayerController.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
             if (scraps <= 0) scraps = 1;
             speed = 1f/scraps;
             anims.Update(gt, PlayerController.PlayerState, (1f / scraps) * 128);

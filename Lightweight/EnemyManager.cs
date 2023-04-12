@@ -12,37 +12,38 @@ namespace Lightweight
     internal class EnemyManager
     {
         private static EnemyManager instance;
-        private static List<Enemy> enemies;
-        private int maxEnemies;
+        private List<Enemy> enemies;
+        private Dictionary<string, Texture2D> spriteSheets;
 
-        private EnemyManager(int maxEnemies)
+        private EnemyManager()
         {
-            this.maxEnemies = maxEnemies;
+            spriteSheets = new Dictionary<string, Texture2D>();
+            enemies = new List<Enemy>();
         }
 
         public static EnemyManager Instance
         {
             get 
             {
-                if (Instance == null) instance = new EnemyManager(10);
-                return Instance;
+                if (instance == null) instance = new EnemyManager();
+                return instance;
             }
         }
 
-        public int MaxEnemies 
-        { 
-            get { return maxEnemies; } 
-            set { maxEnemies = value; }
+        public void LoadSpriteSheets(ContentManager content)
+        {
+            spriteSheets.Add("run", content.Load<Texture2D>("PNG/Mage/Run/run"));
         }
 
-        public void SpawnEnemies()
+        public void SpawnEnemies(int numSpawn, Vector2 pos)
         {
-            // spawn rules
-            Vector2 spawnPos = new Vector2(10, 10);
-
-            for(int i = 0; i < maxEnemies; i++)
+            for(int i = 0; i < numSpawn; i++)
             {
-                enemies.Add(new Enemy(spawnPos));
+                enemies.Add(new Enemy(pos, new Animator()));
+                enemies[enemies.Count - 1].Anims.AddAnimation(EnemyState.RunRight,
+                    new Animation(spriteSheets["run"], 6));
+                enemies[enemies.Count - 1].Anims.AddAnimation(EnemyState.RunLeft,
+                    new Animation(spriteSheets["run"], 6, SpriteEffects.FlipHorizontally));
             }
         }
 

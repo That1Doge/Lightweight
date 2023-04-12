@@ -7,7 +7,7 @@ public class BulletManager
     /// <summary>
     /// List of active bullets
     /// </summary>
-    private static List<Bullet> bullets;
+    private static List<Bullet> bullets = new();
     private static Texture2D bulletTexture;
 
     public static List<Bullet> Bullets

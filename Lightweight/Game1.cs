@@ -86,7 +86,9 @@ namespace Lightweight
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
 
-            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain_circle1");
+            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
+
+            EnemyManager.Instance.LoadSpriteSheets(Content);
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
@@ -231,6 +233,7 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Gameplay:
+
                     //Collision mechanic
                     foreach (Wall walls in walls) 
                     { 
@@ -291,8 +294,8 @@ namespace Lightweight
             }
             // TODO: Add your update logic here
             player.Update(gameTime);
+            EnemyManager.Instance.Update(gameTime, player);
 
-            
             base.Update(gameTime);
 
             prevState = Keyboard.GetState();
@@ -304,7 +307,6 @@ namespace Lightweight
             _spriteBatch.Begin();
 
             // TODO: Add your drawing code here
-
             // Switch statement for what gets drawn to the screen
             switch (menuState)
             {
@@ -331,6 +333,7 @@ namespace Lightweight
                     levelManager.Draw(_spriteBatch);
 
                     player.Draw(_spriteBatch);
+                    EnemyManager.Instance.Draw(_spriteBatch);
                     foreach (Wall wall in walls)
                     {
                         wall.Draw(_spriteBatch);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-    internal class Animator
+    public class Animator
     {
         protected Dictionary<object, Animation> animations;
         protected object lastKey;

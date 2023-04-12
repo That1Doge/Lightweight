@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-    internal class Animation
+    public class Animation
     {
         // texture data
         private Texture2D spriteSheet;

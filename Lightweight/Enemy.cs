@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-    public enum EnemyState { FaceLeft, FaceRight, RunLeft, RunRight }
+    public enum EnemyState { RunLeft, RunRight }
     /// <summary>
     /// Enemy Class 
     /// Creates a single Instance of a enemy
@@ -25,13 +25,17 @@ namespace Lightweight
         private Vector2 pos;
         private float speed;
         private Rectangle hitBox;
+        private Animator anims;
+        private EnemyState animState;
 
         public Rectangle HitBox { get { return hitBox; } }
+        public Animator Anims { get { return anims; } }
 
-        public Enemy(Vector2 pos)
+        public Enemy(Vector2 pos, Animator anims)
         {
             this.pos = pos;
-            speed = 50;
+            this.anims = anims;
+            speed = 5;
         }
 
         public void ITakeDamage(int damage, int defense)
@@ -43,11 +47,11 @@ namespace Lightweight
         public void Update(GameTime gt, Player player)
         {
             Vector2 direction = player.Position - pos;
-            if(direction != Vector2.Zero)
-            {
-                pos += Vector2.Normalize(direction) * speed * 
-                    (float)gt.ElapsedGameTime.TotalSeconds * 1000f;
-            }
+            direction.Normalize();
+            pos += direction * speed * (float)gt.ElapsedGameTime.TotalSeconds * 10f;
+            if(direction.X > 0) { animState = EnemyState.RunRight; }
+            else { animState = EnemyState.RunLeft; }
+            anims.Update(gt, animState);
         }
 
         public void Die()
@@ -62,12 +66,11 @@ namespace Lightweight
 
         public void Shoot(Texture2D texture, Vector2 origin, Vector2 target)
         {
-            throw new NotImplementedException();
         }
 
         public void Draw(SpriteBatch sb)
         {
-
+            anims.Draw(sb, pos);
         }
     }
 }
