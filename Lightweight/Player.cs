@@ -120,20 +120,21 @@ namespace Lightweight
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             this.playerHealth = playerHealth - (damage - defense);
-        }   
+        }
 
         /// <summary>
         /// Player shoots a bullet in the direction specified
         /// </summary>
-        /// <param name="texture">Texture for the bullet</param>
+        /// <param name="origin">Coordinates of the origin</param>
         /// <param name="target">Coordinates of the target</param>
-        public void Shoot(Vector2 origin, Vector2 target)
+
+        public void Shoot(Vector2 origin, Vector2 target, int speed, int damage)
         {
             // calculate direction to mouse pos
-            Vector2 direction = Vector2.Normalize(origin - target);
+            Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's position with the calculated direction
-            Bullet bullet = new Bullet(origin, direction);
+            Bullet bullet = new Bullet(origin, direction, speed, damage);
 
             // implement bullets list and add bullet to list
             BulletManager.Add(bullet);

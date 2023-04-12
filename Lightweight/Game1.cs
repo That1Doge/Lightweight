@@ -25,8 +25,8 @@ namespace Lightweight
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        int windowWidth;
-        int windowHeight;
+        private static int windowWidth;
+        private static int windowHeight;
         private Texture2D floorTile;
         private Texture2D leftWall;
         private Texture2D rightWall;
@@ -49,10 +49,14 @@ namespace Lightweight
         private Texture2D buttonTexture;
         private Texture2D toggleOn;
         private Texture2D toggleOff;
+        private Texture2D backButton;
         private KeyboardState prevState;
         private Player player;
         private List<Wall> walls;
         private LevelManager levelManager;
+
+        public static int WindowWidth { get { return windowWidth; } }
+        public static int WindowHeight { get { return windowHeight; } }
 
         public Game1()
         {
@@ -85,6 +89,7 @@ namespace Lightweight
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
+            backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
 
             BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
@@ -100,8 +105,8 @@ namespace Lightweight
                 windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
 
             // Loads all of the Options buttons
-            optionsBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(20, 20, 
-                buttonTexture.Width, buttonTexture.Height));
+            optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
+                backButton.Width, backButton.Height));
             godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
 
             // Loads all of the Pause buttons
@@ -116,8 +121,8 @@ namespace Lightweight
 
             levelManager = new LevelManager(floorTile, trapTexture, topWall, windowHeight, windowWidth);
 
-            levelManager.BuildLevel();
-            //levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+            //levelManager.BuildLevel();
+            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
 
             //Creates walls and adds them to a list
             for (int i = 0; i < 4; i++) 
@@ -199,6 +204,7 @@ namespace Lightweight
                     if (playButton.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;
+                        Reset();
                     }
                     else if (optionsButton.ButtonClicked())
                     {
@@ -254,6 +260,23 @@ namespace Lightweight
                             player.Y += 5;
                         }
                     }
+
+                    // remove bullets no longer active
+                    for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
+                    {
+                        BulletManager.Bullets[i].Update();
+
+                        if (!BulletManager.Bullets[i].IsAlive)
+                        {
+                            BulletManager.Bullets.RemoveAt(i);
+                        }
+                    }
+
+                    // update bullets
+                    /*foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Update();
+                    }*/
 
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
@@ -322,7 +345,7 @@ namespace Lightweight
 
                     break;
                 case MenuStates.OptionsMenu:
-                    optionsBack.Render(_spriteBatch, "BACK", optionsBack.Rectangle);
+                    optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
 
                     break;
@@ -337,6 +360,11 @@ namespace Lightweight
                     foreach (Wall wall in walls)
                     {
                         wall.Draw(_spriteBatch);
+                    }
+
+                    foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Draw(_spriteBatch);
                     }
 
                     _spriteBatch.DrawString(

@@ -16,18 +16,29 @@ public class Bullet : GameObject
     private Vector2 direction;
 
     /// <summary>
+    /// Speed of the bullet per frame
+    /// </summary>
+    private int speed;
+
+    private int damage;
+
+    /// <summary>
     /// Whether this object is currently active 
     /// </summary>
     private bool isAlive;
+
+    public bool IsAlive{ get { return isAlive; } }
 
     /// <summary>
     /// Instantiate a new bullet at the given position in the given direction
     /// </summary>
     /// <param name="position">The position at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
-    public Bullet(Vector2 position, Vector2 direction) : base(BulletManager.BulletTexture, position)
+    public Bullet(Vector2 position, Vector2 direction, int speed,int damage) : base(BulletManager.BulletTexture, position)
     {
         this.direction = direction;
+        this.speed = speed;
+        this.damage = damage;
         isAlive = true;
     }
 
@@ -61,11 +72,11 @@ public class Bullet : GameObject
         if (!isAlive) return;
 
         // update the bullet's position in the given direction
-        position += direction;
+        position += direction * speed;
 
         // if the bullet has gone off-screen, remove from game
-        if (position.X < 0 || position.X > windowWidth ||
-            position.Y < 0 || position.Y > windowHeight)
+        if (position.X < 0 || position.X > Game1.WindowWidth ||
+            position.Y < 0 || position.Y > Game1.WindowHeight)
         {
             isAlive = false;
         }
