@@ -74,7 +74,7 @@ namespace Lightweight
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
 
                 // shoot from player position
-                Player.Shoot(new Vector2(0, 0), mousePosition);
+                //Player.Shoot(new Vector2(0, 0), mousePosition);
             }
             
 

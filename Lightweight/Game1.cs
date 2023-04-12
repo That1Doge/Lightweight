@@ -81,7 +81,7 @@ namespace Lightweight
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
 
-            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain_circle1");
+            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
@@ -108,8 +108,8 @@ namespace Lightweight
 
             levelManager = new LevelManager(floorTile, trapTexture, topWall, windowHeight, windowWidth);
 
-            levelManager.BuildLevel();
-            //levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+            //levelManager.BuildLevel();
+            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
 
             //Creates walls and adds them to a list
             for (int i = 0; i < 4; i++) 
