@@ -49,6 +49,7 @@ namespace Lightweight
         private Texture2D buttonTexture;
         private Texture2D toggleOn;
         private Texture2D toggleOff;
+        private Texture2D backButton;
         private KeyboardState prevState;
         private Player player;
         private List<Wall> walls;
@@ -85,6 +86,7 @@ namespace Lightweight
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
+            backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
 
             BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
@@ -98,8 +100,8 @@ namespace Lightweight
                 windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
 
             // Loads all of the Options buttons
-            optionsBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(20, 20, 
-                buttonTexture.Width, buttonTexture.Height));
+            optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
+                backButton.Width, backButton.Height));
             godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
 
             // Loads all of the Pause buttons
@@ -197,6 +199,7 @@ namespace Lightweight
                     if (playButton.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;
+                        Reset();
                     }
                     else if (optionsButton.ButtonClicked())
                     {
@@ -337,7 +340,7 @@ namespace Lightweight
 
                     break;
                 case MenuStates.OptionsMenu:
-                    optionsBack.Render(_spriteBatch, "BACK", optionsBack.Rectangle);
+                    optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
 
                     break;
