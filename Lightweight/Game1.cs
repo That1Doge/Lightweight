@@ -32,6 +32,7 @@ namespace Lightweight
         private Texture2D rightWall;
         private Texture2D topWall;
         private Texture2D bottomWall;
+        private Texture2D trapTexture;
         private MenuStates menuState;
         private MenuButton playButton;
         private MenuButton optionsButton;
@@ -79,6 +80,7 @@ namespace Lightweight
             bottomWall = Content.Load<Texture2D>("bottom_wall");
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
+            trapTexture = Content.Load<Texture2D>("placeholder_trap");
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
@@ -103,7 +105,7 @@ namespace Lightweight
             retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
 
-            levelManager = new LevelManager(floorTile, topWall, windowHeight, windowWidth);
+            levelManager = new LevelManager(floorTile, trapTexture, topWall, windowHeight, windowWidth);
 
             levelManager.BuildLevel();
 
@@ -143,7 +145,7 @@ namespace Lightweight
                         case 0:
                             if (x == 0)
                             {
-                                walls.Add(new Wall(topWall, new Rectangle(5, 0, 50, 12)));
+                                walls.Add(new Wall(topWall, new Rectangle(5, -5, 50, 12)));
                             }
                             else
                             {
@@ -176,8 +178,7 @@ namespace Lightweight
 
             // Switch statement that changes the Menu States depending on what action is done
             switch(menuState)
-            {
-                
+            { 
                 case MenuStates.MainMenu:
                     // Tests the menu state 
                     //if(Keyboard.GetState().IsKeyDown(Keys.W))
@@ -232,13 +233,19 @@ namespace Lightweight
                         }
                     }
 
+                    foreach (Tile tile in levelManager.FloorTiles) 
+                    {
+                        if (tile.Intersect(player.HitBox) && tile.IsTrap) 
+                        {
+                            menuState = MenuStates.GameOver;
+                        }
+                    }
                     // Accesses pause menu
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
                         prevState.IsKeyUp(Keys.Escape))
                     {
                         menuState = MenuStates.Pause;
                     }
-
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
                         menuState = MenuStates.GameOver;
@@ -250,19 +257,17 @@ namespace Lightweight
                     {
                         menuState = MenuStates.Gameplay;
                     }
-
                     break;
                 case MenuStates.GameOver:
-
                     if (menuButton.ButtonClicked())
                     {
                         menuState = MenuStates.MainMenu;
                     }
                     else if (retryButton.ButtonClicked())
-                    {
+                    { 
                         menuState = MenuStates.Gameplay;
+                        Reset();
                     }
-
                     break;
             }
             // TODO: Add your update logic here
@@ -334,6 +339,16 @@ namespace Lightweight
 
             _spriteBatch.End();  
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Resets level and player after a retry/start of game
+        /// </summary>
+        public void Reset()
+        {
+            player.X = 400;
+            player.Y = 240;
+            levelManager.BuildLevel();
         }
     }
 }

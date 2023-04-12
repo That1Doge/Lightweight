@@ -12,43 +12,70 @@ namespace Lightweight
     internal class LevelManager
     {
         Texture2D tileTexture;
+        Rectangle hitbox;
         GraphicsDeviceManager _graphics;
         int windowWidth;
         int windowHeight;
-        int yPosTile = 0;
+        int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
+        Texture2D trapTexture;
+        Random rng = new Random();
+        int trapChance;
 
-        public LevelManager(Texture2D tile, Texture2D wall, int height, int width) 
+        public List<Tile> FloorTiles { get { return floorTiles; } set { floorTiles = value; } } 
+
+        public LevelManager(Texture2D tile, Texture2D trap, Texture2D wall, int height, int width) 
         { 
             tileTexture = tile;
+            trapTexture = trap;
             windowWidth = width;
             windowHeight = height;
         }   
         public void LoadLevel(string filename) 
         {
-            StreamReader input = null;
-            
+            StreamReader input = new StreamReader(filename);
+            string line = input.ReadLine();
+            while (line != null)
+            {
+                string[] split = line.Split(',');
+            }
         }
 
         public void BuildLevel() 
-        { 
-            for (int i = 0; i < (windowHeight / 16); i++) 
+        {
+            if (floorTiles.Count != 0)
             {
-                for (int x = 0; x < ((windowWidth) / 15); x++) 
-                { 
-                    if (x == 0) 
+                floorTiles.Clear();
+                BuildLevel();
+            }
+            else 
+            {
+                yPosTile = 0;
+                for (int i = 0; i < 15; i++)
+                {
+                    for (int x = 0; x < 25; x++)
                     {
-                        floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 16, 16)));   
+                        trapChance = rng.Next(1, 21);
+                        if (x == 0)
+                        {
+                            floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+                        }
+                        else
+                        {
+                            if (trapChance == 1 && x != 24 && i != 14 && i != 0)
+                            {
+                                floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
+                            }
+                            else
+                            {
+                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), false));
+                            }
+                        }
                     }
-                    else 
-                    {
-                        floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 16, yPosTile, 16, 16)));
-                    }
+                    yPosTile += 32;
                 }
-                yPosTile += 16;
-            } 
+            }
         }
-
         public void Draw(SpriteBatch sb) 
         {
             foreach (Tile tile in floorTiles)
@@ -56,5 +83,7 @@ namespace Lightweight
                 tile.Draw(sb);
             }
         }
+
+        
     }
 }
