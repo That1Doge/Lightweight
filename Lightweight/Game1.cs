@@ -86,7 +86,7 @@ namespace Lightweight
             topWall = Content.Load<Texture2D>("top_wall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
 
-            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain_circle1");
+            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
@@ -252,6 +252,23 @@ namespace Lightweight
                         }
                     }
 
+                    // remove bullets no longer active
+                    for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
+                    {
+                        BulletManager.Bullets[i].Update();
+
+                        if (!BulletManager.Bullets[i].IsAlive)
+                        {
+                            BulletManager.Bullets.RemoveAt(i);
+                        }
+                    }
+
+                    // update bullets
+                    foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Update();
+                    }
+
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
                         if (tile.Intersect(player.HitBox) && tile.IsTrap) 
@@ -334,6 +351,11 @@ namespace Lightweight
                     foreach (Wall wall in walls)
                     {
                         wall.Draw(_spriteBatch);
+                    }
+
+                    foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Draw(_spriteBatch);
                     }
 
                     _spriteBatch.DrawString(

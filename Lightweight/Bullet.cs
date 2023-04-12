@@ -20,6 +20,8 @@ public class Bullet : GameObject
     /// </summary>
     private bool isAlive;
 
+    public bool IsAlive{ get { return isAlive; } }
+
     /// <summary>
     /// Instantiate a new bullet at the given position in the given direction
     /// </summary>
