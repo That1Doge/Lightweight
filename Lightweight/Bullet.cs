@@ -23,10 +23,9 @@ public class Bullet : GameObject
     /// <summary>
     /// Instantiate a new bullet at the given position in the given direction
     /// </summary>
-    /// <param name="texture">The texture to aapply to this bullet object</param>
     /// <param name="position">The position at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
-    public Bullet(Texture2D texture, Vector2 position, Vector2 direction) : base(texture, position)
+    public Bullet(Vector2 position, Vector2 direction) : base(position)
     {
         this.direction = direction;
         isAlive = true;
@@ -52,7 +51,6 @@ public class Bullet : GameObject
             return false;
         }
     }
-
 
     /// <summary>
     /// Update bullet object

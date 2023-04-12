@@ -51,7 +51,6 @@ namespace Lightweight
         private List<Wall> walls;
         int yPosTile;
 
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);

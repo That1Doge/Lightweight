@@ -128,6 +128,18 @@
 /processorParam:TextureFormat=Color
 /build:right_wall.png
 
+#begin rsz_plain-circle1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rsz_plain-circle1.png
+
 #begin starter_wall.png
 /importer:TextureImporter
 /processor:TextureProcessor
