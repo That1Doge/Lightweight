@@ -21,6 +21,7 @@ namespace Lightweight
         protected Rectangle rectangle;
         protected int windowWidth;
         protected int windowHeight;
+        
 
         public GameObject(Texture2D texture, Vector2 position)
         {

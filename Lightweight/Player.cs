@@ -13,8 +13,7 @@ using System.Xml.Serialization;
 namespace Lightweight
 {
     public class Player : IMove, ITakeDamage, ICollidable
-    {
-        //Fields used in class
+    {        //Fields used in class
         int playerHealth;
         int playerDefense;
         int scraps;
@@ -147,5 +146,7 @@ namespace Lightweight
 
         }
         */
+
+
     }
 }

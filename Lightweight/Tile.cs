@@ -17,8 +17,11 @@ namespace Lightweight
     /// Tile Class 
     /// Creates a single instance of a tile
     /// </summary>
-    internal class Tile : GameObject
+    internal class Tile : GameObject, ICollidable
     {
+        bool isTrap;
+        Rectangle hitbox;
+
         /// <summary>
         /// X position property
         /// </summary>
@@ -28,17 +31,20 @@ namespace Lightweight
         /// Y position property
         /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
+        public Rectangle HitBox { get { return hitbox; } }
+        public bool IsTrap { get { return isTrap; } }
 
         /// <summary>
         /// Tile parameterized constructor
         /// </summary>
         /// <param name="texture">Desired tile texture</param>
         /// <param name="rectangle">Desired rectangle</param>
-        public Tile(Texture2D texture, Rectangle rectangle)
+        public Tile(Texture2D texture, Rectangle rectangle, bool isTrap)
             : base(texture, rectangle)
         {
             this.texture = texture;
-            this.rectangle = rectangle;
+            hitbox = rectangle;
+            this.isTrap = isTrap;
         }
 
         /// <summary>
@@ -56,6 +62,18 @@ namespace Lightweight
         public override void Draw(SpriteBatch sb) 
         {
             sb.Draw(this.texture, this.rectangle, Color.White);
+        }
+
+        public bool Intersect(Rectangle hitbox)
+        {
+            if (this.HitBox.Intersects(hitbox) && isTrap)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
