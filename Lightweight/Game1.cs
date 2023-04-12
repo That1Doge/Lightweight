@@ -43,9 +43,12 @@ namespace Lightweight
         private MenuButton instructionsButton;
         private MenuButton instructionsBack;
         private MenuButton pauseBack;
+        private ToggleButton godMode;
         private SpriteFont buttonText;
         private Rectangle buttonRectangle;
         private Texture2D buttonTexture;
+        private Texture2D toggleOn;
+        private Texture2D toggleOff;
         private KeyboardState prevState;
         private Player player;
         private List<Wall> walls;
@@ -76,6 +79,8 @@ namespace Lightweight
             leftWall = Content.Load<Texture2D>("starter_wall");
             buttonText = Content.Load<SpriteFont>("arial-12");
             buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
+            toggleOn = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOn");
+            toggleOff = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOff");
             bottomWall = Content.Load<Texture2D>("bottom_wall");
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
@@ -95,6 +100,7 @@ namespace Lightweight
             // Loads all of the Options buttons
             optionsBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(20, 20, 
                 buttonTexture.Width, buttonTexture.Height));
+            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
 
             // Loads all of the Pause buttons
             pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
@@ -210,6 +216,18 @@ namespace Lightweight
                     {
                         menuState = MenuStates.MainMenu;
                     }
+                    if(godMode.isClicked())
+                    {
+                        if(godMode.IsOn)
+                        {
+                            // Maybe put something that sets a godMode setting to true and sets off
+                            //      what needs to be done
+                        }
+                        else
+                        {
+                            // Same thing applies here
+                        }
+                    }
 
                     break;
                 case MenuStates.Gameplay:
@@ -303,6 +321,7 @@ namespace Lightweight
                     break;
                 case MenuStates.OptionsMenu:
                     optionsBack.Render(_spriteBatch, "BACK", optionsBack.Rectangle);
+                    godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
 
                     break;
                 case MenuStates.Gameplay:
