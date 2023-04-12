@@ -25,7 +25,7 @@ namespace Lightweight
 
         public List<Tile> FloorTiles { get { return floorTiles; } set { floorTiles = value; } } 
 
-        public LevelManager(Texture2D tile, Texture2D trap, Texture2D wall, int height, int width) 
+        public LevelManager(Texture2D tile, Texture2D trap, Texture2D wall, Texture2D enemy, int height, int width) 
         { 
             tileTexture = tile;
             trapTexture = trap;
@@ -72,6 +72,9 @@ namespace Lightweight
                             case 'O':
                                 floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
                                 break;
+                            case 'E':
+                                //Adding to enemy list will go here once I have a texture :)
+                                break;
                         }
 
                     }
@@ -88,6 +91,9 @@ namespace Lightweight
             input.Close();
         }
 
+        /// <summary>
+        /// Method that builds the level if it has not been loaded
+        /// </summary>
         public void BuildLevel() 
         {
             if (floorTiles.Count != 0)
