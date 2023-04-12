@@ -68,7 +68,6 @@ namespace Lightweight
             prevKb = kb;
             kb = Keyboard.GetState();
             
-            // TODO: Implement Shoot() method call
             // update mouse states
             prevMouse = mouse;
             mouse = Mouse.GetState();
@@ -81,7 +80,7 @@ namespace Lightweight
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
 
                 // shoot from player position
-                //Player.Shoot(new Vector2(0, 0), mousePosition);
+                Player.Shoot(new Vector2(Player.X, Player.Y), mousePosition);
             }
             
 

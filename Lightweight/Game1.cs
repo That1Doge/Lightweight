@@ -252,6 +252,23 @@ namespace Lightweight
                         }
                     }
 
+                    // remove bullets no longer active
+                    for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
+                    {
+                        BulletManager.Bullets[i].Update();
+
+                        if (!BulletManager.Bullets[i].IsAlive)
+                        {
+                            BulletManager.Bullets.RemoveAt(i);
+                        }
+                    }
+
+                    // update bullets
+                    foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Update();
+                    }
+
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
                         if (tile.Intersect(player.HitBox) && tile.IsTrap) 
@@ -334,6 +351,11 @@ namespace Lightweight
                     foreach (Wall wall in walls)
                     {
                         wall.Draw(_spriteBatch);
+                    }
+
+                    foreach (Bullet bullet in BulletManager.Bullets)
+                    {
+                        bullet.Draw(_spriteBatch);
                     }
 
                     _spriteBatch.DrawString(
