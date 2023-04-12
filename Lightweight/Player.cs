@@ -63,6 +63,7 @@ namespace Lightweight
         {
             scraps = 10;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
+            PlayerController.Player = this;
         }
 
         public void LoadAnims(ContentManager content)

@@ -37,6 +37,13 @@ namespace Lightweight
         private static MouseState prevMouse;
         private static MouseState mouse;
 
+        private static Player player;
+        public static Player Player
+        {
+            get { return player; }
+            set { player = value; }
+        }
+
         public static Vector2 Direction { get { return direction; } }
         public static PlayerState PlayerState { get { return playerState; } }
 
