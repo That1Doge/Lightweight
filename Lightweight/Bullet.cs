@@ -25,7 +25,7 @@ public class Bullet : GameObject
     /// </summary>
     /// <param name="position">The position at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
-    public Bullet(Vector2 position, Vector2 direction) : base(position)
+    public Bullet(Vector2 position, Vector2 direction) : base(BulletManager.BulletTexture, position)
     {
         this.direction = direction;
         isAlive = true;

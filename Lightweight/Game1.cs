@@ -81,6 +81,8 @@ namespace Lightweight
             rightWall = Content.Load<Texture2D>("right_wall");
             topWall = Content.Load<Texture2D>("top_wall");
 
+            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain_circle1");
+
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
             playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
