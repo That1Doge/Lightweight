@@ -134,7 +134,7 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's position with the calculated direction
-            Bullet bullet = new Bullet(origin, direction, speed, damage);
+            Bullet bullet = new Bullet(origin, direction);
 
             // implement bullets list and add bullet to list
             BulletManager.Add(bullet);
