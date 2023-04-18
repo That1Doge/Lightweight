@@ -28,10 +28,10 @@ namespace Lightweight
         private static int windowWidth;
         private static int windowHeight;
         private Texture2D floorTile;
-        private Texture2D leftWall;
-        private Texture2D rightWall;
         private Texture2D topWall;
         private Texture2D bottomWall;
+        private Texture2D leftWall;
+        private Texture2D rightWall;
         private Texture2D trapTexture;
         private MenuStates menuState;
         private MenuButton playButton;
@@ -80,14 +80,14 @@ namespace Lightweight
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floorTile = Content.Load<Texture2D>("floor_tile");
-            leftWall = Content.Load<Texture2D>("starter_wall");
             buttonText = Content.Load<SpriteFont>("arial-12");
             buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
             toggleOn = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOn");
             toggleOff = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOff");
-            bottomWall = Content.Load<Texture2D>("bottom_wall");
-            rightWall = Content.Load<Texture2D>("right_wall");
-            topWall = Content.Load<Texture2D>("top_wall");
+            topWall = Content.Load<Texture2D>("topwall");
+            bottomWall = Content.Load<Texture2D>("bwall");
+            rightWall = Content.Load<Texture2D>("rwall");
+            leftWall = Content.Load<Texture2D>("lwall");
             trapTexture = Content.Load<Texture2D>("placeholder_trap");
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
 
@@ -119,68 +119,10 @@ namespace Lightweight
             retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
 
-            levelManager = new LevelManager(floorTile, trapTexture, topWall, windowHeight, windowWidth);
+            levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
 
             //levelManager.BuildLevel();
             levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
-
-            //Creates walls and adds them to a list
-            for (int i = 0; i < 4; i++) 
-            {
-                for (int x = 0; x < 11; x++) 
-                { 
-                    switch (i) 
-                    { 
-                        case 0:
-                            if (x == 0)
-                            {
-                                walls.Add(new Wall(leftWall, new Rectangle(0, 0, 12, 50)));
-                            } 
-                            else 
-                            {
-                                walls.Add(new Wall(leftWall, new Rectangle(0, walls[walls.Count - 1].Y + 43, 12, 50)));
-                            }
-                            break;
-                        case 1:
-                            if (x == 0)
-                            {
-                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 12, windowHeight - 50, 12, 50)));
-                            }
-                            else
-                            {
-                                walls.Add(new Wall(rightWall, new Rectangle(windowWidth - 12, walls[walls.Count - 1].Y - 43, 12, 50)));
-                            }
-                            break;
-                    }
-                }
-                for (int x = 0; x < 21; x++)
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            if (x == 0)
-                            {
-                                walls.Add(new Wall(topWall, new Rectangle(5, -5, 50, 12)));
-                            }
-                            else
-                            {
-                                walls.Add(new Wall(topWall, new Rectangle(walls[walls.Count - 1].X + 43, 0, 50, 12)));
-                            }
-                            break;
-                        case 1:
-                            if (x == 0)
-                            {
-                                walls.Add(new Wall(bottomWall, new Rectangle(4, windowHeight - 12, 50, 12)));
-                            }
-                            else
-                            {
-                                walls.Add(new Wall(bottomWall, new Rectangle(walls[walls.Count - 1].X + 43, windowHeight - 12, 50, 12)));
-                            }
-                            break;
-                    }
-                }
-            }
-
             player.LoadAnims(Content);
         }
 
@@ -354,13 +296,8 @@ namespace Lightweight
 
                     //This draws the tiles/walls, and player across the screen
                     levelManager.Draw(_spriteBatch);
-
                     player.Draw(_spriteBatch);
                     EnemyManager.Instance.Draw(_spriteBatch);
-                    foreach (Wall wall in walls)
-                    {
-                        wall.Draw(_spriteBatch);
-                    }
 
                     foreach (Bullet bullet in BulletManager.Bullets)
                     {

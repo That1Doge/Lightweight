@@ -19,6 +19,7 @@ namespace Lightweight
         //Field used in class
         Rectangle hitBox;
 
+
         /// <summary>
         /// X position property
         /// </summary>

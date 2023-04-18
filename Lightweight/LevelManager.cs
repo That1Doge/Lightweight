@@ -12,23 +12,34 @@ namespace Lightweight
     internal class LevelManager
     {
         Texture2D tileTexture;
+        Texture2D trapTexture;
+        Texture2D topWallTexture;
+        Texture2D bottomWallTexture;
+        Texture2D rightWallTexture;
+        Texture2D leftWallTexture;
         Rectangle hitbox;
         GraphicsDeviceManager _graphics;
         int windowWidth;
         int windowHeight;
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
-        Texture2D trapTexture;
+        List<Wall> walls = new List<Wall>();
+        
         Random rng = new Random();
         int trapChance;
         int attempt = 0;
 
         public List<Tile> FloorTiles { get { return floorTiles; } set { floorTiles = value; } } 
+        public List<Wall> Walls { get { return walls; } set { walls = value; } }
 
-        public LevelManager(Texture2D tile, Texture2D trap, Texture2D wall, Texture2D enemy, int height, int width) 
+        public LevelManager(Texture2D tile, Texture2D trap, Texture2D topWall, Texture2D bottomWall, Texture2D leftWall, Texture2D rightWall, int height, int width) 
         { 
             tileTexture = tile;
             trapTexture = trap;
+            topWallTexture = topWall;
+            bottomWallTexture = bottomWall;
+            leftWallTexture = leftWall;
+            rightWallTexture = rightWall;
             windowWidth = width;
             windowHeight = height;
         }   
@@ -128,12 +139,26 @@ namespace Lightweight
                     yPosTile += 32;
                 }
             }
+            DrawWalls();
         }
+
+        public void DrawWalls() 
+        {
+            walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 468, 800, 12)));
+            walls.Add(new Wall(rightWallTexture, new Rectangle(0, 0, 12, 476)));
+            walls.Add(new Wall(leftWallTexture, new Rectangle(788, 0, 12, 476)));
+            walls.Add(new Wall(topWallTexture, new Rectangle(4, 0, 792, 12)));
+        }
+
         public void Draw(SpriteBatch sb) 
         {
             foreach (Tile tile in floorTiles)
             {
                 tile.Draw(sb);
+            }
+            foreach (Wall wall in walls) 
+            { 
+                wall.Draw(sb);
             }
         }
 
