@@ -131,7 +131,7 @@ namespace Lightweight
                 {
                     for (int x = 0; x < 25; x++)
                     {
-                        trapChance = rng.Next(1, 21);
+                        trapChance = rng.Next(1, 35);
                         enemyChance = rng.Next(1, 21);
 
                         while (enemyChance == trapChance) 
@@ -151,7 +151,7 @@ namespace Lightweight
                             }
                             else if (enemyChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
                             {
-                                enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
+                                //enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
                             }
                             else
                             {
