@@ -88,7 +88,7 @@ namespace Lightweight
             bottomWall = Content.Load<Texture2D>("bwall");
             rightWall = Content.Load<Texture2D>("rwall");
             leftWall = Content.Load<Texture2D>("lwall");
-            trapTexture = Content.Load<Texture2D>("placeholder_trap");
+            trapTexture = Content.Load<Texture2D>("trap");
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
 
             BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
@@ -183,7 +183,7 @@ namespace Lightweight
                 case MenuStates.Gameplay:
 
                     //Collision mechanic
-                    foreach (Wall walls in walls) 
+                    foreach (Wall walls in levelManager.Walls) 
                     { 
                         if (walls.Intersect(player.HitBox) && player.X < 5) 
                         {
