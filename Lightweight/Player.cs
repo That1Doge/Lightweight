@@ -55,7 +55,7 @@ namespace Lightweight
 
         public float Speed { get { return speed; } set { speed = value; } }
 
-        private Vector2 position = new Vector2(100, 100);
+        private Vector2 position = new Vector2(400, 240);
         private float speed;
         private PlayerAnimator anims = new PlayerAnimator();
 

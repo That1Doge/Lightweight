@@ -43,6 +43,7 @@ namespace Lightweight
         private MenuButton instructionsButton;
         private MenuButton instructionsBack;
         private MenuButton pauseBack;
+        private MenuButton readFile;
         private ToggleButton godMode;
         private SpriteFont buttonText;
         private Rectangle buttonRectangle;
@@ -119,10 +120,11 @@ namespace Lightweight
             retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
                 windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
 
-            levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
+            // Button that reads from file
+            readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - 115,
+                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
 
-            //levelManager.BuildLevel();
-            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+            levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
             player.LoadAnims(Content);
         }
 
@@ -166,12 +168,18 @@ namespace Lightweight
                     {
                         menuState = MenuStates.MainMenu;
                     }
+                    if (readFile.ButtonClicked()) 
+                    {
+                        levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+                        levelManager.IsLoaded = true;
+                    }
                     if(godMode.isClicked())
                     {
                         if(godMode.IsOn)
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
+                            player.PlayerHealth = 99999;
                         }
                         else
                         {
@@ -224,8 +232,15 @@ namespace Lightweight
                     {
                         if (tile.Intersect(player.HitBox) && tile.IsTrap) 
                         {
-                            menuState = MenuStates.GameOver;
+                            player.PlayerHealth -= 20;
+                            tile.TileTexture = floorTile;
+                            tile.IsTrap = false;
                         }
+                    }
+
+                    if (player.PlayerHealth == 0) 
+                    {
+                        menuState = MenuStates.GameOver;
                     }
                     // Accesses pause menu
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
@@ -281,7 +296,7 @@ namespace Lightweight
                     playButton.Render(_spriteBatch, "PLAY", playButton.Rectangle);
                     optionsButton.Render(_spriteBatch, "OPTIONS", optionsButton.Rectangle);
                     quitButton.Render(_spriteBatch, "QUIT", quitButton.Rectangle);
-
+                    
                     break;
                 case MenuStates.InstructionMenu:
 
@@ -289,6 +304,7 @@ namespace Lightweight
                 case MenuStates.OptionsMenu:
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
+                    readFile.Render(_spriteBatch, "READ FROM FILE", readFile.Rectangle);
 
                     break;
                 case MenuStates.Gameplay:
@@ -309,6 +325,12 @@ namespace Lightweight
                         $"Scraps: {player.Scraps}",
                         new Vector2(15, 10),
                         Color.Black);
+
+                    _spriteBatch.DrawString(buttonText, 
+                        $"Health: {player.PlayerHealth}",
+                        new Vector2(15, 35),
+                        Color.Black);
+
                     break;
                 case MenuStates.Pause:
                     pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
@@ -336,6 +358,7 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
+            player.PlayerHealth = 100;
             levelManager.BuildLevel();
         }
     }

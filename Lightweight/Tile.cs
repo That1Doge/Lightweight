@@ -27,12 +27,14 @@ namespace Lightweight
         /// </summary>
         public int X { get { return this.rectangle.X; } set { this.rectangle.X = value; } }
 
+        public Texture2D TileTexture { get { return texture; } set { texture = value; } }
+
         /// <summary>
         /// Y position property
         /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
         public Rectangle HitBox { get { return hitbox; } }
-        public bool IsTrap { get { return isTrap; } }
+        public bool IsTrap { get { return isTrap; } set { isTrap = value; } }
 
         /// <summary>
         /// Tile parameterized constructor

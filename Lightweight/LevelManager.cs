@@ -17,6 +17,7 @@ namespace Lightweight
         Texture2D bottomWallTexture;
         Texture2D rightWallTexture;
         Texture2D leftWallTexture;
+        bool isLoaded;
         Rectangle hitbox;
         GraphicsDeviceManager _graphics;
         int windowWidth;
@@ -24,11 +25,16 @@ namespace Lightweight
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
         List<Wall> walls = new List<Wall>();
+        EnemyManager enemyManager;
         
         Random rng = new Random();
         int trapChance;
+        int enemyChance;
         int attempt = 0;
 
+        public Texture2D TileTexture { get { return tileTexture; } set { tileTexture = value; } }
+        public Texture2D TrapTexture { get { return trapTexture; } set { trapTexture = value; } }
+        public bool IsLoaded { get { return isLoaded; } set { isLoaded = value; } } 
         public List<Tile> FloorTiles { get { return floorTiles; } set { floorTiles = value; } } 
         public List<Wall> Walls { get { return walls; } set { walls = value; } }
 
@@ -42,7 +48,9 @@ namespace Lightweight
             rightWallTexture = rightWall;
             windowWidth = width;
             windowHeight = height;
+            isLoaded = false;
         }   
+
         public void LoadLevel(string filename) 
         {
             StreamReader input = new StreamReader(filename);
@@ -74,7 +82,6 @@ namespace Lightweight
                     for (int i = 1; i < 24; i++) 
                     {
                         floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-                        //TODO -- Add random enemy spawns, to traps 
                         switch (tilesToRead[i - 1])
                         {
                             case 'X':
@@ -84,7 +91,7 @@ namespace Lightweight
                                 floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
                                 break;
                             case 'E':
-                                //Adding to enemy list will go here once I have a texture :)
+                                enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
                                 break;
                         }
 
@@ -99,6 +106,7 @@ namespace Lightweight
                     floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
                 }
             }
+            BuildWalls();
             input.Close();
         }
 
@@ -107,7 +115,11 @@ namespace Lightweight
         /// </summary>
         public void BuildLevel() 
         {
-            if (floorTiles.Count != 0)
+            if (isLoaded == true)
+            {
+                return;
+            }
+            else if (floorTiles.Count != 0)
             {
                 floorTiles.Clear();
                 BuildLevel();
@@ -120,15 +132,26 @@ namespace Lightweight
                     for (int x = 0; x < 25; x++)
                     {
                         trapChance = rng.Next(1, 21);
+                        enemyChance = rng.Next(1, 21);
+
+                        while (enemyChance == trapChance) 
+                        {
+                            enemyChance = rng.Next(1, 21);
+                        }
+
                         if (x == 0)
                         {
                             floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
                         }
                         else
                         {
-                            if (trapChance == 1 && x != 24 && i != 14 && i != 0)
+                            if (trapChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
                             {
                                 floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
+                            }
+                            else if (enemyChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
+                            {
+                                enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
                             }
                             else
                             {
@@ -139,10 +162,10 @@ namespace Lightweight
                     yPosTile += 32;
                 }
             }
-            DrawWalls();
+            BuildWalls();
         }
 
-        public void DrawWalls() 
+        public void BuildWalls() 
         {
             walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 468, 800, 12)));
             walls.Add(new Wall(rightWallTexture, new Rectangle(0, 0, 12, 476)));
