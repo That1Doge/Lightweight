@@ -59,6 +59,7 @@ namespace Lightweight
         private LevelManager levelManager;
         private SpriteFont titleFont;
         private Stopwatch timer;
+        private int timeSurvived;
 
         public static int WindowWidth { get { return windowWidth; } }
         public static int WindowHeight { get { return windowHeight; } }
@@ -262,19 +263,24 @@ namespace Lightweight
 
                     if (player.PlayerHealth <= 0) 
                     {
+                        timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
                         timer.Stop();
+
                         menuState = MenuStates.GameOver;
                     }
                     // Accesses pause menu
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
                         prevState.IsKeyUp(Keys.Escape))
                     {
-                        menuState = MenuStates.Pause;
                         timer.Stop();
+                        menuState = MenuStates.Pause;
+                        
                     }
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
                         menuState = MenuStates.GameOver;
+                        timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
+                        timer.Stop();
                     }
 
                     if(!timer.IsRunning)
@@ -286,8 +292,9 @@ namespace Lightweight
                     if((Keyboard.GetState().IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
                         || pauseBack.ButtonClicked())
                     {
-                        menuState = MenuStates.Gameplay;
                         timer.Start();
+                        menuState = MenuStates.Gameplay;
+                        
                     }
 
                     if(backToMenu.ButtonClicked())
@@ -385,8 +392,11 @@ namespace Lightweight
                     break;
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
+                    
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
-
+                    
+                    _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
+                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 150), Color.Black);
                     // Draws the Game Over buttons needed
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
