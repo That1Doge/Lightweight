@@ -44,6 +44,7 @@ namespace Lightweight
         private MenuButton instructionsBack;
         private MenuButton pauseBack;
         private MenuButton readFile;
+        private MenuButton backToMenu;
         private ToggleButton godMode;
         private SpriteFont buttonText;
         private Rectangle buttonRectangle;
@@ -119,8 +120,10 @@ namespace Lightweight
                 backButton.Width, backButton.Height));
 
             // Loads all of the Pause buttons
-            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
+            backToMenu = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
+                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
 
             // Game over buttons loaded here
             menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
@@ -276,6 +279,11 @@ namespace Lightweight
                     {
                         menuState = MenuStates.Gameplay;
                     }
+
+                    if(backToMenu.ButtonClicked())
+                    {
+                        menuState = MenuStates.MainMenu;
+                    }
                     break;
                 case MenuStates.GameOver:
                     if (menuButton.ButtonClicked())
@@ -355,7 +363,7 @@ namespace Lightweight
                     break;
                 case MenuStates.Pause:
                     pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
-
+                    backToMenu.Render(_spriteBatch, "BACK TO MENU", backToMenu.Rectangle);
                     break;
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
