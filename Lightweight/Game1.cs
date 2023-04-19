@@ -81,8 +81,8 @@ namespace Lightweight
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floorTile = Content.Load<Texture2D>("floor_tile");
-            buttonText = Content.Load<SpriteFont>("arial-12");
-            buttonTexture = Content.Load<Texture2D>("buttonPlaceholder");
+            buttonText = Content.Load<SpriteFont>("arial-14");
+            buttonTexture = Content.Load<Texture2D>("PNG/ButtonImages/gameButton");
             toggleOn = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOn");
             toggleOff = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOff");
             topWall = Content.Load<Texture2D>("topwall");
@@ -98,17 +98,23 @@ namespace Lightweight
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
-            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width/2 , 
-                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
-            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
-            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width, buttonTexture.Height));
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width, 
+                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
+            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
+                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
+            instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
+                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
+            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 2, buttonTexture.Height));
 
             // Loads all of the Options buttons
             optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
                 backButton.Width, backButton.Height));
             godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
+
+            // Loads all of the Instructions menu content
+            instructionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20,
+                backButton.Width, backButton.Height));
 
             // Loads all of the Pause buttons
             pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
@@ -154,6 +160,10 @@ namespace Lightweight
                     {
                         menuState = MenuStates.OptionsMenu;
                     }
+                    else if(instructionsButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.InstructionMenu;
+                    }
                     else if (quitButton.ButtonClicked())
                     {
                         Exit();
@@ -161,7 +171,10 @@ namespace Lightweight
 
                     break;
                 case MenuStates.InstructionMenu:
-                    
+                    if(instructionsBack.ButtonClicked())
+                    {
+                        menuState = MenuStates.MainMenu;
+                    }
                     break;
                 case MenuStates.OptionsMenu:
                     if(optionsBack.ButtonClicked())
@@ -297,11 +310,12 @@ namespace Lightweight
                     // Draws buttons to the play screen
                     playButton.Render(_spriteBatch, "PLAY", playButton.Rectangle);
                     optionsButton.Render(_spriteBatch, "OPTIONS", optionsButton.Rectangle);
+                    instructionsButton.Render(_spriteBatch, "INSTRUCTIONS", instructionsButton.Rectangle);
                     quitButton.Render(_spriteBatch, "QUIT", quitButton.Rectangle);
                     
                     break;
                 case MenuStates.InstructionMenu:
-
+                    instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
                     break;
                 case MenuStates.OptionsMenu:
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);

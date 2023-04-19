@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:arial-12.spritefont
 
+#begin arial-14.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:arial-14.spritefont
+
 #begin buttonPlaceholder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,6 +122,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:PNG/ButtonImages/backArrow.png
+
+#begin PNG/ButtonImages/gameButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PNG/ButtonImages/gameButton.png
 
 #begin PNG/ButtonImages/toggleOptionOff.png
 /importer:TextureImporter
