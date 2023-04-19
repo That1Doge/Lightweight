@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Lightweight
@@ -57,6 +58,7 @@ namespace Lightweight
         private List<Wall> walls;
         private LevelManager levelManager;
         private SpriteFont titleFont;
+        private Stopwatch timer;
 
         public static int WindowWidth { get { return windowWidth; } }
         public static int WindowHeight { get { return windowHeight; } }
@@ -76,7 +78,7 @@ namespace Lightweight
             walls = new List<Wall>();
             menuState = MenuStates.MainMenu;
             base.Initialize();
-
+            timer = new Stopwatch();
         }
 
         protected override void LoadContent()
@@ -260,6 +262,7 @@ namespace Lightweight
 
                     if (player.PlayerHealth <= 0) 
                     {
+                        timer.Stop();
                         menuState = MenuStates.GameOver;
                     }
                     // Accesses pause menu
@@ -267,10 +270,16 @@ namespace Lightweight
                         prevState.IsKeyUp(Keys.Escape))
                     {
                         menuState = MenuStates.Pause;
+                        timer.Stop();
                     }
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
                         menuState = MenuStates.GameOver;
+                    }
+
+                    if(!timer.IsRunning)
+                    {
+                        timer.Start();
                     }
                     break;
                 case MenuStates.Pause:
@@ -278,6 +287,7 @@ namespace Lightweight
                         || pauseBack.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;
+                        timer.Start();
                     }
 
                     if(backToMenu.ButtonClicked())
@@ -329,6 +339,9 @@ namespace Lightweight
                     break;
                 case MenuStates.InstructionMenu:
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
+
+                    // Player tries to survive as long as possible
+
                     break;
                 case MenuStates.OptionsMenu:
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
@@ -358,6 +371,11 @@ namespace Lightweight
                     _spriteBatch.DrawString(buttonText, 
                         $"Health: {player.PlayerHealth}",
                         new Vector2(15, 35),
+                        Color.Black);
+
+                    _spriteBatch.DrawString(buttonText,
+                        $"Time: {timer.ElapsedMilliseconds/1000}",
+                        new Vector2(15, 60),
                         Color.Black);
 
                     break;
@@ -395,6 +413,7 @@ namespace Lightweight
                 player.PlayerHealth = 100;
             }
             levelManager.BuildLevel();
+            timer.Reset();
         }
     }
 }
