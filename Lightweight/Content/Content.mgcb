@@ -87,6 +87,13 @@
 /processorParam:TextureFormat=Color
 /build:hitbox.png
 
+#begin impact-50.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:impact-50.spritefont
+
 #begin lwall.png
 /importer:TextureImporter
 /processor:TextureProcessor

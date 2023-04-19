@@ -55,6 +55,7 @@ namespace Lightweight
         private Player player;
         private List<Wall> walls;
         private LevelManager levelManager;
+        private SpriteFont titleFont;
 
         public static int WindowWidth { get { return windowWidth; } }
         public static int WindowHeight { get { return windowHeight; } }
@@ -91,6 +92,7 @@ namespace Lightweight
             leftWall = Content.Load<Texture2D>("lwall");
             trapTexture = Content.Load<Texture2D>("trap");
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
+            titleFont = Content.Load<SpriteFont>("impact-50");
 
             BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
@@ -313,6 +315,9 @@ namespace Lightweight
                     instructionsButton.Render(_spriteBatch, "INSTRUCTIONS", instructionsButton.Rectangle);
                     quitButton.Render(_spriteBatch, "QUIT", quitButton.Rectangle);
                     
+                    // Draws the title of the game
+                    _spriteBatch.DrawString(titleFont, "LIGHTWEIGHT", new Vector2(windowWidth/2 - (titleFont.MeasureString("LIGHTWEIGHT").X / 2), 30), Color.Black);
+                    
                     break;
                 case MenuStates.InstructionMenu:
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
@@ -354,6 +359,7 @@ namespace Lightweight
                     break;
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
+                    _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
 
                     // Draws the Game Over buttons needed
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
