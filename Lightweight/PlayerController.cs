@@ -75,6 +75,7 @@ namespace Lightweight
             // if LMB clicked, shoot bullet at mouse position
             if (mouse.LeftButton == ButtonState.Pressed &&
                 prevMouse.LeftButton == ButtonState.Released)
+                // and mouse is inside the game window, and its not the title screen
             {
                 // get current mouse position
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
