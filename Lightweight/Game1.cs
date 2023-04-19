@@ -280,7 +280,7 @@ namespace Lightweight
 
             prevState = Keyboard.GetState();
         }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.SlateGray);

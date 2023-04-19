@@ -133,7 +133,7 @@ namespace Lightweight
                     for (int x = 0; x < 25; x++)
                     {
                         trapChance = rng.Next(1, 35);
-                        enemyChance = rng.Next(1, 21);
+                        enemyChance = rng.Next(1, 30);
 
                         while (enemyChance == trapChance) 
                         {
