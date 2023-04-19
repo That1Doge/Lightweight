@@ -92,6 +92,7 @@ namespace Lightweight
                                 break;
                             case 'E':
                                 enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
+                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
                                 break;
                         }
 
