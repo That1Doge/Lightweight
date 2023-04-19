@@ -152,7 +152,7 @@ namespace Lightweight
                             }
                             else if (enemyChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
                             {
-                                enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
+                                //enemyManager.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
                                 floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), false));
                             }
                             else

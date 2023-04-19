@@ -358,7 +358,10 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            player.PlayerHealth = 100;
+            if (!godMode.IsOn) 
+            {
+                player.PlayerHealth = 100;
+            }
             levelManager.BuildLevel();
         }
     }
