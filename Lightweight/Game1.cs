@@ -238,7 +238,7 @@ namespace Lightweight
                         }
                     }
 
-                    if (player.PlayerHealth == 0) 
+                    if (player.PlayerHealth <= 0) 
                     {
                         menuState = MenuStates.GameOver;
                     }
