@@ -173,9 +173,11 @@ namespace Lightweight
                         levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
                         levelManager.IsLoaded = true;
                     }
-                    if(godMode.isClicked())
+
+                    
+                    if (godMode.isClicked())
                     {
-                        if(godMode.IsOn)
+                        if (godMode.IsOn)
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
@@ -358,7 +360,9 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            if (!godMode.IsOn) 
+            
+            // Changes health based on the GodMode setting
+            if(!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
             }
