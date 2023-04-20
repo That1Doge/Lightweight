@@ -448,7 +448,7 @@ namespace Lightweight
             player.X = 400;
             player.Y = 240;
 
-            if(!(player.PlayerHealth <= 0))
+            if(!(player.PlayerHealth <= 0) && menuState == MenuStates.Gameplay)
             {
                 levelManager.BuildLevel();
             }
