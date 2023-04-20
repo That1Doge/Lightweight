@@ -364,13 +364,14 @@ namespace Lightweight
                 case MenuStates.InstructionMenu:
                     // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
-                    _spriteBatch.DrawString(buttonText, "Use W/ A/ S/ D to move" +
-                                                                          "\nPress Space or Left Shift to Dodge Roll" +
-                                                                          "\nLeft Click to shoot at your cursor" +
-                                                                          "\nShoot at enemies and pick up the scrap they drop " +
-                                                                          "\nto stay slow" +
-                                                                          "\nAvoid the traps!" +
-                                                                          "\nTry to survive as long as possible",
+                    _spriteBatch.DrawString(buttonText, "- Use W/ A/ S/ D to move" +
+                                                                          "\n- Press Space or Left Shift to Dodge Roll and " +
+                                                                          "\n  avoid damage" +
+                                                                          "\n- Left Click to shoot at your cursor" +
+                                                                          "\n- Shoot at enemies and pick up the scrap they drop " +
+                                                                          "\n  to stay slow" +
+                                                                          "\n- Avoid the traps!" +
+                                                                          "\n- Try to survive as long as possible",
                     new Vector2(windowWidth/2 - 150, 190), Color.Black);
                     _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
                     // Player tries to survive as long as possible
@@ -448,7 +449,7 @@ namespace Lightweight
             player.X = 400;
             player.Y = 240;
 
-            if(!(player.PlayerHealth <= 0) && menuState == MenuStates.Gameplay)
+            if(!(player.PlayerHealth <= 0))
             {
                 levelManager.BuildLevel();
             }
