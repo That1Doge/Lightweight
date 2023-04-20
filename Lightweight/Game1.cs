@@ -256,8 +256,6 @@ namespace Lightweight
                         if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
                         {
                             player.PlayerHealth -= 20;
-                            tile.TileTexture = floorTile;
-                            tile.IsTrap = false;
                         }
                     }
 
@@ -430,7 +428,10 @@ namespace Lightweight
             {
                 player.PlayerHealth = 100;
             }
-            levelManager.BuildLevel();
+            if (!levelManager.IsLoaded) 
+            {
+                levelManager.BuildLevel();
+            }
             timer.Reset();
         }
     }
