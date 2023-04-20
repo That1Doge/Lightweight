@@ -210,7 +210,7 @@ namespace Lightweight
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
-                            player.PlayerHealth = 99999;
+                            player.PlayerHealth = 999999;
                         }
                         else
                         {
@@ -357,8 +357,10 @@ namespace Lightweight
                     // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
                     _spriteBatch.DrawString(buttonText, "Use W/ A/ S/ D to move" +
-                                                                          "\nPress Space or Left Shift to Dodge" +
+                                                                          "\nPress Space or Left Shift to Dodge Roll" +
                                                                           "\nLeft Click to shoot at your cursor" +
+                                                                          "\nShoot at enemies and pick up the scrap they drop " +
+                                                                          "\nto stay slow" +
                                                                           "\nAvoid the traps!" +
                                                                           "\nTry to survive as long as possible",
                     new Vector2(windowWidth/2 - 150, 190), Color.Black);
