@@ -424,7 +424,7 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            
+            player.Scraps = 10;
             // Changes health based on the GodMode setting
             if(!godMode.IsOn)
             {
