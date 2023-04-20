@@ -110,7 +110,7 @@ namespace Lightweight
                     }
                     //else if ((kb.IsKeyDown(Keys.Space)
                     //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
-                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
+                    else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
@@ -129,7 +129,7 @@ namespace Lightweight
                     }
                     //else if ((kb.IsKeyDown(Keys.Space)
                     //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
-                    else if(SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
+                    else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
@@ -148,7 +148,7 @@ namespace Lightweight
                     }
                     //else if ((kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
                     //    && player.Scraps > 0)
-                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
+                    else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
@@ -167,7 +167,7 @@ namespace Lightweight
                     }
                     //else if ((kb.IsKeyDown(Keys.Space)
                     //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
-                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
+                    else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
