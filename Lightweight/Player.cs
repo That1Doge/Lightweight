@@ -92,9 +92,8 @@ namespace Lightweight
             hitBox.Y = (int)position.Y + 10;
 
             if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
-            if (PlayerController.SingleKeyPress(Keys.O)) scraps--;
+            if (PlayerController.SingleKeyPress(Keys.O) && scraps > 0) scraps--;
             if (PlayerController.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
-            if (scraps <= 1) scraps = 1;
             speed = 1f/(scraps+2);
             anims.Update(gt, PlayerController.PlayerState, (1f / (scraps+2)) * 128);
 
@@ -137,8 +136,8 @@ namespace Lightweight
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             this.playerHealth = playerHealth - (damage - defense);
-
-            scraps--;
+            if(scraps > 0) scraps--;
+            immuneCounter = 0.5;
         }
 
         /// <summary>
