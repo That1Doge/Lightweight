@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -67,15 +68,18 @@ namespace Lightweight
         {
             prevKb = kb;
             kb = Keyboard.GetState();
-            
+
             // update mouse states
             prevMouse = mouse;
             mouse = Mouse.GetState();
 
             // if LMB clicked, shoot bullet at mouse position
             if (mouse.LeftButton == ButtonState.Pressed &&
-                prevMouse.LeftButton == ButtonState.Released)
-                // and mouse is inside the game window, and its not the title screen
+                prevMouse.LeftButton == ButtonState.Released /*&&
+                //mouse.X >= 0 && mouse.X <= GraphicsDevice.Viewport.Width &&
+                //vmouse.Y >= 0 && mouse.Y <= GraphicsDevice.Viewport.Height*/)
+                // TODO: make it so you don't shoot by clicking outside the game window (see above commment)
+                // TODO: make it so clicking on the button to start the game doesnt trigger the shoot method
             {
                 // get current mouse position
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
