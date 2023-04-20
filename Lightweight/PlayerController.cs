@@ -108,8 +108,9 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    else if ((kb.IsKeyDown(Keys.Space)
-                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    //else if ((kb.IsKeyDown(Keys.Space)
+                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
@@ -126,8 +127,9 @@ namespace Lightweight
                     {
                         playerState = PlayerState.RunRight;
                     }
-                    else if ((kb.IsKeyDown(Keys.Space)
-                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    //else if ((kb.IsKeyDown(Keys.Space)
+                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    else if(SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
@@ -144,8 +146,9 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceLeft;
                     }
-                    else if ((kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
-                        && player.Scraps > 0)
+                    //else if ((kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
+                    //    && player.Scraps > 0)
+                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
@@ -162,8 +165,9 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    else if ((kb.IsKeyDown(Keys.Space)
-                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    //else if ((kb.IsKeyDown(Keys.Space)
+                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    else if (SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift))
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
