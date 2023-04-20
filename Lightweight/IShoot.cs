@@ -21,12 +21,12 @@ namespace Lightweight
     internal interface IShoot
     {
         /// <summary>
-        /// Instantiate a new bullet object at this object's position
+        /// Instantiate a new bullet object at this object's pos
         /// moving in the direction of the target object
         /// </summary>
         /// <param name="texture">The texture to apply to the bullet</param>
-        /// <param name="origin">The position for the bullet to move towards</param>
-        /// <param name="target">The position for the bullet to move towards</param>
+        /// <param name="origin">The pos for the bullet to move towards</param>
+        /// <param name="target">The pos for the bullet to move towards</param>
         public void Shoot(Texture2D texture, Vector2 origin, Vector2 target);
     }
 }

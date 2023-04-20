@@ -253,7 +253,7 @@ namespace Lightweight
 
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
-                        if (tile.Intersect(player.HitBox) && tile.IsTrap) 
+                        if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
                         {
                             player.PlayerHealth -= 20;
                             tile.TileTexture = floorTile;

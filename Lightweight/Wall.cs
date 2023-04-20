@@ -19,14 +19,13 @@ namespace Lightweight
         //Field used in class
         Rectangle hitBox;
 
-
         /// <summary>
-        /// X position property
+        /// X pos property
         /// </summary>
         public int X { get { return this.rectangle.X; } set { this.rectangle.X = value; } }
 
         /// <summary>
-        /// Y position property
+        /// Y pos property
         /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
 

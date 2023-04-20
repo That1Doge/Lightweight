@@ -72,15 +72,14 @@ namespace Lightweight
             prevMouse = mouse;
             mouse = Mouse.GetState();
 
-            // if LMB clicked, shoot bullet at mouse position
+            // if LMB clicked, shoot bullet at mouse pos
             if (mouse.LeftButton == ButtonState.Pressed &&
                 prevMouse.LeftButton == ButtonState.Released)
-                // and mouse is inside the game window, and its not the title screen
             {
-                // get current mouse position
+                // get current mouse pos
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
 
-                // shoot from player position
+                // shoot from player pos
                 Player.Shoot(new Vector2(Player.HitBox.X, Player.HitBox.Y), mousePosition, 10, 10);
             }
             
@@ -109,11 +108,12 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    else if (kb.IsKeyDown(Keys.Space)
-                        || kb.IsKeyDown(Keys.LeftShift))
+                    else if ((kb.IsKeyDown(Keys.Space)
+                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
+                        player.Scraps--;
                     }
                     break;
                 case PlayerState.FaceRight:
@@ -126,11 +126,12 @@ namespace Lightweight
                     {
                         playerState = PlayerState.RunRight;
                     }
-                    else if (kb.IsKeyDown(Keys.Space) ||
-                        kb.IsKeyDown(Keys.LeftShift))
+                    else if ((kb.IsKeyDown(Keys.Space)
+                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
+                        player.Scraps--;
                     }
                     break;
                 case PlayerState.RunLeft:
@@ -143,11 +144,12 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceLeft;
                     }
-                    else if (kb.IsKeyDown(Keys.Space) ||
-                        kb.IsKeyDown(Keys.LeftShift))
+                    else if ((kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
+                        && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
                         isRolling = true;
+                        player.Scraps--;
                     }
                     break;
                 case PlayerState.RunRight:
@@ -160,10 +162,12 @@ namespace Lightweight
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    else if (kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.Space))
+                    else if ((kb.IsKeyDown(Keys.Space)
+                        || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
                         isRolling = true;
+                        player.Scraps--;
                     }
                     break;
                 case PlayerState.RollLeft:

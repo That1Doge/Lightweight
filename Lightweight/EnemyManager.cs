@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,12 +15,17 @@ namespace Lightweight
     {
         private static EnemyManager instance;
         private List<Enemy> enemies;
-        private Dictionary<string, Texture2D> spriteSheets;
+        private List<Scrap> scraps;
+        private Dictionary<object, Animation> enemyAnims;
+        private Dictionary<object, Animation> scrapAnims;
+        private Texture2D hitBoxTex;
 
         private EnemyManager()
         {
-            spriteSheets = new Dictionary<string, Texture2D>();
             enemies = new List<Enemy>();
+            scraps = new List<Scrap>();
+            enemyAnims = new Dictionary<object, Animation>();
+            scrapAnims = new Dictionary<object, Animation>();
         }
 
         public static EnemyManager Instance
@@ -32,18 +39,28 @@ namespace Lightweight
 
         public void LoadSpriteSheets(ContentManager content)
         {
-            spriteSheets.Add("run", content.Load<Texture2D>("PNG/Mage/Run/run"));
+            enemyAnims.Add(EnemyState.RunLeft, 
+                new Animation(content.Load<Texture2D>("PNG/enemy"), 5, SpriteEffects.FlipHorizontally));
+            enemyAnims.Add(EnemyState.RunRight,
+                new Animation(content.Load<Texture2D>("PNG/enemy"), 5));
+            scrapAnims[0] = new Animation(content.Load<Texture2D>("PNG/scrap"), 8,
+                SpriteEffects.None, true, 3);
+            hitBoxTex = content.Load<Texture2D>("hitbox");
         }
 
         public void SpawnEnemies(int numSpawn, Vector2 pos)
         {
             for(int i = 0; i < numSpawn; i++)
             {
-                enemies.Add(new Enemy(pos, new Animator()));
-                enemies[enemies.Count - 1].Anims.AddAnimation(EnemyState.RunRight,
-                    new Animation(spriteSheets["run"], 6));
-                enemies[enemies.Count - 1].Anims.AddAnimation(EnemyState.RunLeft,
-                    new Animation(spriteSheets["run"], 6, SpriteEffects.FlipHorizontally));
+                enemies.Add(new Enemy(pos, new Animator(enemyAnims), hitBoxTex));
+            }
+        }
+
+        public void SpawnScrap(int numSpawn, Vector2 pos)
+        {
+            for(int i = 0; i < numSpawn; i++)
+            {
+                scraps.Add(new Scrap(pos, new Animator(scrapAnims)));
             }
         }
 
@@ -53,11 +70,21 @@ namespace Lightweight
             {
                 enemies[i].Update(gt, player);
             }
+            for(int i = 0; i < scraps.Count; i++)
+            {
+                scraps[i].Update(gt, player);
+            }
         }
 
-        public void Remove(Enemy enemy) 
+        public void KillEnemy(Enemy enemy) 
         {
+            SpawnScrap(5, enemy.Pos);
             enemies.Remove(enemy);
+        }
+
+        public void RemoveScrap(Scrap scrap)
+        {
+            scraps.Remove(scrap);
         }
 
         public void Draw(SpriteBatch sb)
@@ -65,6 +92,12 @@ namespace Lightweight
             for(int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Draw(sb);
+            }
+
+            for(int i = 0; i < scraps.Count; i++)
+            {
+                scraps[i].Draw(sb);
+                sb.Draw(hitBoxTex, scraps[i].HitBox, Color.Red);
             }
         }
     }
