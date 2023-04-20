@@ -23,6 +23,7 @@ namespace Lightweight
 
     public class Game1 : Game
     {
+        //Fields used within class
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -61,7 +62,14 @@ namespace Lightweight
         private Stopwatch timer;
         private int timeSurvived;
 
+        /// <summary>
+        /// Property that gets the window width
+        /// </summary>
         public static int WindowWidth { get { return windowWidth; } }
+
+        /// <summary>
+        /// Property that gets the window height
+        /// </summary>
         public static int WindowHeight { get { return windowHeight; } }
 
         public Game1()
@@ -84,6 +92,7 @@ namespace Lightweight
 
         protected override void LoadContent()
         {
+            //Loads each asset
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floorTile = Content.Load<Texture2D>("floor_tile");
             buttonText = Content.Load<SpriteFont>("arial-14");
@@ -176,7 +185,6 @@ namespace Lightweight
                     {
                         Exit();
                     }
-
                     break;
                 case MenuStates.InstructionMenu:
                     if(instructionsBack.ButtonClicked())
@@ -195,7 +203,7 @@ namespace Lightweight
                         levelManager.IsLoaded = true;
                     }
 
-                    
+                    //God mode configuration
                     if (godMode.isClicked())
                     {
                         if (godMode.IsOn)
@@ -213,7 +221,7 @@ namespace Lightweight
                     break;
                 case MenuStates.Gameplay:
 
-                    //Collision mechanic
+                    //Wall collision
                     foreach (Wall walls in levelManager.Walls) 
                     { 
                         if (walls.Intersect(player.HitBox) && player.X < 5) 
@@ -234,7 +242,7 @@ namespace Lightweight
                         }
                     }
 
-                    // remove bullets no longer active
+                    // remove bullets when no longer active
                     for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
                     {
                         BulletManager.Bullets[i].Update();
@@ -251,6 +259,7 @@ namespace Lightweight
                         bullet.Update();
                     }*/
 
+                    //If player hits trap
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
                         if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
@@ -259,6 +268,7 @@ namespace Lightweight
                         }
                     }
 
+                    //Puts total time on gameover screen
                     if (player.PlayerHealth <= 0) 
                     {
                         timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
@@ -266,6 +276,7 @@ namespace Lightweight
 
                         menuState = MenuStates.GameOver;
                     }
+
                     // Accesses pause menu
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
                         prevState.IsKeyUp(Keys.Escape))
@@ -370,23 +381,27 @@ namespace Lightweight
                     levelManager.Draw(_spriteBatch);
                     player.Draw(_spriteBatch);
                     EnemyManager.Instance.Draw(_spriteBatch);
-
+                    
+                    //Draws bullet to screen
                     foreach (Bullet bullet in BulletManager.Bullets)
                     {
                         bullet.Draw(_spriteBatch);
                     }
 
+                    //Draws scrap balance
                     _spriteBatch.DrawString(
                         buttonText,
                         $"Scraps: {player.Scraps}",
                         new Vector2(15, 10),
                         Color.Black);
 
+                    //Draws total health
                     _spriteBatch.DrawString(buttonText, 
                         $"Health: {player.PlayerHealth}",
                         new Vector2(15, 35),
                         Color.Black);
 
+                    //Draws timer
                     _spriteBatch.DrawString(buttonText,
                         $"Time: {timer.ElapsedMilliseconds/1000}",
                         new Vector2(15, 60),
@@ -423,10 +438,15 @@ namespace Lightweight
             player.X = 400;
             player.Y = 240;
             player.Scraps = 10;
+
             // Changes health based on the GodMode setting
             if(!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
+            }
+            else 
+            {
+                player.PlayerHealth = 99999;
             }
             if (!levelManager.IsLoaded) 
             {
