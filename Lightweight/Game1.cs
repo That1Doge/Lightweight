@@ -264,7 +264,7 @@ namespace Lightweight
                     {
                         if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
                         {
-                            player.PlayerHealth -= 2;
+                            player.PlayerHealth -= 1;
                         }
                     }
 
