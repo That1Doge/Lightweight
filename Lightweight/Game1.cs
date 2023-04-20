@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Lightweight
 {
@@ -63,6 +65,8 @@ namespace Lightweight
 
         public static int WindowWidth { get { return windowWidth; } }
         public static int WindowHeight { get { return windowHeight; } }
+
+        public MenuStates MenuState { get { return menuState; } }
 
         public Game1()
         {
@@ -212,6 +216,8 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Gameplay:
+                    player.Update(gameTime);
+                    EnemyManager.Instance.Update(gameTime, player);
 
                     //Collision mechanic
                     foreach (Wall walls in levelManager.Walls) 
@@ -285,6 +291,11 @@ namespace Lightweight
                     {
                         timer.Start();
                     }
+
+                    if(EnemyManager.Instance.Enemies.Count == 0)
+                    {
+                        Reset();
+                    }
                     break;
                 case MenuStates.Pause:
                     if((Keyboard.GetState().IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
@@ -313,9 +324,6 @@ namespace Lightweight
                     break;
             }
             // TODO: Add your update logic here
-            player.Update(gameTime);
-            EnemyManager.Instance.Update(gameTime, player);
-
             base.Update(gameTime);
 
             prevState = Keyboard.GetState();
@@ -422,17 +430,25 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            player.Scraps = 10;
-            // Changes health based on the GodMode setting
-            if(!godMode.IsOn)
-            {
-                player.PlayerHealth = 100;
-            }
-            if (!levelManager.IsLoaded) 
+
+            if(!(player.PlayerHealth <= 0))
             {
                 levelManager.BuildLevel();
             }
-            timer.Reset();
+            else
+            {
+                player.Scraps = 10;
+                // Changes health based on the GodMode setting
+                if (!godMode.IsOn)
+                {
+                    player.PlayerHealth = 100;
+                }
+                if (!levelManager.IsLoaded)
+                {
+                    levelManager.BuildLevel();
+                }
+                timer.Reset();
+            }
         }
     }
 }

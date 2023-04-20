@@ -20,6 +20,8 @@ namespace Lightweight
         private Dictionary<object, Animation> scrapAnims;
         private Texture2D hitBoxTex;
 
+        public List<Enemy> Enemies { get { return enemies; } }
+
         private EnemyManager()
         {
             enemies = new List<Enemy>();

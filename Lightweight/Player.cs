@@ -63,6 +63,7 @@ namespace Lightweight
         public Player()
         {
             scraps = 10;
+            playerHealth = 100;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
             PlayerController.Player = this;
         }
