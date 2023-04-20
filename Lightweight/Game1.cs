@@ -346,7 +346,7 @@ namespace Lightweight
                     // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
                     _spriteBatch.DrawString(buttonText, "Use W/ A/ S/ D to move" +
-                                                                          "\nPress Space or Left Shift to Roll" +
+                                                                          "\nPress Space or Left Shift to Dodge" +
                                                                           "\nLeft Click to shoot at your cursor" +
                                                                           "\nAvoid the traps!" +
                                                                           "\nTry to survive as long as possible",
