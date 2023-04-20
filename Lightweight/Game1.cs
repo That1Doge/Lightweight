@@ -345,15 +345,24 @@ namespace Lightweight
                     
                     break;
                 case MenuStates.InstructionMenu:
+                    // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
-
+                    _spriteBatch.DrawString(buttonText, "Use W/ A/ S/ D to move" +
+                                                                          "\nPress Space or Left Shift to Roll" +
+                                                                          "\nLeft Click to shoot at your cursor" +
+                                                                          "\nAvoid the traps!" +
+                                                                          "\nTry to survive as long as possible",
+                    new Vector2(windowWidth/2 - 150, 190), Color.Black);
+                    _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
                     // Player tries to survive as long as possible
 
                     break;
                 case MenuStates.OptionsMenu:
+                    // Draws all of the Options buttons to the options screen
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
                     readFile.Render(_spriteBatch, "READ FROM FILE", readFile.Rectangle);
+                    _spriteBatch.DrawString(titleFont, "OPTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("OPTIONS").X / 2), 30), Color.Black);
 
                     break;
                 case MenuStates.Gameplay:
@@ -387,20 +396,19 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Pause:
+                    // Draws the buttons for the pause menu
                     pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
                     backToMenu.Render(_spriteBatch, "BACK TO MENU", backToMenu.Rectangle);
+                    _spriteBatch.DrawString(titleFont, "PAUSED", new Vector2(windowWidth / 2 - (titleFont.MeasureString("PAUSED").X / 2), 30), Color.Black);
                     break;
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
-                    
+                    // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
-                    
                     _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
                         new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 150), Color.Black);
-                    // Draws the Game Over buttons needed
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
-
                     break;
             }
 
