@@ -121,39 +121,39 @@ namespace Lightweight
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
-            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width, 
-                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
-            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
-            instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
-            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 2, buttonTexture.Height));
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width * 2, 
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
+            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 9), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Loads all of the Options buttons
             optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
                 backButton.Width, backButton.Height));
-            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
+            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width * 2, windowHeight / 2, toggleOff.Width * 2, toggleOff.Height * 2), toggleOn, toggleOff);
 
             // Loads all of the Instructions menu content
             instructionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20,
                 backButton.Width, backButton.Height));
 
             // Loads all of the Pause buttons
-            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
-            backToMenu = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
+            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height  * 2));
+            backToMenu = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width  *2,
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Game over buttons loaded here
-            menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
-            retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+            menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
+            retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Button that reads from file
-            readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - 115,
-                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
+            readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
             player.LoadAnims(Content);
@@ -376,7 +376,7 @@ namespace Lightweight
                                                                           "\n  to stay slow" +
                                                                           "\n- Avoid the traps!" +
                                                                           "\n- Try to survive as long as possible",
-                    new Vector2(windowWidth/2 - 150, 190), Color.Black);
+                    new Vector2(windowWidth/2 - 260, 350), Color.Black);
                     _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
                     // Player tries to survive as long as possible
 
