@@ -38,11 +38,13 @@ namespace Lightweight
         int trapChance;
         int enemyChance;
         int attempt = 0;
+        int wave;
 
         /// <summary>
         /// Property that returns if board is loaded
         /// </summary>
         public bool IsLoaded { get { return isLoaded; } set { isLoaded = value; } } 
+        public int Wave { get { return wave; } set { wave = value; } }
 
         /// <summary>
         /// Property that returns list of floor tiles
@@ -68,6 +70,7 @@ namespace Lightweight
             windowWidth = width;
             windowHeight = height;
             isLoaded = false;
+            wave = 0;
         }   
 
         /// <summary>
@@ -82,6 +85,7 @@ namespace Lightweight
             string line = "";
             yPosTile = 0;
 
+            
             //Reads until there is no more text
             while ((line = input.ReadLine()) != null)
             {
@@ -148,6 +152,7 @@ namespace Lightweight
             }
 
             //Builds walls and closes the input
+            wave++;
             BuildWalls();
             input.Close();
         }
@@ -158,67 +163,57 @@ namespace Lightweight
         public void BuildLevel() 
         {
             //If board has been loaded, do not build a new board
-            if (isLoaded == true)
+            if (isLoaded == true && wave != 1)
             {
-                return;
+                floorTiles.Clear();
             }
             //If board is not loaded and isn't clear, clear it
             else if (floorTiles.Count != 0)
             {
                 floorTiles.Clear();
-                BuildLevel();
             }
-            else 
+
+            yPosTile = 0;
+
+            //For loops that build all floor tiles
+            for (int i = 0; i < 15; i++)
             {
-                yPosTile = 0;
-
-                //For loops that build all floor tiles
-                for (int i = 0; i < 15; i++)
+                for (int x = 0; x < 25; x++)
                 {
-                    for (int x = 0; x < 25; x++)
+                    //Determines chance if tile will spawn trap/enemy 
+                    trapChance = rng.Next(1, 35);
+
+                    //Builds border tile
+                    if (x == 0)
                     {
-                        //Determines chance if tile will spawn trap/enemy 
-                        trapChance = rng.Next(1, 35);
-                        enemyChance = rng.Next(1, 50);
-
-                        //Redo enemy chance if they are both equal
-                        while (enemyChance == trapChance) 
+                        floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+                    }
+                    else
+                    {
+                        //If hit the trap chance, build a trap
+                        if (trapChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
                         {
-                            enemyChance = rng.Next(1, 21);
+                            floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
                         }
-
-                        //Builds border tile
-                        if (x == 0)
-                        {
-                            floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-                        }
+                        //Builds normal tile if chance is not hit
                         else
                         {
-                            //If hit the trap chance, build a trap
-                            if (trapChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
-                            {
-                                floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
-                            }
-                            //If hit the enemy chance, build an enemy and normal tile under the enemy
-                            else if (enemyChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
-                            {
-                                EnemyManager.Instance.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
-                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), false));
-                            }
-                            //Builds normal tile if chance is not hit
-                            else
-                            {
-                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), false));
-                            }
+                            floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), false));
                         }
                     }
-                    //changes Y value to build the next line
-                    yPosTile += 32;
                 }
+                //changes Y value to build the next line
+                yPosTile += 32;
             }
-
+            
+            for(int i = 0; i < wave + 2; i++) 
+            {
+                EnemyManager.Instance.SpawnEnemies(1, new Vector2(rng.Next(13, 1910), rng.Next(12, 1065)));
+            }
+                
             //Buids walls of level
             BuildWalls();
+            wave++;
         }
 
         /// <summary>

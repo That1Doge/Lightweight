@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -85,6 +86,9 @@ namespace Lightweight
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
             player = new Player();
@@ -418,6 +422,8 @@ namespace Lightweight
                         new Vector2(15, 60),
                         Color.Black);
 
+                    _spriteBatch.DrawString(buttonText, $"Wave: {levelManager.Wave}", new Vector2(15, 95), Color.Black);
+
                     break;
                 case MenuStates.Pause:
                     // Draws the buttons for the pause menu
@@ -453,20 +459,20 @@ namespace Lightweight
             {
                 levelManager.BuildLevel();
             }
-            else
+            if (levelManager.IsLoaded) 
             {
-                player.Scraps = 10;
-                // Changes health based on the GodMode setting
-                if (!godMode.IsOn)
-                {
-                    player.PlayerHealth = 100;
-                }
-                if (!levelManager.IsLoaded)
-                {
-                    levelManager.BuildLevel();
-                }
-                timer.Reset();
+                if (levelManager.Wave > 1)
+                levelManager.BuildLevel();
             }
+            // Changes health based on the GodMode setting
+            if (!godMode.IsOn)
+            {
+                player.PlayerHealth = 100;
+            }
+            player.Scraps = 10;
+            timer.Reset();
         }
+
+
     }
 }
