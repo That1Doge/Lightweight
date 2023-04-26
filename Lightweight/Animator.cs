@@ -19,6 +19,12 @@ namespace Lightweight
             lastKey = null;
         }
 
+        public Animator(Dictionary<object, Animation> animations)
+        {
+            this.animations = animations;
+            lastKey = null;
+        }
+
         public void AddAnimation(object key, Animation animation)
         {
             animations.Add(key, animation);
@@ -42,6 +48,7 @@ namespace Lightweight
 
         public void Draw(SpriteBatch sb, Vector2 pos)
         {
+            if(lastKey == null) { return; }
             animations[lastKey].Draw(sb, pos);
         }
     }

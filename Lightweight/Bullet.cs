@@ -15,12 +15,16 @@ public class Bullet : GameObject
     /// </summary>
     private Vector2 direction;
 
+    private Texture2D hitBoxTex;
+
     /// <summary>
     /// Speed of the bullet per frame
     /// </summary>
     private int speed;
 
     private int damage;
+
+    private Rectangle hitBox;
 
     /// <summary>
     /// Whether this object is currently active 
@@ -29,10 +33,14 @@ public class Bullet : GameObject
 
     public bool IsAlive{ get { return isAlive; } }
 
+    public Rectangle HitBox { get { return hitBox; } }
+
+    public int Damage { get { return damage; } }
+
     /// <summary>
-    /// Instantiate a new bullet at the given position in the given direction
+    /// Instantiate a new bullet at the given pos in the given direction
     /// </summary>
-    /// <param name="position">The position at which to instantiate the bullet</param>
+    /// <param name="position">The pos at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
     public Bullet(Vector2 position, Vector2 direction, int speed,int damage) : base(BulletManager.BulletTexture, position)
     {
@@ -40,6 +48,8 @@ public class Bullet : GameObject
         this.speed = speed;
         this.damage = damage;
         isAlive = true;
+        hitBoxTex = texture;
+        hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, texture.Width, texture.Height);
     }
 
     /// <summary>
@@ -49,7 +59,7 @@ public class Bullet : GameObject
     /// <returns></returns>
     public bool Intersect(Rectangle target)
     {
-        // Check if position is inside rectangle bounds
+        // Check if pos is inside rectangle bounds
         if (position.X >= target.X &&
             position.X <= target.X + target.Width &&
             position.Y >= target.Y &&
@@ -71,8 +81,10 @@ public class Bullet : GameObject
         // don't update if bullet isn't active
         if (!isAlive) return;
 
-        // update the bullet's position in the given direction
+        // update the bullet's pos in the given direction
         position += direction * speed;
+        hitBox.X = (int)position.X;
+        hitBox.Y = (int)position.Y;
 
         // if the bullet has gone off-screen, remove from game
         if (position.X < 0 || position.X > Game1.WindowWidth ||
@@ -96,5 +108,7 @@ public class Bullet : GameObject
             texture, 
             position, 
             Color.White);
+
+        spriteBatch.Draw(hitBoxTex, hitBox, Color.Red);
     }
 }

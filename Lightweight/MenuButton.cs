@@ -25,7 +25,7 @@ namespace Lightweight
 
     /// <summary>
     /// Class that handles what the Menu Buttons look like, what text they have,
-    /// and what position they are at
+    /// and what pos they are at
     /// </summary>
     internal class MenuButton
     {
@@ -48,7 +48,7 @@ namespace Lightweight
         /// </summary>
         /// <param name="texture">The image for the button</param>
         /// <param name="rect">the size of the button</param>
-        /// <param name="position">the position of the button</param>
+        /// <param name="position">the pos of the button</param>
         public MenuButton(Texture2D texture, SpriteFont text, Rectangle rect)
         {
             this.texture = texture;

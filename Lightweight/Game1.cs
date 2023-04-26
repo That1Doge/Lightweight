@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Lightweight
 {
@@ -23,6 +26,7 @@ namespace Lightweight
 
     public class Game1 : Game
     {
+        //Fields used within class
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -61,8 +65,17 @@ namespace Lightweight
         private Stopwatch timer;
         private int timeSurvived;
 
+        /// <summary>
+        /// Property that gets the window width
+        /// </summary>
         public static int WindowWidth { get { return windowWidth; } }
+
+        /// <summary>
+        /// Property that gets the window height
+        /// </summary>
         public static int WindowHeight { get { return windowHeight; } }
+
+        public MenuStates MenuState { get { return menuState; } }
 
         public Game1()
         {
@@ -73,6 +86,9 @@ namespace Lightweight
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
             player = new Player();
@@ -84,6 +100,7 @@ namespace Lightweight
 
         protected override void LoadContent()
         {
+            //Loads each asset
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floorTile = Content.Load<Texture2D>("floor_tile");
             buttonText = Content.Load<SpriteFont>("arial-14");
@@ -176,7 +193,6 @@ namespace Lightweight
                     {
                         Exit();
                     }
-
                     break;
                 case MenuStates.InstructionMenu:
                     if(instructionsBack.ButtonClicked())
@@ -195,14 +211,14 @@ namespace Lightweight
                         levelManager.IsLoaded = true;
                     }
 
-                    
+                    //God mode configuration
                     if (godMode.isClicked())
                     {
                         if (godMode.IsOn)
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
-                            player.PlayerHealth = 99999;
+                            player.PlayerHealth = 999999;
                         }
                         else
                         {
@@ -212,8 +228,10 @@ namespace Lightweight
 
                     break;
                 case MenuStates.Gameplay:
+                    player.Update(gameTime);
+                    EnemyManager.Instance.Update(gameTime, player);
 
-                    //Collision mechanic
+                    //Wall collision
                     foreach (Wall walls in levelManager.Walls) 
                     { 
                         if (walls.Intersect(player.HitBox) && player.X < 5) 
@@ -234,7 +252,7 @@ namespace Lightweight
                         }
                     }
 
-                    // remove bullets no longer active
+                    // remove bullets when no longer active
                     for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
                     {
                         BulletManager.Bullets[i].Update();
@@ -251,16 +269,16 @@ namespace Lightweight
                         bullet.Update();
                     }*/
 
+                    //If player hits trap
                     foreach (Tile tile in levelManager.FloorTiles) 
                     {
-                        if (tile.Intersect(player.HitBox) && tile.IsTrap) 
+                        if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
                         {
-                            player.PlayerHealth -= 20;
-                            tile.TileTexture = floorTile;
-                            tile.IsTrap = false;
+                            player.PlayerHealth -= 1;
                         }
                     }
 
+                    //Puts total time on gameover screen
                     if (player.PlayerHealth <= 0) 
                     {
                         timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
@@ -268,6 +286,7 @@ namespace Lightweight
 
                         menuState = MenuStates.GameOver;
                     }
+
                     // Accesses pause menu
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
                         prevState.IsKeyUp(Keys.Escape))
@@ -286,6 +305,11 @@ namespace Lightweight
                     if(!timer.IsRunning)
                     {
                         timer.Start();
+                    }
+
+                    if(EnemyManager.Instance.Enemies.Count == 0)
+                    {
+                        Reset();
                     }
                     break;
                 case MenuStates.Pause:
@@ -315,9 +339,6 @@ namespace Lightweight
                     break;
             }
             // TODO: Add your update logic here
-            player.Update(gameTime);
-            EnemyManager.Instance.Update(gameTime, player);
-
             base.Update(gameTime);
 
             prevState = Keyboard.GetState();
@@ -345,15 +366,27 @@ namespace Lightweight
                     
                     break;
                 case MenuStates.InstructionMenu:
+                    // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
-
+                    _spriteBatch.DrawString(buttonText, "- Use W/ A/ S/ D to move" +
+                                                                          "\n- Press Space or Left Shift to Dodge Roll and " +
+                                                                          "\n  avoid damage" +
+                                                                          "\n- Left Click to shoot at your cursor" +
+                                                                          "\n- Shoot at enemies and pick up the scrap they drop " +
+                                                                          "\n  to stay slow" +
+                                                                          "\n- Avoid the traps!" +
+                                                                          "\n- Try to survive as long as possible",
+                    new Vector2(windowWidth/2 - 150, 190), Color.Black);
+                    _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
                     // Player tries to survive as long as possible
 
                     break;
                 case MenuStates.OptionsMenu:
+                    // Draws all of the Options buttons to the options screen
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
                     readFile.Render(_spriteBatch, "READ FROM FILE", readFile.Rectangle);
+                    _spriteBatch.DrawString(titleFont, "OPTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("OPTIONS").X / 2), 30), Color.Black);
 
                     break;
                 case MenuStates.Gameplay:
@@ -363,44 +396,49 @@ namespace Lightweight
                     levelManager.Draw(_spriteBatch);
                     player.Draw(_spriteBatch);
                     EnemyManager.Instance.Draw(_spriteBatch);
-
+                    
+                    //Draws bullet to screen
                     foreach (Bullet bullet in BulletManager.Bullets)
                     {
                         bullet.Draw(_spriteBatch);
                     }
 
+                    //Draws scrap balance
                     _spriteBatch.DrawString(
                         buttonText,
                         $"Scraps: {player.Scraps}",
                         new Vector2(15, 10),
                         Color.Black);
 
+                    //Draws total health
                     _spriteBatch.DrawString(buttonText, 
                         $"Health: {player.PlayerHealth}",
                         new Vector2(15, 35),
                         Color.Black);
 
+                    //Draws timer
                     _spriteBatch.DrawString(buttonText,
                         $"Time: {timer.ElapsedMilliseconds/1000}",
                         new Vector2(15, 60),
                         Color.Black);
 
+                    _spriteBatch.DrawString(buttonText, $"Wave: {levelManager.Wave}", new Vector2(15, 95), Color.Black);
+
                     break;
                 case MenuStates.Pause:
+                    // Draws the buttons for the pause menu
                     pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
                     backToMenu.Render(_spriteBatch, "BACK TO MENU", backToMenu.Rectangle);
+                    _spriteBatch.DrawString(titleFont, "PAUSED", new Vector2(windowWidth / 2 - (titleFont.MeasureString("PAUSED").X / 2), 30), Color.Black);
                     break;
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
-                    
+                    // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
-                    
                     _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
                         new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 150), Color.Black);
-                    // Draws the Game Over buttons needed
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
-
                     break;
             }
 
@@ -416,14 +454,25 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            
+
+            if(!(player.PlayerHealth <= 0))
+            {
+                levelManager.BuildLevel();
+            }
+            if (levelManager.IsLoaded) 
+            {
+                if (levelManager.Wave > 1)
+                levelManager.BuildLevel();
+            }
             // Changes health based on the GodMode setting
-            if(!godMode.IsOn)
+            if (!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
             }
-            levelManager.BuildLevel();
+            player.Scraps = 10;
             timer.Reset();
         }
+
+
     }
 }

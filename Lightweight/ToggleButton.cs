@@ -104,7 +104,7 @@ namespace Lightweight
             {
                 sb.Draw(textureOff, rect, Color.White);
             }
-            sb.DrawString(font, text, new Vector2((rect.X + rect.Width) + 10, rect.Y + 15), Color.White);
+            sb.DrawString(font, text, new Vector2((rect.X + rect.Width) + 10, rect.Y + 15), Color.Black);
 
         }
 
