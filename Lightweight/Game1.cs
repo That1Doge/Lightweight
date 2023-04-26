@@ -133,7 +133,7 @@ namespace Lightweight
             // Loads all of the Options buttons
             optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
                 backButton.Width, backButton.Height));
-            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width * 2, windowHeight / 2, toggleOff.Width * 2, toggleOff.Height * 2), toggleOn, toggleOff);
+            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width * 2, windowHeight / 2 - toggleOff.Height * 2, toggleOff.Width * 2, toggleOff.Height * 2), toggleOn, toggleOff);
 
             // Loads all of the Instructions menu content
             instructionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20,
@@ -436,7 +436,7 @@ namespace Lightweight
                     // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
                     _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
-                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 150), Color.Black);
+                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 250), Color.Black);
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
                     break;
