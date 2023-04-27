@@ -192,7 +192,7 @@ namespace Lightweight
                     else
                     {
                         //If hit the trap chance, build a trap
-                        if (trapChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
+                        if (trapChance == 1 && x != 59 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12 && i != 33)
                         {
                             floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
                         }
@@ -222,10 +222,10 @@ namespace Lightweight
         /// </summary>
         public void BuildWalls() 
         {
-            walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 468, 800, 12)));
-            walls.Add(new Wall(rightWallTexture, new Rectangle(0, 0, 12, 476)));
-            walls.Add(new Wall(leftWallTexture, new Rectangle(788, 0, 12, 476)));
-            walls.Add(new Wall(topWallTexture, new Rectangle(4, 0, 792, 12)));
+            walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 1068, 1916, 12)));
+            walls.Add(new Wall(rightWallTexture, new Rectangle(1908, 0, 12, 1076)));
+            walls.Add(new Wall(leftWallTexture, new Rectangle(0, 0, 12, 1076)));
+            walls.Add(new Wall(topWallTexture, new Rectangle(4, 0, 1916, 12)));
         }
 
         /// <summary>

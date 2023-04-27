@@ -222,7 +222,7 @@ namespace Lightweight
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
-                            player.PlayerHealth = 999999;
+                            player.PlayerHealth = 999999;   
                         }
                         else
                         {
@@ -472,21 +472,19 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-            levelManager.Wave = 0;
             EnemyManager.Instance.Enemies.Clear();
-            if(!(player.PlayerHealth <= 0))
-            {
-                levelManager.BuildLevel();
-            }
-            if (levelManager.IsLoaded) 
-            {
-                if (levelManager.Wave > 1)
-                levelManager.BuildLevel();
-            }
+            
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
+            }
+            levelManager.Wave = 0;
+            levelManager.BuildLevel();
+            if (levelManager.IsLoaded)
+            {
+                if (levelManager.Wave > 1)
+                    levelManager.BuildLevel();
             }
             player.Scraps = 10;
             timer.Reset();
@@ -508,10 +506,11 @@ namespace Lightweight
                     levelManager.BuildLevel();
             }
             // Changes health based on the GodMode setting
-            if (!godMode.IsOn)
+            if (godMode.IsOn)
             {
-                player.PlayerHealth = 100;
+                player.PlayerHealth = 99999;
             }
+
             player.Scraps = 10;
             timer.Reset();
         }
