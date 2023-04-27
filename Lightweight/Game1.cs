@@ -20,6 +20,7 @@ namespace Lightweight
         InstructionMenu,
         OptionsMenu,
         Gameplay,
+        WaveComplete,
         GameOver,
         Pause
     }
@@ -50,6 +51,7 @@ namespace Lightweight
         private MenuButton pauseBack;
         private MenuButton readFile;
         private MenuButton backToMenu;
+        private MenuButton waveComplete;
         private ToggleButton godMode;
         private SpriteFont buttonText;
         private Rectangle buttonRectangle;
@@ -154,6 +156,8 @@ namespace Lightweight
             // Button that reads from file
             readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
                 windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            waveComplete = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
             player.LoadAnims(Content);
@@ -178,8 +182,8 @@ namespace Lightweight
                     
                     if (playButton.ButtonClicked())
                     {
-                        menuState = MenuStates.Gameplay;
                         Reset();
+                        menuState = MenuStates.Gameplay;
                     }
                     else if (optionsButton.ButtonClicked())
                     {
@@ -293,7 +297,6 @@ namespace Lightweight
                     {
                         timer.Stop();
                         menuState = MenuStates.Pause;
-                        
                     }
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
@@ -301,15 +304,20 @@ namespace Lightweight
                         timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
                         timer.Stop();
                     }
-
                     if(!timer.IsRunning)
                     {
                         timer.Start();
                     }
-
                     if(EnemyManager.Instance.Enemies.Count == 0)
                     {
-                        Reset();
+                        menuState = MenuStates.WaveComplete;
+                    }
+                    break;
+                case MenuStates.WaveComplete:
+                    if (waveComplete.ButtonClicked()) 
+                    {
+                        Continue();
+                        menuState = MenuStates.Gameplay;
                     }
                     break;
                 case MenuStates.Pause:
@@ -317,12 +325,11 @@ namespace Lightweight
                         || pauseBack.ButtonClicked())
                     {
                         timer.Start();
-                        menuState = MenuStates.Gameplay;
-                        
+                        menuState = MenuStates.Gameplay;   
                     }
-
                     if(backToMenu.ButtonClicked())
                     {
+                        Reset();
                         menuState = MenuStates.MainMenu;
                     }
                     break;
@@ -332,9 +339,9 @@ namespace Lightweight
                         menuState = MenuStates.MainMenu;
                     }
                     else if (retryButton.ButtonClicked())
-                    { 
-                        menuState = MenuStates.Gameplay;
+                    {
                         Reset();
+                        menuState = MenuStates.Gameplay;
                     }
                     break;
             }
@@ -422,8 +429,19 @@ namespace Lightweight
                         new Vector2(15, 90),
                         Color.Black);
 
-                    _spriteBatch.DrawString(buttonText, $"Wave: {levelManager.Wave}", new Vector2(15, 130), Color.Black);
+                    _spriteBatch.DrawString(buttonText, 
+                        $"Wave: {levelManager.Wave}", 
+                        new Vector2(15, 130), 
+                        Color.Black);
 
+                    break;
+                case MenuStates.WaveComplete:
+                    _spriteBatch.DrawString(buttonText,
+                        String.Format("Completed Wave {0}!",
+                        levelManager.Wave),
+                        new Vector2(waveComplete.Rectangle.X + 50, waveComplete.Rectangle.Y - 250),
+                        Color.Black);
+                    waveComplete.Render(_spriteBatch, "CONTINUE", waveComplete.Rectangle); 
                     break;
                 case MenuStates.Pause:
                     // Draws the buttons for the pause menu
@@ -454,7 +472,8 @@ namespace Lightweight
         {
             player.X = 400;
             player.Y = 240;
-
+            levelManager.Wave = 0;
+            EnemyManager.Instance.Enemies.Clear();
             if(!(player.PlayerHealth <= 0))
             {
                 levelManager.BuildLevel();
@@ -473,6 +492,29 @@ namespace Lightweight
             timer.Reset();
         }
 
+
+        public void Continue() 
+        {
+            player.X = 400;
+            player.Y = 240;
+
+            if (!(player.PlayerHealth <= 0))
+            {
+                levelManager.BuildLevel();
+            }
+            if (levelManager.IsLoaded)
+            {
+                if (levelManager.Wave > 1)
+                    levelManager.BuildLevel();
+            }
+            // Changes health based on the GodMode setting
+            if (!godMode.IsOn)
+            {
+                player.PlayerHealth = 100;
+            }
+            player.Scraps = 10;
+            timer.Reset();
+        }
 
     }
 }

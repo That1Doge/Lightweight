@@ -44,6 +44,7 @@ namespace Lightweight
         /// Property that returns if board is loaded
         /// </summary>
         public bool IsLoaded { get { return isLoaded; } set { isLoaded = value; } } 
+
         public int Wave { get { return wave; } set { wave = value; } }
 
         /// <summary>
@@ -176,9 +177,9 @@ namespace Lightweight
             yPosTile = 0;
 
             //For loops that build all floor tiles
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 34; i++)
             {
-                for (int x = 0; x < 25; x++)
+                for (int x = 0; x < 60; x++)
                 {
                     //Determines chance if tile will spawn trap/enemy 
                     trapChance = rng.Next(1, 35);
