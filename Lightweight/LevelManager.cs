@@ -193,7 +193,10 @@ namespace Lightweight
                     else
                     {
                         //If hit the trap chance, build a trap
-                        if (trapChance == 1 && x != 59 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12 && i != 33)
+                        if (trapChance == 1 && x != 59 && i != 0 
+                            && i != 33 && x != 27 && 
+                            x != 28 && x!= 29 && 
+                            x != 30)
                         {
                             floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
                         }
@@ -208,6 +211,7 @@ namespace Lightweight
                 yPosTile += 32;
             }
             
+            //Spawns number of enemies based on wave
             for(int i = 0; i < wave + 2; i++) 
             {
                 EnemyManager.Instance.SpawnEnemies(1, new Vector2(rng.Next(13, 1910), rng.Next(12, 1065)));
