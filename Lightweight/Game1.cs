@@ -416,12 +416,6 @@ namespace Lightweight
                         new Vector2(15, 50),
                         Color.Black);
 
-                    //Draws timer
-                    _spriteBatch.DrawString(buttonText,
-                        $"Time: {timer.ElapsedMilliseconds/1000}",
-                        new Vector2(15, 90),
-                        Color.Black);
-
                     _spriteBatch.DrawString(buttonText, 
                         $"Wave: {LevelManager.Instance.Wave}", 
                         new Vector2(15, 130), 
