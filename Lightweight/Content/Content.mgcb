@@ -106,6 +106,9 @@
 /processorParam:TextureFormat=Color
 /build:lwall.png
 
+#begin map/loadBoard.txt
+/copy:map/loadBoard.txt
+
 #begin placeholder_trap.png
 /importer:TextureImporter
 /processor:TextureProcessor

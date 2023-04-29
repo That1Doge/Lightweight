@@ -29,14 +29,19 @@ namespace Lightweight
         Texture2D rightWallTexture;
         Texture2D leftWallTexture;
         bool isLoaded;
+        Rectangle hitbox;
+        GraphicsDeviceManager _graphics;
+        int windowWidth;
+        int windowHeight;
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
-        List<Wall> walls = new List<Wall>();
         Random rng = new Random();
+        private static LevelManager instance;
+        bool loadedAlready;
         int trapChance;
+        int enemyChance;
         int attempt = 0;
         int wave;
-        private static LevelManager instance;
 
         public static LevelManager Instance 
         { 
@@ -52,6 +57,7 @@ namespace Lightweight
         /// Property that returns if board is loaded
         /// </summary>
         public bool IsLoaded { get { return isLoaded; } set { isLoaded = value; } } 
+
         public int Wave { get { return wave; } set { wave = value; } }
 
         /// <summary>
@@ -61,15 +67,16 @@ namespace Lightweight
 
         /// <summary>
         /// Property that returns list of walls
-        /// </summary>
-        public List<Wall> Walls { get { return walls; } set { walls = value; } }
-
-        //Parameterized constructor that initialises all things it handles
         public LevelManager()
         {
             windowWidth = Game1.WindowWidth;
             windowHeight = Game1.WindowHeight;
+            leftWallTexture = leftWall;
+            rightWallTexture = rightWall;
+            windowWidth = width;
+            windowHeight = height;
             isLoaded = false;
+            loadedAlready = false;
             wave = 0;
         }   
 
@@ -85,81 +92,63 @@ namespace Lightweight
 
         /// <summary>
         /// Method that loads the board from a file
-        /// Files are 23*13
+        /// Files are 58*32
         /// </summary>
         /// <param name="filename">filename of desired load from file</param>
-        public void LoadLevel(string filename) 
+        public void LoadLevel() 
         {
             //Fields used in method
-            StreamReader input = new StreamReader(filename);
+            StreamReader input = new StreamReader("../../../Content/map/loadBoard.txt");
             string line = "";
             yPosTile = 0;
 
-            
+            //Builds border set of floor tiles
+            floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+            for (int i = 1; i < 59; i++)
+            {
+                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+            }
+            floorTiles.Add(new Tile(tileTexture, new Rectangle(1888, yPosTile, 32, 32), false));
+            yPosTile += 32;
+
             //Reads until there is no more text
             while ((line = input.ReadLine()) != null)
-            {
-                //Splits first line
-                string[] split = line.Split(',');
-
-                //Reads from the first line
-                if (attempt == 0)
-                {
-                    //Takes symbols and stores them
-                    string[] symbols = new string[split.Length];
-                    for (int i = 0; i < symbols.Length; i++) 
-                    {
-                        symbols[i] = split[i];
-                    }
-
-                    //Builds border set of floor tiles
-                    floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-                    for (int i = 1; i < 25; i++) 
-                    {
-                        floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
-                    }
-                    yPosTile += 32;
-                    attempt++;
-                }
+            { 
                 //Reads from subsequent lines
-                else if (attempt < 14)
-                {
-                    string tilesToRead = line;
+                string tilesToRead = line;
 
-                    //Builds board based on symbol present within character
-                    for (int i = 1; i < 24; i++) 
-                    {
-                        floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-
-                        //Determines what to place based on symbol
-                        switch (tilesToRead[i - 1])
-                        {
-                            case 'X':
-                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
-                                break;
-                            case 'O':
-                                floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
-                                break;
-                            case 'E':
-                                EnemyManager.Instance.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
-                                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
-                                break;
-                        }
-
-                    }
-
-                    //Places final tile and goes to next line
-                    floorTiles.Add(new Tile(tileTexture, new Rectangle(768, yPosTile, 32, 32), false));
-                    yPosTile += 32;
-                    attempt++;
-                }
-                //Adds last line of border tiles
                 floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
-                for (int i = 1; i < 25; i++)
+
+                //Builds board based on symbol present within file
+                for (int i = 1; i < 59; i++)
                 {
-                    floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                    //Determines what to place based on symbol
+                    switch (tilesToRead[i - 1])
+                    {
+                        case 'X':
+                            floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                            break;
+                        case 'O':
+                            floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), true));
+                            break;
+                        case 'E':
+                            EnemyManager.Instance.SpawnEnemies(1, new Vector2(floorTiles[i - 1].X + 32, yPosTile));
+                            floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+                            break;
+                    }
                 }
+                //Places final tile and goes to next line
+                floorTiles.Add(new Tile(tileTexture, new Rectangle(1888, yPosTile, 32, 32), false));
+                yPosTile += 32;
             }
+
+            //Adds last line of border tiles
+            floorTiles.Add(new Tile(tileTexture, new Rectangle(0, yPosTile, 32, 32), false));
+            for (int i = 1; i < 59; i++)
+            {
+                floorTiles.Add(new Tile(tileTexture, new Rectangle(floorTiles[i - 1].X + 32, yPosTile, 32, 32), false));
+            }
+            floorTiles.Add(new Tile(tileTexture, new Rectangle(1888, yPosTile, 32, 32), false));
 
             //Builds walls and closes the input
             wave++;
@@ -173,9 +162,14 @@ namespace Lightweight
         public void BuildLevel() 
         {
             //If board has been loaded, do not build a new board
-            if (isLoaded == true && wave != 1)
+            if (isLoaded == true)
             {
-                floorTiles.Clear();
+                for (int i = 0; i < wave + 2; i++)
+                {
+                    EnemyManager.Instance.SpawnEnemies(1, new Vector2(rng.Next(13, 1910), rng.Next(12, 1065)));
+                }
+                wave++;
+                return;
             }
             //If board is not loaded and isn't clear, clear it
             else if (floorTiles.Count != 0)
@@ -186,9 +180,9 @@ namespace Lightweight
             yPosTile = 0;
 
             //For loops that build all floor tiles
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 34; i++)
             {
-                for (int x = 0; x < 25; x++)
+                for (int x = 0; x < 60; x++)
                 {
                     //Determines chance if tile will spawn trap/enemy 
                     trapChance = rng.Next(1, 35);
@@ -201,7 +195,7 @@ namespace Lightweight
                     else
                     {
                         //If hit the trap chance, build a trap
-                        if (trapChance == 1 && x != 24 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12)
+                        if (trapChance == 1 && x != 59 && i != 14 && i != 0 && x != 10 && x != 11 && x != 12 && i != 33)
                         {
                             floorTiles.Add(new Tile(trapTexture, new Rectangle(floorTiles[x - 1].X + 32, yPosTile, 32, 32), true));
                         }
@@ -231,10 +225,10 @@ namespace Lightweight
         /// </summary>
         public void BuildWalls() 
         {
-            walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 468, 800, 12)));
-            walls.Add(new Wall(rightWallTexture, new Rectangle(0, 0, 12, 476)));
-            walls.Add(new Wall(leftWallTexture, new Rectangle(788, 0, 12, 476)));
-            walls.Add(new Wall(topWallTexture, new Rectangle(4, 0, 792, 12)));
+            walls.Add(new Wall(bottomWallTexture, new Rectangle(0, 1068, 1916, 12)));
+            walls.Add(new Wall(rightWallTexture, new Rectangle(1908, 0, 12, 1076)));
+            walls.Add(new Wall(leftWallTexture, new Rectangle(0, 0, 12, 1076)));
+            walls.Add(new Wall(topWallTexture, new Rectangle(4, 0, 1916, 12)));
         }
 
         /// <summary>

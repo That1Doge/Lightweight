@@ -21,6 +21,7 @@ namespace Lightweight
         InstructionMenu,
         OptionsMenu,
         Gameplay,
+        WaveComplete,
         GameOver,
         Pause
     }
@@ -45,6 +46,7 @@ namespace Lightweight
         private MenuButton pauseBack;
         private MenuButton readFile;
         private MenuButton backToMenu;
+        private MenuButton waveComplete;
         private ToggleButton godMode;
         private SpriteFont buttonText;
         private Rectangle buttonRectangle;
@@ -57,6 +59,8 @@ namespace Lightweight
         private SpriteFont titleFont;
         private Stopwatch timer;
         private int timeSurvived;
+        private int playerStartX;
+        private int playerStartY;
 
         /// <summary>
         /// Property that gets the window width
@@ -88,6 +92,8 @@ namespace Lightweight
             menuState = MenuStates.MainMenu;
             base.Initialize();
             timer = new Stopwatch();
+            playerStartX = (windowWidth / 2) - player.HitBox.Width;
+            playerStartY = windowHeight / 2;
         }
 
         protected override void LoadContent()
@@ -115,39 +121,41 @@ namespace Lightweight
 
             // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
-            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width, 
-                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
-            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
-            instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
-            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 2, buttonTexture.Height));
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width * 2, 
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
+            optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 9), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Loads all of the Options buttons
             optionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20, 
                 backButton.Width, backButton.Height));
-            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width, windowHeight / 2, toggleOff.Width, toggleOff.Height), toggleOn, toggleOff);
+            godMode = new ToggleButton(new Rectangle(windowWidth / 2 - toggleOff.Width * 2, windowHeight / 2 - toggleOff.Height * 2, toggleOff.Width * 2, toggleOff.Height * 2), toggleOn, toggleOff);
 
             // Loads all of the Instructions menu content
             instructionsBack = new MenuButton(backButton, buttonText, buttonRectangle = new Rectangle(20, 20,
                 backButton.Width, backButton.Height));
 
             // Loads all of the Pause buttons
-            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width * 2, buttonTexture.Height));
-            backToMenu = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width,
-                windowHeight / 2, buttonTexture.Width * 2, buttonTexture.Height));
+            pauseBack = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height  * 2));
+            backToMenu = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width  *2,
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Game over buttons loaded here
-            menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2, buttonTexture.Width, buttonTexture.Height));
-            retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width / 2,
-                windowHeight / 2 + (buttonTexture.Height * 2), buttonTexture.Width, buttonTexture.Height));
+            menuButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
+            retryButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             // Button that reads from file
-            readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - 115,
-                windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
+            readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            waveComplete = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
 
             //LevelManager.Instance.Instance.Instance = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
             player.LoadAnims(Content);
@@ -172,8 +180,15 @@ namespace Lightweight
                     
                     if (playButton.ButtonClicked())
                     {
+                        if(levelManager.IsLoaded) 
+                        {
+                            levelManager.LoadLevel();
+                        }
+                        else 
+                        {
+                            Reset();
+                        }
                         menuState = MenuStates.Gameplay;
-                        Reset();
                     }
                     else if (optionsButton.ButtonClicked())
                     {
@@ -212,7 +227,7 @@ namespace Lightweight
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
                             //      what needs to be done
-                            player.PlayerHealth = 999999;
+                            player.PlayerHealth = 999999;   
                         }
                         else
                         {
@@ -232,17 +247,17 @@ namespace Lightweight
                         {
                             player.X = 5;
                         }
-                        else if (walls.Intersect(player.HitBox) && player.Y > 413) 
+                        else if (walls.Intersect(player.HitBox) && player.Y > 1015) 
                         {
-                            player.Y = 413;
+                            player.Y = 1015;
                         }
-                        else if (walls.Intersect(player.HitBox) && player.X > 751) 
+                        else if (walls.Intersect(player.HitBox) && player.X > 1877) 
                         { 
-                            player.X = 751;
+                            player.X = 1877;
                         }
                         else if (walls.Intersect(player.HitBox) && player.Y < 5) 
                         { 
-                            player.Y += 5;
+                            player.Y = 5;
                         }
                     }
 
@@ -287,7 +302,6 @@ namespace Lightweight
                     {
                         timer.Stop();
                         menuState = MenuStates.Pause;
-                        
                     }
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
@@ -295,15 +309,20 @@ namespace Lightweight
                         timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
                         timer.Stop();
                     }
-
                     if(!timer.IsRunning)
                     {
                         timer.Start();
                     }
-
                     if(EnemyManager.Instance.Enemies.Count == 0)
                     {
-                        Reset();
+                        menuState = MenuStates.WaveComplete;
+                    }
+                    break;
+                case MenuStates.WaveComplete:
+                    if (waveComplete.ButtonClicked()) 
+                    {
+                        Continue();
+                        menuState = MenuStates.Gameplay;
                     }
                     break;
                 case MenuStates.Pause:
@@ -311,12 +330,11 @@ namespace Lightweight
                         || pauseBack.ButtonClicked())
                     {
                         timer.Start();
-                        menuState = MenuStates.Gameplay;
-                        
+                        menuState = MenuStates.Gameplay;   
                     }
-
                     if(backToMenu.ButtonClicked())
                     {
+                        Reset();
                         menuState = MenuStates.MainMenu;
                     }
                     break;
@@ -326,9 +344,9 @@ namespace Lightweight
                         menuState = MenuStates.MainMenu;
                     }
                     else if (retryButton.ButtonClicked())
-                    { 
-                        menuState = MenuStates.Gameplay;
+                    {
                         Reset();
+                        menuState = MenuStates.Gameplay;
                     }
                     break;
             }
@@ -370,7 +388,7 @@ namespace Lightweight
                                                                           "\n  to stay slow" +
                                                                           "\n- Avoid the traps!" +
                                                                           "\n- Try to survive as long as possible",
-                    new Vector2(windowWidth/2 - 150, 190), Color.Black);
+                    new Vector2(windowWidth/2 - 260, 350), Color.Black);
                     _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
                     // Player tries to survive as long as possible
 
@@ -407,17 +425,28 @@ namespace Lightweight
                     //Draws total health
                     _spriteBatch.DrawString(buttonText, 
                         $"Health: {player.PlayerHealth}",
-                        new Vector2(15, 35),
+                        new Vector2(15, 50),
                         Color.Black);
 
                     //Draws timer
                     _spriteBatch.DrawString(buttonText,
                         $"Time: {timer.ElapsedMilliseconds/1000}",
-                        new Vector2(15, 60),
+                        new Vector2(15, 90),
                         Color.Black);
 
-                    _spriteBatch.DrawString(buttonText, $"Wave: {LevelManager.Instance.Wave}", new Vector2(15, 95), Color.Black);
+                    _spriteBatch.DrawString(buttonText, 
+                        $"Wave: {levelManager.Wave}", 
+                        new Vector2(15, 130), 
+                        Color.Black);
 
+                    break;
+                case MenuStates.WaveComplete:
+                    _spriteBatch.DrawString(buttonText,
+                        String.Format("Completed Wave {0}!",
+                        levelManager.Wave),
+                        new Vector2(waveComplete.Rectangle.X + 50, waveComplete.Rectangle.Y - 250),
+                        Color.Black);
+                    waveComplete.Render(_spriteBatch, "CONTINUE", waveComplete.Rectangle); 
                     break;
                 case MenuStates.Pause:
                     // Draws the buttons for the pause menu
@@ -430,7 +459,7 @@ namespace Lightweight
                     // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
                     _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
-                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 150), Color.Black);
+                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 250), Color.Black);
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
                     break;
@@ -446,27 +475,40 @@ namespace Lightweight
         /// </summary>
         public void Reset()
         {
-            player.X = 400;
-            player.Y = 240;
-
-            if(!(player.PlayerHealth <= 0))
-            {
-                LevelManager.Instance.BuildLevel();
-            }
-            if (LevelManager.Instance.IsLoaded) 
-            {
-                if (LevelManager.Instance.Wave > 1)
-                LevelManager.Instance.BuildLevel();
-            }
+            player.X = playerStartX;
+            player.Y = playerStartY;
+            EnemyManager.Instance.Enemies.Clear();
+            EnemyManager.Instance.Scraps.Clear();
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
             }
+            levelManager.Wave = 0;
+            levelManager.BuildLevel();
             player.Scraps = 10;
             timer.Reset();
         }
 
+
+        public void Continue() 
+        {
+            player.X = playerStartX;
+            player.Y = playerStartY;
+            EnemyManager.Instance.Scraps.Clear();
+
+            if (!(player.PlayerHealth <= 0))
+            {
+                levelManager.BuildLevel();
+            }
+            // Changes health based on the GodMode setting
+            if (godMode.IsOn)
+            {
+                player.PlayerHealth = 99999;
+            }
+            player.Scraps = 10;
+            timer.Reset();
+        }
 
     }
 }
