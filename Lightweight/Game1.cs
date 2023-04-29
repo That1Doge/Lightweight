@@ -483,7 +483,7 @@ namespace Lightweight
             player.X = playerStartX;
             player.Y = playerStartY;
             EnemyManager.Instance.Enemies.Clear();
-            
+            EnemyManager.Instance.Scraps.Clear();
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)
             {
@@ -500,6 +500,7 @@ namespace Lightweight
         {
             player.X = playerStartX;
             player.Y = playerStartY;
+            EnemyManager.Instance.Scraps.Clear();
 
             if (!(player.PlayerHealth <= 0))
             {

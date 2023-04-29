@@ -21,6 +21,7 @@ namespace Lightweight
         private Texture2D hitBoxTex;
 
         public List<Enemy> Enemies { get { return enemies; } }
+        public List<Scrap> Scraps { get { return scraps; } }
 
         private EnemyManager()
         {
