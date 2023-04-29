@@ -363,7 +363,7 @@ namespace Lightweight
                                                                           "\n  avoid damage" +
                                                                           "\n- Left Click to shoot at your cursor" +
                                                                           "\n- Shoot at enemies and pick up the scrap they drop " +
-                                                                          "\n  to stay slow" +
+                                                                          "\n  to stay slow and take less damage" +
                                                                           "\n- Avoid the traps!" +
                                                                           "\n- Try to survive as long as possible",
                     new Vector2(windowWidth/2 - 260, 350), Color.Black);
