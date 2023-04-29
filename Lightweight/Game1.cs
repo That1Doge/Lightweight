@@ -172,9 +172,9 @@ namespace Lightweight
                     
                     if (playButton.ButtonClicked())
                     {
-                        if(!LevelManager.Instance.IsLoaded) 
+                        if(LevelManager.Instance.IsLoaded) 
                         {
-                            LevelManager.Instance.BuildLevel();
+                            LevelManager.Instance.LoadLevel();
                         }
                         else 
                         {
@@ -206,10 +206,13 @@ namespace Lightweight
                     {
                         menuState = MenuStates.MainMenu;
                     }
-                    if (readFile.ButtonClicked()) 
+                    if (readFile.ButtonClicked() && LevelManager.Instance.IsLoaded == false) 
                     {
-                        LevelManager.Instance.LoadLevel();
                         LevelManager.Instance.IsLoaded = true;
+                    }
+                    if(readFile.ButtonClicked() && LevelManager.Instance.IsLoaded == true) 
+                    {
+                        LevelManager.Instance.IsLoaded = false;
                     }
 
                     //God mode configuration
@@ -364,16 +367,37 @@ namespace Lightweight
                                                                           "\n- Avoid the traps!" +
                                                                           "\n- Try to survive as long as possible",
                     new Vector2(windowWidth/2 - 260, 350), Color.Black);
-                    _spriteBatch.DrawString(titleFont, "INSTRUCTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30), Color.Black);
-                    // Player tries to survive as long as possible
-
+                    _spriteBatch.DrawString(titleFont,
+                        "INSTRUCTIONS",
+                        new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30),
+                        Color.Black);
                     break;
                 case MenuStates.OptionsMenu:
                     // Draws all of the Options buttons to the options screen
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
                     readFile.Render(_spriteBatch, "READ FROM FILE", readFile.Rectangle);
-                    _spriteBatch.DrawString(titleFont, "OPTIONS", new Vector2(windowWidth / 2 - (titleFont.MeasureString("OPTIONS").X / 2), 30), Color.Black);
+
+                    if (LevelManager.Instance.IsLoaded == true) 
+                    {
+                        _spriteBatch.DrawString(buttonText, 
+                            "On!", new Vector2(readFile.Rectangle.X + (readFile.Rectangle.X / 4) - 5, 
+                            readFile.Rectangle.Y + 75), 
+                            Color.Black);
+                    }
+                    if (LevelManager.Instance.IsLoaded == false) 
+                    {
+                        _spriteBatch.DrawString(buttonText,
+                                "Off!", new Vector2(readFile.Rectangle.X + (readFile.Rectangle.X / 4) - 5,
+                                readFile.Rectangle.Y + 75),
+                                Color.Black);
+                    }
+                 
+                    _spriteBatch.DrawString(titleFont, 
+                        "OPTIONS",
+                        new Vector2(windowWidth / 2 - 
+                        (titleFont.MeasureString("OPTIONS").X / 2), 
+                        30), Color.Black);
 
                     break;
                 case MenuStates.Gameplay:
@@ -403,6 +427,7 @@ namespace Lightweight
                         new Vector2(15, 50),
                         Color.Black);
 
+                    //Draws wave number to screen
                     _spriteBatch.DrawString(buttonText, 
                         $"Wave: {LevelManager.Instance.Wave}", 
                         new Vector2(15, 90), 
@@ -467,7 +492,9 @@ namespace Lightweight
             LevelManager.Instance.BuildLevel();
         }
 
-
+        /// <summary>
+        /// Method that advances to the next wave
+        /// </summary>
         public void Continue() 
         {
             player.X = playerStartX;
