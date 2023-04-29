@@ -10,6 +10,12 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Bullet Class 
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     /// <summary>
@@ -75,6 +81,7 @@ namespace Lightweight
         /// Property that returns the menu state
         /// </summary>
         public MenuStates MenuState { get { return menuState; } }
+
 
         public Game1()
         {
