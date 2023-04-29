@@ -35,6 +35,7 @@ namespace Lightweight
         int windowHeight;
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
+        List<Wall> walls = new List<Wall>();
         Random rng = new Random();
         private static LevelManager instance;
         bool loadedAlready;
@@ -67,14 +68,11 @@ namespace Lightweight
 
         /// <summary>
         /// Property that returns list of walls
+        public List<Wall> Walls { get { return walls; } }
         public LevelManager()
         {
             windowWidth = Game1.WindowWidth;
             windowHeight = Game1.WindowHeight;
-            leftWallTexture = leftWall;
-            rightWallTexture = rightWall;
-            windowWidth = width;
-            windowHeight = height;
             isLoaded = false;
             loadedAlready = false;
             wave = 0;

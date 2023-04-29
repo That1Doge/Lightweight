@@ -100,16 +100,10 @@ namespace Lightweight
         {
             //Loads each asset
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            //floorTile = Content.Load<Texture2D>("floor_tile");
             buttonText = Content.Load<SpriteFont>("arial-14");
             buttonTexture = Content.Load<Texture2D>("PNG/ButtonImages/gameButton");
             toggleOn = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOn");
             toggleOff = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOff");
-            //topWall = Content.Load<Texture2D>("topwall");
-            //bottomWall = Content.Load<Texture2D>("bwall");
-            //rightWall = Content.Load<Texture2D>("rwall");
-            //leftWall = Content.Load<Texture2D>("lwall");
-            //trapTexture = Content.Load<Texture2D>("trap");
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
             titleFont = Content.Load<SpriteFont>("impact-50");
 
@@ -180,9 +174,9 @@ namespace Lightweight
                     
                     if (playButton.ButtonClicked())
                     {
-                        if(levelManager.IsLoaded) 
+                        if(!LevelManager.Instance.IsLoaded) 
                         {
-                            levelManager.LoadLevel();
+                            LevelManager.Instance.BuildLevel();
                         }
                         else 
                         {
@@ -216,7 +210,7 @@ namespace Lightweight
                     }
                     if (readFile.ButtonClicked()) 
                     {
-                        LevelManager.Instance.LoadLevel("..\\..\\..\\testBoard.txt");
+                        LevelManager.Instance.LoadLevel();
                         LevelManager.Instance.IsLoaded = true;
                     }
 
@@ -272,12 +266,6 @@ namespace Lightweight
                         }
                     }
 
-                    // update bullets
-                    /*foreach (Bullet bullet in BulletManager.Instance.Bullets)
-                    {
-                        bullet.Update();
-                    }*/
-
                     //If player hits trap
                     foreach (Tile tile in LevelManager.Instance.FloorTiles) 
                     {
@@ -321,6 +309,7 @@ namespace Lightweight
                 case MenuStates.WaveComplete:
                     if (waveComplete.ButtonClicked()) 
                     {
+                        BulletManager.Instance.Bullets.Clear();
                         Continue();
                         menuState = MenuStates.Gameplay;
                     }
@@ -435,7 +424,7 @@ namespace Lightweight
                         Color.Black);
 
                     _spriteBatch.DrawString(buttonText, 
-                        $"Wave: {levelManager.Wave}", 
+                        $"Wave: {LevelManager.Instance.Wave}", 
                         new Vector2(15, 130), 
                         Color.Black);
 
@@ -443,7 +432,7 @@ namespace Lightweight
                 case MenuStates.WaveComplete:
                     _spriteBatch.DrawString(buttonText,
                         String.Format("Completed Wave {0}!",
-                        levelManager.Wave),
+                        LevelManager.Instance.Wave),
                         new Vector2(waveComplete.Rectangle.X + 50, waveComplete.Rectangle.Y - 250),
                         Color.Black);
                     waveComplete.Render(_spriteBatch, "CONTINUE", waveComplete.Rectangle); 
@@ -484,8 +473,8 @@ namespace Lightweight
             {
                 player.PlayerHealth = 100;
             }
-            levelManager.Wave = 0;
-            levelManager.BuildLevel();
+            LevelManager.Instance.Wave = 0;
+            LevelManager.Instance.BuildLevel();
             player.Scraps = 10;
             timer.Reset();
         }
@@ -495,18 +484,18 @@ namespace Lightweight
         {
             player.X = playerStartX;
             player.Y = playerStartY;
-            EnemyManager.Instance.Scraps.Clear();
+            // EnemyManager.Instance.Scraps.Clear();
 
             if (!(player.PlayerHealth <= 0))
             {
-                levelManager.BuildLevel();
+                LevelManager.Instance.BuildLevel();
             }
             // Changes health based on the GodMode setting
             if (godMode.IsOn)
             {
                 player.PlayerHealth = 99999;
             }
-            player.Scraps = 10;
+            // player.Scraps = 10;
             timer.Reset();
         }
 
