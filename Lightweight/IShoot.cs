@@ -24,9 +24,10 @@ namespace Lightweight
         /// Instantiate a new bullet object at this object's pos
         /// moving in the direction of the target object
         /// </summary>
-        /// <param name="texture">The texture to apply to the bullet</param>
         /// <param name="origin">The pos for the bullet to move towards</param>
         /// <param name="target">The pos for the bullet to move towards</param>
+        /// <param name="speed">how fast the bullet moves</param>
+        /// <param name="damage">How much damage the bullet will do</param>
         public void Shoot(Vector2 origin, Vector2 target, int speed, int damage);
     }
 }
