@@ -71,6 +71,9 @@ namespace Lightweight
         /// </summary>
         public static int WindowHeight { get { return windowHeight; } }
 
+        /// <summary>
+        /// Property that returns the menu state
+        /// </summary>
         public MenuStates MenuState { get { return menuState; } }
 
         public Game1()
@@ -82,11 +85,16 @@ namespace Lightweight
 
         protected override void Initialize()
         {
+            //Changes window resolution
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
+
+            //Variables for window width/height
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
+
+            //Misc initializations
             player = new Player();
             menuState = MenuStates.MainMenu;
             base.Initialize();
@@ -105,13 +113,11 @@ namespace Lightweight
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
             titleFont = Content.Load<SpriteFont>("impact-50");
 
+            //Loads instance content
             LevelManager.Instance.LoadContent(Content);
-
             BulletManager.Instance.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
-
             EnemyManager.Instance.LoadSpriteSheets(Content);
 
-            // TODO: use this.Content to load your game content here
             // Loads all of the Menu buttons
             playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width * 2, 
                 windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
@@ -163,50 +169,65 @@ namespace Lightweight
             // Switch statement that changes the Menu States depending on what action is done
             switch(menuState)
             { 
-                case MenuStates.MainMenu:
-                    // Tests the menu state 
-                    //if(Keyboard.GetState().IsKeyDown(Keys.W))
-                    //{
-                    //    menuState = MenuStates.Gameplay;
-                    //}
+                //Main Menu
+                case MenuStates.MainMenu: 
                     
+                    //If play button is clicked, build level based upon if level is loaded or not
                     if (playButton.ButtonClicked())
                     {
+                        //Load level from file if option is selected
                         if(LevelManager.Instance.IsLoaded) 
                         {
                             LevelManager.Instance.LoadLevel();
                         }
+                        //Otherwise change level
                         else 
                         {
                             Reset();
                         }
                         menuState = MenuStates.Gameplay;
                     }
+
+                    //Brings up options menu
                     else if (optionsButton.ButtonClicked())
                     {
                         menuState = MenuStates.OptionsMenu;
                     }
+
+                    //Brings up instruction menu if clicked
                     else if(instructionsButton.ButtonClicked())
                     {
                         menuState = MenuStates.InstructionMenu;
                     }
+
+                    //Exit game if button is clicked
                     else if (quitButton.ButtonClicked())
                     {
                         Exit();
                     }
                     break;
+
+                //Instruction menu
                 case MenuStates.InstructionMenu:
+
+                    //Goes back to main menu if button is clicked
                     if(instructionsBack.ButtonClicked())
                     {
                         menuState = MenuStates.MainMenu;
                     }
                     break;
+
+                //Options menu
                 case MenuStates.OptionsMenu:
+
+                    //If back button is clicked, return to main menu
                     if(optionsBack.ButtonClicked())
                     {
                         menuState = MenuStates.MainMenu;
                     }
-                    if (readFile.ButtonClicked() && LevelManager.Instance.IsLoaded == false) 
+
+                    //If read button 
+                    if (readFile.ButtonClicked()) 
                     {
                         LevelManager.Instance.IsLoaded = true;
                     }
