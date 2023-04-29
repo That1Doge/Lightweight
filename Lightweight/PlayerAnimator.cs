@@ -19,9 +19,12 @@ namespace Lightweight
     /// </summary>
     internal class PlayerAnimator : Animator
     {
-        public PlayerAnimator() 
+        private Player player;
+
+        public PlayerAnimator(Player player) 
             : base()
         {
+            this.player = player;
         }
 
         public void Update(GameTime gt, object key, float fps)
@@ -34,7 +37,7 @@ namespace Lightweight
                 if (key is (object)PlayerState.RollLeft 
                     or (object)PlayerState.RollRight)
                 {
-                    if (animations[key].Ended) { PlayerController.IsRolling = false; }
+                    if (animations[key].Ended) { player.Controller.IsRolling = false; }
                 }
                 lastKey = key;
             }

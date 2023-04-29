@@ -20,7 +20,7 @@ namespace Lightweight
     /// Enemy Class 
     /// Creates a single Instance of a enemy
     /// </summary>
-    public class Enemy : ITakeDamage, ICollidable//, IShoot
+    public class Enemy : ITakeDamage, ICollidable, IShoot
     {
         private int enemyHealth;
         private Vector2 pos;
@@ -34,6 +34,7 @@ namespace Lightweight
         private double damageTimer;
         private bool playerContact;
         private double startTimer;
+        private int enemyDefense;
 
         public Rectangle HitBox { get { return hitBox; } }
         public Animator Anims { get { return anims; } }
@@ -48,12 +49,19 @@ namespace Lightweight
             hitBox = new Rectangle((int)pos.X + 4, (int)pos.Y + 4, 25, 25);
             this.hitBoxTex = hitBoxTex;
             shootTimer = 2;
+            this.enemyHealth = LevelManager.Instance.Wave * 10;
+            enemyDefense = LevelManager.Instance.Wave;
         }
 
         public void ITakeDamage(int damage, int defense)
         {
             //defense is half as effective on enemies
             this.enemyHealth = enemyHealth - (damage - defense / 2);
+            shotImmune = 0.5;
+            if (enemyHealth <= 0)
+            {
+                Die();
+            }
         }
 
         public void Update(GameTime gt, Player player)
@@ -98,7 +106,6 @@ namespace Lightweight
                     {
                         Shoot(hitBox.Center.ToVector2(), player.Position, 10, 10);
                         shootTimer = 1.5;
-                        shotImmune = 0.5;
                     }
                     else
                     {
@@ -111,12 +118,15 @@ namespace Lightweight
                     shotImmune -= gt.ElapsedGameTime.TotalSeconds;
                 }
 
-                for (int i = 0; i < BulletManager.Bullets.Count; i++)
+                for (int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
                 {
-                    if (hitBox.Intersects(BulletManager.Bullets[i].HitBox) && shotImmune <= 0)
+                    Bullet bullet = BulletManager.Instance.Bullets[i];
+                    if (hitBox.Intersects(bullet.HitBox) 
+                        && bullet.Source != this 
+                        && shotImmune <= 0)
                     {
-                        BulletManager.Remove(BulletManager.Bullets[i]);
-                        Die();
+                        BulletManager.Instance.Remove(bullet);
+                        ITakeDamage(bullet.Damage, enemyDefense);
                     }
                 }
             }
@@ -138,10 +148,10 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(origin, direction, speed, damage);
+            Bullet bullet = new Bullet(this, origin, direction, speed, damage);
 
             // implement bullets list and add bullet to list
-            BulletManager.Add(bullet);
+            BulletManager.Instance.Add(bullet);
         }
         public void Draw(SpriteBatch sb)
         {

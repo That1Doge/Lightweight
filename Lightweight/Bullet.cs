@@ -17,6 +17,10 @@ public class Bullet : GameObject
 
     private Texture2D hitBoxTex;
 
+    private IShoot source;
+
+    public IShoot Source { get { return source; } }
+
     /// <summary>
     /// Speed of the bullet per frame
     /// </summary>
@@ -42,11 +46,12 @@ public class Bullet : GameObject
     /// </summary>
     /// <param name="position">The pos at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
-    public Bullet(Vector2 position, Vector2 direction, int speed,int damage) : base(BulletManager.BulletTexture, position)
+    public Bullet(IShoot source, Vector2 position, Vector2 direction, int speed,int damage) : base(BulletManager.Instance.BulletTexture, position)
     {
         this.direction = direction;
         this.speed = speed;
         this.damage = damage;
+        this.source = source;
         isAlive = true;
         hitBoxTex = texture;
         hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, texture.Width, texture.Height);

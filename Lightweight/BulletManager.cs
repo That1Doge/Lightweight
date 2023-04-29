@@ -7,27 +7,37 @@ public class BulletManager
     /// <summary>
     /// List of active bullets
     /// </summary>
-    private static List<Bullet> bullets = new List<Bullet>();
-    private static Texture2D bulletTexture;
+    private List<Bullet> bullets = new List<Bullet>();
+    private Texture2D bulletTexture;
+    private static BulletManager instance;
 
-    public static List<Bullet> Bullets
+    public static BulletManager Instance
+    {
+        get
+        {
+            if(instance == null) instance = new BulletManager();
+            return instance;
+        }
+    }
+
+    public List<Bullet> Bullets
     {
         get { return bullets; }
         set { bullets = value; }
     }
 
-    public static Texture2D BulletTexture
+    public Texture2D BulletTexture
     {
         get { return bulletTexture; }
         set { bulletTexture = value; }
     }
 
-    public static void Add(Bullet bullet)
+    public void Add(Bullet bullet)
     {
         bullets.Add(bullet);
     }
     
-    public static void Remove(Bullet bullet)
+    public void Remove(Bullet bullet)
     {
         bullets.Remove(bullet);
     }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,18 +29,24 @@ namespace Lightweight
         Texture2D rightWallTexture;
         Texture2D leftWallTexture;
         bool isLoaded;
-        Rectangle hitbox;
-        GraphicsDeviceManager _graphics;
-        int windowWidth;
-        int windowHeight;
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
         List<Wall> walls = new List<Wall>();
         Random rng = new Random();
         int trapChance;
-        int enemyChance;
         int attempt = 0;
         int wave;
+        private static LevelManager instance;
+
+        public static LevelManager Instance 
+        { 
+            get 
+            {
+                if (instance == null) instance = new LevelManager();
+                return instance;
+            }
+        }
+
 
         /// <summary>
         /// Property that returns if board is loaded
@@ -57,21 +65,23 @@ namespace Lightweight
         public List<Wall> Walls { get { return walls; } set { walls = value; } }
 
         //Parameterized constructor that initialises all things it handles
-        public LevelManager(Texture2D tile, Texture2D trap, Texture2D topWall, 
-            Texture2D bottomWall, Texture2D leftWall, Texture2D rightWall, 
-            int height, int width) 
-        { 
-            tileTexture = tile;
-            trapTexture = trap;
-            topWallTexture = topWall;
-            bottomWallTexture = bottomWall;
-            leftWallTexture = leftWall;
-            rightWallTexture = rightWall;
-            windowWidth = width;
-            windowHeight = height;
+        public LevelManager()
+        {
+            windowWidth = Game1.WindowWidth;
+            windowHeight = Game1.WindowHeight;
             isLoaded = false;
             wave = 0;
         }   
+
+        public void LoadContent(ContentManager content)
+        {
+            topWallTexture = content.Load<Texture2D>("topwall");
+            bottomWallTexture = content.Load<Texture2D>("bwall");
+            rightWallTexture = content.Load<Texture2D>("rwall");
+            leftWallTexture = content.Load<Texture2D>("lwall");
+            trapTexture = content.Load<Texture2D>("trap");
+            tileTexture = content.Load<Texture2D>("floor_tile");
+        }
 
         /// <summary>
         /// Method that loads the board from a file

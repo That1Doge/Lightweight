@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 
 namespace Lightweight
 {
-    public class Player : IMove, ITakeDamage, ICollidable
+    public class Player : IMove, ITakeDamage, ICollidable, IShoot
     {        //Fields used in class
         int playerHealth;
         int playerDefense;
@@ -21,7 +21,9 @@ namespace Lightweight
         private Texture2D hitBoxTex;
         private Texture2D bulletTex;
         private double immuneCounter;
+        private PlayerController controller;
 
+        public PlayerController Controller { get { return controller; } }
         public Texture2D BulletTex
         { get { return bulletTex; } }
 
@@ -58,14 +60,15 @@ namespace Lightweight
 
         private Vector2 position = new Vector2(400, 240);
         private float speed;
-        private PlayerAnimator anims = new PlayerAnimator();
+        private PlayerAnimator anims;
 
         public Player()
         {
             scraps = 10;
             playerHealth = 100;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
-            PlayerController.Player = this;
+            controller = new PlayerController(this);
+            anims = new PlayerAnimator(this);
         }
 
         public void LoadAnims(ContentManager content)
@@ -83,31 +86,31 @@ namespace Lightweight
 
         public void Update(GameTime gt)
         {
-            PlayerController.Update(gt);
+            controller.Update(gt);
 
-            position += PlayerController.Direction * this.Speed
+            position += controller.Direction * this.Speed
                 * (float)gt.ElapsedGameTime.TotalSeconds * 1000f;
 
             hitBox.X = (int)position.X + 5;
             hitBox.Y = (int)position.Y + 10;
 
-            if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
-            if (PlayerController.SingleKeyPress(Keys.O) && scraps > 0) scraps--;
-            if (PlayerController.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
+            if (controller.SingleKeyPress(Keys.P)) scraps++;
+            if (controller.SingleKeyPress(Keys.O) && scraps > 0) scraps--;
+            if (controller.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
             speed = 1f/(scraps+2);
-            anims.Update(gt, PlayerController.PlayerState, (1f / (scraps+2)) * 128);
+            anims.Update(gt, controller.PlayerState, (1f / (scraps+2)) * 128);
 
             if(immuneCounter > 0)
             {
                 immuneCounter -= gt.ElapsedGameTime.TotalSeconds;
             }
 
-            for(int i = 0; i < BulletManager.Bullets.Count; i++)
+            for(int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
             {
-                if (hitBox.Intersects(BulletManager.Bullets[i].HitBox) && immuneCounter <= 0 && !PlayerController.IsRolling)
+                if (hitBox.Intersects(BulletManager.Instance.Bullets[i].HitBox) && immuneCounter <= 0 && !controller.IsRolling)
                 {
-                    ITakeDamage(BulletManager.Bullets[i].Damage, 0);
-                    BulletManager.Remove(BulletManager.Bullets[i]);
+                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage, 0);
+                    BulletManager.Instance.Remove(BulletManager.Instance.Bullets[i]);
                 }
             }
         }
@@ -132,7 +135,7 @@ namespace Lightweight
 
         public void ITakeDamage(int damage, int defense)
         {
-            if (PlayerController.IsRolling) { return; }
+            if (controller.IsRolling) { return; }
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             this.playerHealth = playerHealth - (damage - defense);
@@ -158,10 +161,10 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(origin, direction, speed, damage);
+            Bullet bullet = new Bullet(this, origin, direction, speed, damage);
 
             // implement bullets list and add bullet to list
-            BulletManager.Add(bullet);
+            BulletManager.Instance.Add(bullet);
         }
 
         public void Move(Direction direction)

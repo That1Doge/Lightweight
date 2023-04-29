@@ -60,7 +60,7 @@ namespace Lightweight
 
         public void SpawnScrap(int numSpawn, Vector2 pos)
         {
-            for(int i = 0; i < numSpawn; i++)
+            for(int i = 0; i <= numSpawn; i++)
             {
                 scraps.Add(new Scrap(pos, new Animator(scrapAnims)));
             }
@@ -80,7 +80,7 @@ namespace Lightweight
 
         public void KillEnemy(Enemy enemy) 
         {
-            SpawnScrap(5, enemy.Pos);
+            SpawnScrap(LevelManager.Instance.Wave + 2, enemy.Pos);
             enemies.Remove(enemy);
         }
 

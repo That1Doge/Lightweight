@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -32,12 +33,6 @@ namespace Lightweight
 
         private static int windowWidth;
         private static int windowHeight;
-        private Texture2D floorTile;
-        private Texture2D topWall;
-        private Texture2D bottomWall;
-        private Texture2D leftWall;
-        private Texture2D rightWall;
-        private Texture2D trapTexture;
         private MenuStates menuState;
         private MenuButton playButton;
         private MenuButton optionsButton;
@@ -59,8 +54,6 @@ namespace Lightweight
         private Texture2D backButton;
         private KeyboardState prevState;
         private Player player;
-        private List<Wall> walls;
-        private LevelManager levelManager;
         private SpriteFont titleFont;
         private Stopwatch timer;
         private int timeSurvived;
@@ -92,7 +85,6 @@ namespace Lightweight
             windowWidth = _graphics.PreferredBackBufferWidth;
             windowHeight = _graphics.PreferredBackBufferHeight;
             player = new Player();
-            walls = new List<Wall>();
             menuState = MenuStates.MainMenu;
             base.Initialize();
             timer = new Stopwatch();
@@ -102,20 +94,22 @@ namespace Lightweight
         {
             //Loads each asset
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            floorTile = Content.Load<Texture2D>("floor_tile");
+            //floorTile = Content.Load<Texture2D>("floor_tile");
             buttonText = Content.Load<SpriteFont>("arial-14");
             buttonTexture = Content.Load<Texture2D>("PNG/ButtonImages/gameButton");
             toggleOn = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOn");
             toggleOff = Content.Load<Texture2D>("PNG/ButtonImages/toggleOptionOff");
-            topWall = Content.Load<Texture2D>("topwall");
-            bottomWall = Content.Load<Texture2D>("bwall");
-            rightWall = Content.Load<Texture2D>("rwall");
-            leftWall = Content.Load<Texture2D>("lwall");
-            trapTexture = Content.Load<Texture2D>("trap");
+            //topWall = Content.Load<Texture2D>("topwall");
+            //bottomWall = Content.Load<Texture2D>("bwall");
+            //rightWall = Content.Load<Texture2D>("rwall");
+            //leftWall = Content.Load<Texture2D>("lwall");
+            //trapTexture = Content.Load<Texture2D>("trap");
             backButton = Content.Load<Texture2D>("PNG/ButtonImages/backArrow");
             titleFont = Content.Load<SpriteFont>("impact-50");
 
-            BulletManager.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
+            LevelManager.Instance.LoadContent(Content);
+
+            BulletManager.Instance.BulletTexture = Content.Load<Texture2D>("rsz_plain-circle1");
 
             EnemyManager.Instance.LoadSpriteSheets(Content);
 
@@ -155,7 +149,7 @@ namespace Lightweight
             readFile = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - 115,
                 windowHeight / 2 + (buttonTexture.Height * 4), buttonTexture.Width * 2, buttonTexture.Height));
 
-            levelManager = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
+            //LevelManager.Instance.Instance.Instance = new LevelManager(floorTile, trapTexture, topWall, bottomWall, leftWall, rightWall, windowHeight, windowWidth);
             player.LoadAnims(Content);
         }
 
@@ -207,8 +201,8 @@ namespace Lightweight
                     }
                     if (readFile.ButtonClicked()) 
                     {
-                        levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
-                        levelManager.IsLoaded = true;
+                        LevelManager.Instance.LoadLevel("..\\..\\..\\testBoard.txt");
+                        LevelManager.Instance.IsLoaded = true;
                     }
 
                     //God mode configuration
@@ -232,7 +226,7 @@ namespace Lightweight
                     EnemyManager.Instance.Update(gameTime, player);
 
                     //Wall collision
-                    foreach (Wall walls in levelManager.Walls) 
+                    foreach (Wall walls in LevelManager.Instance.Walls) 
                     { 
                         if (walls.Intersect(player.HitBox) && player.X < 5) 
                         {
@@ -253,26 +247,26 @@ namespace Lightweight
                     }
 
                     // remove bullets when no longer active
-                    for (int i = BulletManager.Bullets.Count - 1; i >= 0; i--)
+                    for (int i = BulletManager.Instance.Bullets.Count - 1; i >= 0; i--)
                     {
-                        BulletManager.Bullets[i].Update();
+                        BulletManager.Instance.Bullets[i].Update();
 
-                        if (!BulletManager.Bullets[i].IsAlive)
+                        if (!BulletManager.Instance.Bullets[i].IsAlive)
                         {
-                            BulletManager.Bullets.RemoveAt(i);
+                            BulletManager.Instance.Bullets.RemoveAt(i);
                         }
                     }
 
                     // update bullets
-                    /*foreach (Bullet bullet in BulletManager.Bullets)
+                    /*foreach (Bullet bullet in BulletManager.Instance.Bullets)
                     {
                         bullet.Update();
                     }*/
 
                     //If player hits trap
-                    foreach (Tile tile in levelManager.FloorTiles) 
+                    foreach (Tile tile in LevelManager.Instance.FloorTiles) 
                     {
-                        if (tile.Intersect(player.HitBox) && tile.IsTrap && !PlayerController.IsRolling) 
+                        if (tile.Intersect(player.HitBox) && tile.IsTrap && !player.Controller.IsRolling) 
                         {
                             player.PlayerHealth -= 1;
                         }
@@ -393,12 +387,12 @@ namespace Lightweight
                     GraphicsDevice.Clear(Color.Black);
 
                     //This draws the tiles/walls, and player across the screen
-                    levelManager.Draw(_spriteBatch);
+                    LevelManager.Instance.Draw(_spriteBatch);
                     player.Draw(_spriteBatch);
                     EnemyManager.Instance.Draw(_spriteBatch);
                     
                     //Draws bullet to screen
-                    foreach (Bullet bullet in BulletManager.Bullets)
+                    foreach (Bullet bullet in BulletManager.Instance.Bullets)
                     {
                         bullet.Draw(_spriteBatch);
                     }
@@ -422,7 +416,7 @@ namespace Lightweight
                         new Vector2(15, 60),
                         Color.Black);
 
-                    _spriteBatch.DrawString(buttonText, $"Wave: {levelManager.Wave}", new Vector2(15, 95), Color.Black);
+                    _spriteBatch.DrawString(buttonText, $"Wave: {LevelManager.Instance.Wave}", new Vector2(15, 95), Color.Black);
 
                     break;
                 case MenuStates.Pause:
@@ -457,12 +451,12 @@ namespace Lightweight
 
             if(!(player.PlayerHealth <= 0))
             {
-                levelManager.BuildLevel();
+                LevelManager.Instance.BuildLevel();
             }
-            if (levelManager.IsLoaded) 
+            if (LevelManager.Instance.IsLoaded) 
             {
-                if (levelManager.Wave > 1)
-                levelManager.BuildLevel();
+                if (LevelManager.Instance.Wave > 1)
+                LevelManager.Instance.BuildLevel();
             }
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)

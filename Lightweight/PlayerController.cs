@@ -27,43 +27,44 @@ namespace Lightweight
     /// Player Controller class
     /// Controls player movement and input
     /// </summary>
-    public static class PlayerController
+    public class PlayerController
     {
-        private static Vector2 direction;
-        private static PlayerState playerState;
-        private static bool isRolling;
-        private static KeyboardState kb;
-        private static KeyboardState prevKb;
-        private static MouseState prevMouse;
-        private static MouseState mouse;
+        private Vector2 direction;
+        private PlayerState playerState;
+        private bool isRolling;
+        private KeyboardState kb;
+        private KeyboardState prevKb;
+        private MouseState prevMouse;
+        private MouseState mouse;
 
-        private static Player player;
-        public static Player Player
+        private Player player;
+        public Player Player
         {
             get { return player; }
             set { player = value; }
         }
 
-        public static Vector2 Direction { get { return direction; } }
-        public static PlayerState PlayerState { get { return playerState; } }
+        public  Vector2 Direction { get { return direction; } }
+        public PlayerState PlayerState { get { return playerState; } }
 
-        public static bool IsRolling 
+        public bool IsRolling 
         { 
             get { return isRolling; } 
             set { isRolling = value; } 
         }
 
-        static PlayerController()
+        public PlayerController(Player player)
         {
+            this.player = player;
             playerState = PlayerState.FaceRight;
         }
 
-        public static bool SingleKeyPress(Keys key)
+        public bool SingleKeyPress(Keys key)
         {
             return prevKb.IsKeyUp(key) && kb.IsKeyDown(key);
         }
 
-        public static void Update(GameTime gt)
+        public void Update(GameTime gt)
         {
             prevKb = kb;
             kb = Keyboard.GetState();
