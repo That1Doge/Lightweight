@@ -20,6 +20,5 @@ namespace Lightweight
     internal interface ICollidable
     {
        public Rectangle HitBox { get; }
-       public bool Intersect(Rectangle hitbox);
     }
 }

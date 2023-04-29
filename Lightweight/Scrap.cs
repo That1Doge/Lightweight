@@ -30,9 +30,12 @@ namespace Lightweight
             despawnTimer -= gt.ElapsedGameTime.TotalSeconds;
             if(despawnTimer <= 0) { EnemyManager.Instance.RemoveScrap(this); }
             if (hitBox.Intersects(player.HitBox)) 
-            { 
-                player.Scraps++;
-                EnemyManager.Instance.RemoveScrap(this);
+            {
+                if (player.Scraps < player.MaxScraps)
+                {
+                    player.Scraps++;
+                    EnemyManager.Instance.RemoveScrap(this);
+                }
             }
             anim.Update(gt, 0);
         }

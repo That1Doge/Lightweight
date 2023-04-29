@@ -12,11 +12,12 @@ using System.Xml.Serialization;
 
 namespace Lightweight
 {
-    public class Player : IMove, ITakeDamage, ICollidable, IShoot
+    public class Player : ITakeDamage, ICollidable, IShoot
     {        //Fields used in class
         int playerHealth;
         int playerDefense;
         int scraps;
+        int maxScraps;
         private Rectangle hitBox;
         private Texture2D hitBoxTex;
         private Texture2D bulletTex;
@@ -35,6 +36,8 @@ namespace Lightweight
             get { return playerHealth; }
             set { playerHealth = value; }
         }
+
+        public int MaxScraps { get { return maxScraps; } }
 
         /// <summary>
         /// A get and set property for the player defense
@@ -65,6 +68,7 @@ namespace Lightweight
         public Player()
         {
             scraps = 10;
+            maxScraps = 30;
             playerHealth = 100;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
             controller = new PlayerController(this);
@@ -107,10 +111,13 @@ namespace Lightweight
 
             for(int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
             {
-                if (hitBox.Intersects(BulletManager.Instance.Bullets[i].HitBox) && immuneCounter <= 0 && !controller.IsRolling)
+                Bullet bullet = BulletManager.Instance.Bullets[i];
+                if (hitBox.Intersects(bullet.HitBox)
+                    && immuneCounter <= 0 && !controller.IsRolling && 
+                   bullet.Source != this)
                 {
-                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage, 0);
-                    BulletManager.Instance.Remove(BulletManager.Instance.Bullets[i]);
+                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage);
+                    BulletManager.Instance.Remove(bullet);
                 }
             }
         }
@@ -121,25 +128,17 @@ namespace Lightweight
             sb.Draw(hitBoxTex, hitBox, Color.Pink);
         }
 
-        public bool Intersect(Rectangle rect)
-        {
-            if (hitBox.Intersects(rect))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void ITakeDamage(int damage, int defense)
+        public void ITakeDamage(int damage)
         {
             if (controller.IsRolling) { return; }
+
+            int defense = scraps;
+
+            if (defense < damage) { playerHealth -= (damage - defense); }
+
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
-            this.playerHealth = playerHealth - (damage - defense);
-            if(scraps > 0) scraps--;
+            if (scraps > 0) scraps--;
             immuneCounter = 0.5;
         }
 
@@ -151,9 +150,7 @@ namespace Lightweight
 
         public void Shoot(Vector2 origin, Vector2 target, int speed, int damage)
         {
-            if(scraps == 0) { return; }
-
-            immuneCounter = 0.5;
+            if (scraps == 0) { return; }
 
             scraps--;
 
@@ -166,19 +163,5 @@ namespace Lightweight
             // implement bullets list and add bullet to list
             BulletManager.Instance.Add(bullet);
         }
-
-        public void Move(Direction direction)
-        {
-            throw new NotImplementedException();
-        }
-
-        /*
-        public void Move(Direction dir)
-        {
-
-        }
-        */
-
-
     }
 }

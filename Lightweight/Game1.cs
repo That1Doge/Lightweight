@@ -57,7 +57,6 @@ namespace Lightweight
         private KeyboardState prevState;
         private Player player;
         private SpriteFont titleFont;
-        private int timeSurvived;
         private int playerStartX;
         private int playerStartY;
 
@@ -457,7 +456,6 @@ namespace Lightweight
             player.X = playerStartX;
             player.Y = playerStartY;
             EnemyManager.Instance.Enemies.Clear();
-            BulletManager.Instance.Bullets.Clear();
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)
             {
@@ -472,7 +470,6 @@ namespace Lightweight
         {
             player.X = playerStartX;
             player.Y = playerStartY;
-            EnemyManager.Instance.Scraps.Clear();
 
             if (!(player.PlayerHealth <= 0))
             {
@@ -483,7 +480,6 @@ namespace Lightweight
             {
                 player.PlayerHealth = 99999;
             }
-            player.Scraps = 10;
         }
 
     }

@@ -183,7 +183,7 @@ namespace Lightweight
                 for (int x = 0; x < 60; x++)
                 {
                     //Determines chance if tile will spawn trap/enemy 
-                    trapChance = rng.Next(1, 35);
+                    trapChance = rng.Next(1, 16);
 
                     //Builds border tile
                     if (x == 0)

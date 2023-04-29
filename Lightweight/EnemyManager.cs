@@ -55,7 +55,7 @@ namespace Lightweight
         {
             for(int i = 0; i < numSpawn; i++)
             {
-                enemies.Add(new Enemy(pos, new Animator(enemyAnims), hitBoxTex));
+                enemies.Add(new Enemy(LevelManager.Instance.Wave * 10,pos, new Animator(enemyAnims), hitBoxTex));
             }
         }
 
@@ -63,7 +63,7 @@ namespace Lightweight
         {
             for(int i = 0; i <= numSpawn; i++)
             {
-                scraps.Add(new Scrap(pos, new Animator(scrapAnims)));
+                scraps.Add(new Scrap(pos, new Animator(scrapAnims), 10));
             }
         }
 

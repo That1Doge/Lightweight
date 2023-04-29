@@ -41,7 +41,7 @@ namespace Lightweight
 
         public Vector2 Pos { get { return pos; } }
 
-        public Enemy(Vector2 pos, Animator anims, Texture2D hitBoxTex)
+        public Enemy(int enemyHealth, Vector2 pos, Animator anims, Texture2D hitBoxTex)
         {
             this.pos = pos;
             this.anims = anims;
@@ -49,14 +49,12 @@ namespace Lightweight
             hitBox = new Rectangle((int)pos.X + 4, (int)pos.Y + 4, 25, 25);
             this.hitBoxTex = hitBoxTex;
             shootTimer = 2;
-            this.enemyHealth = LevelManager.Instance.Wave * 10;
-            enemyDefense = LevelManager.Instance.Wave;
+            this.enemyHealth = enemyHealth;
         }
 
-        public void ITakeDamage(int damage, int defense)
+        public void ITakeDamage(int damage)
         {
-            //defense is half as effective on enemies
-            this.enemyHealth = enemyHealth - (damage - defense / 2);
+            enemyHealth -= damage;
             shotImmune = 0.5;
             if (enemyHealth <= 0)
             {
@@ -82,7 +80,7 @@ namespace Lightweight
                 {
                     if (!playerContact)
                     {
-                        player.ITakeDamage(10, 0);
+                        player.ITakeDamage(10);
                         damageTimer = 0.5;
                         playerContact = true;
                     }
@@ -91,7 +89,7 @@ namespace Lightweight
 
                     if (damageTimer <= 0)
                     {
-                        player.ITakeDamage(5, 0);
+                        player.ITakeDamage(5);
                         damageTimer = 0.5;
                     }
                 }
@@ -126,7 +124,7 @@ namespace Lightweight
                         && shotImmune <= 0)
                     {
                         BulletManager.Instance.Remove(bullet);
-                        ITakeDamage(bullet.Damage, enemyDefense);
+                        ITakeDamage(bullet.Damage);
                     }
                 }
             }

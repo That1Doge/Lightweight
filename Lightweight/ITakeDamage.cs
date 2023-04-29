@@ -17,6 +17,6 @@ namespace Lightweight
     /// </summary>
     internal interface ITakeDamage
     {
-        void ITakeDamage(int damage, int damageReduction);
+        void ITakeDamage(int damage);
     }
 }
