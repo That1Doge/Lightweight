@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,17 +29,13 @@ namespace Lightweight
         Texture2D leftWallTexture;
         bool isLoaded;
         Rectangle hitbox;
-        GraphicsDeviceManager _graphics;
-        int windowWidth;
-        int windowHeight;
         int yPosTile;
         List<Tile> floorTiles = new List<Tile>();
         List<Wall> walls = new List<Wall>();
         Random rng = new Random();
         int trapChance;
-        int enemyChance;
-        int attempt = 0;
         int wave;
+        bool loadedAlready;
 
         /// <summary>
         /// Property that returns if board is loaded
@@ -68,9 +65,8 @@ namespace Lightweight
             bottomWallTexture = bottomWall;
             leftWallTexture = leftWall;
             rightWallTexture = rightWall;
-            windowWidth = width;
-            windowHeight = height;
             isLoaded = false;
+            loadedAlready = false;
             wave = 0;
         }   
 
@@ -79,10 +75,10 @@ namespace Lightweight
         /// Files are 58*32
         /// </summary>
         /// <param name="filename">filename of desired load from file</param>
-        public void LoadLevel(string filename) 
+        public void LoadLevel() 
         {
             //Fields used in method
-            StreamReader input = new StreamReader(filename);
+            StreamReader input = new StreamReader("../../../Content/map/loadBoard.txt");
             string line = "";
             yPosTile = 0;
 
@@ -146,8 +142,13 @@ namespace Lightweight
         public void BuildLevel() 
         {
             //If board has been loaded, do not build a new board
-            if (isLoaded == true && wave != 1)
+            if (isLoaded == true)
             {
+                for (int i = 0; i < wave + 2; i++)
+                {
+                    EnemyManager.Instance.SpawnEnemies(1, new Vector2(rng.Next(13, 1910), rng.Next(12, 1065)));
+                }
+                wave++;
                 return;
             }
             //If board is not loaded and isn't clear, clear it

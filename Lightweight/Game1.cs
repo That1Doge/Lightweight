@@ -66,6 +66,8 @@ namespace Lightweight
         private SpriteFont titleFont;
         private Stopwatch timer;
         private int timeSurvived;
+        private int playerStartX;
+        private int playerStartY;
 
         /// <summary>
         /// Property that gets the window width
@@ -98,6 +100,8 @@ namespace Lightweight
             menuState = MenuStates.MainMenu;
             base.Initialize();
             timer = new Stopwatch();
+            playerStartX = (windowWidth / 2) - player.HitBox.Width;
+            playerStartY = windowHeight / 2;
         }
 
         protected override void LoadContent()
@@ -184,7 +188,7 @@ namespace Lightweight
                     {
                         if(levelManager.IsLoaded) 
                         {
-                            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+                            levelManager.LoadLevel();
                         }
                         else 
                         {
@@ -481,8 +485,8 @@ namespace Lightweight
         /// </summary>
         public void Reset()
         {
-            player.X = 400;
-            player.Y = 240;
+            player.X = playerStartX;
+            player.Y = playerStartY;
             EnemyManager.Instance.Enemies.Clear();
             
             // Changes health based on the GodMode setting
@@ -492,11 +496,6 @@ namespace Lightweight
             }
             levelManager.Wave = 0;
             levelManager.BuildLevel();
-            if (levelManager.IsLoaded)
-            {
-                if (levelManager.Wave > 1)
-                    levelManager.BuildLevel();
-            }
             player.Scraps = 10;
             timer.Reset();
         }
@@ -504,24 +503,18 @@ namespace Lightweight
 
         public void Continue() 
         {
-            player.X = 400;
-            player.Y = 240;
+            player.X = playerStartX;
+            player.Y = playerStartY;
 
             if (!(player.PlayerHealth <= 0))
             {
                 levelManager.BuildLevel();
-            }
-            if (levelManager.IsLoaded)
-            {
-                if (levelManager.Wave > 1)
-                    levelManager.BuildLevel();
             }
             // Changes health based on the GodMode setting
             if (godMode.IsOn)
             {
                 player.PlayerHealth = 99999;
             }
-
             player.Scraps = 10;
             timer.Reset();
         }
