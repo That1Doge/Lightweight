@@ -182,7 +182,14 @@ namespace Lightweight
                     
                     if (playButton.ButtonClicked())
                     {
-                        Reset();
+                        if(levelManager.IsLoaded) 
+                        {
+                            levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
+                        }
+                        else 
+                        {
+                            Reset();
+                        }
                         menuState = MenuStates.Gameplay;
                     }
                     else if (optionsButton.ButtonClicked())
@@ -211,7 +218,6 @@ namespace Lightweight
                     }
                     if (readFile.ButtonClicked()) 
                     {
-                        levelManager.LoadLevel("..\\..\\..\\testBoard.txt");
                         levelManager.IsLoaded = true;
                     }
 
@@ -242,17 +248,17 @@ namespace Lightweight
                         {
                             player.X = 5;
                         }
-                        else if (walls.Intersect(player.HitBox) && player.Y > 413) 
+                        else if (walls.Intersect(player.HitBox) && player.Y > 1015) 
                         {
-                            player.Y = 413;
+                            player.Y = 1015;
                         }
-                        else if (walls.Intersect(player.HitBox) && player.X > 751) 
+                        else if (walls.Intersect(player.HitBox) && player.X > 1877) 
                         { 
-                            player.X = 751;
+                            player.X = 1877;
                         }
                         else if (walls.Intersect(player.HitBox) && player.Y < 5) 
                         { 
-                            player.Y += 5;
+                            player.Y = 5;
                         }
                     }
 
@@ -421,6 +427,11 @@ namespace Lightweight
                     _spriteBatch.DrawString(buttonText, 
                         $"Health: {player.PlayerHealth}",
                         new Vector2(15, 50),
+                        Color.Black);
+
+                    _spriteBatch.DrawString(buttonText,
+                        $"Y: {player.Y}",
+                        new Vector2(15, 500),
                         Color.Black);
 
                     //Draws timer
