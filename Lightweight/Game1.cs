@@ -484,9 +484,9 @@ namespace Lightweight
                         30), Color.Black);
 
                     _spriteBatch.DrawString(buttonText, "All assets from OpenGameArt," +
-                                                                          "\n   Wall and Floor Tiles from Buch" +
-                                                                          "\n   Character from CraftPix.net" +
-                                                                          "\n   Trap from thrashplay",
+                                                                          "\n   Wall and Floor Tiles by Buch" +
+                                                                          "\n   Character asset by CraftPix.net" +
+                                                                          "\n   Trap asset by thrashplay",
                         new Vector2(windowWidth/2 - 260, 350), Color.Black);
 
                     break;
