@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
+    /// <summary>
+    /// Enumeration of player state
+    /// </summary>
     public enum PlayerState
     {
         FaceLeft,
