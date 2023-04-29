@@ -226,14 +226,10 @@ namespace Lightweight
                         menuState = MenuStates.MainMenu;
                     }
 
-                    //If read button 
-                    if (readFile.ButtonClicked()) 
+                    //If read button file is clickec, change indication to true
+                    if (readFile.ButtonClicked())
                     {
                         LevelManager.Instance.IsLoaded = true;
-                    }
-                    if(readFile.ButtonClicked() && LevelManager.Instance.IsLoaded == true) 
-                    {
-                        LevelManager.Instance.IsLoaded = false;
                     }
 
                     //God mode configuration
@@ -242,7 +238,7 @@ namespace Lightweight
                         if (godMode.IsOn)
                         {
                             // Maybe put something that sets a godMode setting to true and sets off
-                            //      what needs to be done
+                            // what needs to be done
                             player.PlayerHealth = 999999;   
                         }
                         else
@@ -250,8 +246,9 @@ namespace Lightweight
                             // Same thing applies here
                         }
                     }
-
                     break;
+
+                //Gameplay
                 case MenuStates.Gameplay:
                     player.Update(gameTime);
                     EnemyManager.Instance.Update(gameTime, player);
@@ -259,18 +256,25 @@ namespace Lightweight
                     //Wall collision
                     foreach (Wall walls in LevelManager.Instance.Walls) 
                     { 
+                        //Left wall
                         if (walls.Intersect(player.HitBox) && player.X < 5) 
                         {
                             player.X = 5;
                         }
+
+                        //Bottom wall
                         else if (walls.Intersect(player.HitBox) && player.Y > 1015) 
                         {
                             player.Y = 1015;
                         }
+
+                        //Right wall
                         else if (walls.Intersect(player.HitBox) && player.X > 1877) 
                         { 
                             player.X = 1877;
                         }
+
+                        //Top wall
                         else if (walls.Intersect(player.HitBox) && player.Y < 5) 
                         { 
                             player.Y = 5;
@@ -313,35 +317,53 @@ namespace Lightweight
                     {
                         menuState = MenuStates.GameOver;
                     }
+
+                    //When all enemies are defeated, advance to next screen
                     if(EnemyManager.Instance.Enemies.Count == 0)
                     {
                         menuState = MenuStates.WaveComplete;
                     }
                     break;
+
+                //Wave complete screen
                 case MenuStates.WaveComplete:
+
+                    //When continue button clicked, continue game
                     if (waveComplete.ButtonClicked()) 
                     {
                         Continue();
                         menuState = MenuStates.Gameplay;
                     }
                     break;
+
+                //Pause menu
                 case MenuStates.Pause:
+
+                    //Returns to gameplay 
                     if((Keyboard.GetState().IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
                         || pauseBack.ButtonClicked())
                     {
                         menuState = MenuStates.Gameplay;   
                     }
+
+                    //Returns to menu if clicked
                     if(backToMenu.ButtonClicked())
                     {
                         Reset();
                         menuState = MenuStates.MainMenu;
                     }
                     break;
+
+                //Game over screen
                 case MenuStates.GameOver:
+
+                    //Return to menu
                     if (menuButton.ButtonClicked())
                     {
                         menuState = MenuStates.MainMenu;
                     }
+
+                    //Retry game
                     else if (retryButton.ButtonClicked())
                     {
                         Reset();
@@ -349,7 +371,6 @@ namespace Lightweight
                     }
                     break;
             }
-            // TODO: Add your update logic here
             base.Update(gameTime);
 
             prevState = Keyboard.GetState();
@@ -360,11 +381,11 @@ namespace Lightweight
             GraphicsDevice.Clear(Color.SlateGray);
             _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+
             // Switch statement for what gets drawn to the screen
             switch (menuState)
             {
-
+                //Main menu
                 case MenuStates.MainMenu:
                     // Draws buttons to the play screen
                     playButton.Render(_spriteBatch, "PLAY", playButton.Rectangle);
@@ -374,9 +395,11 @@ namespace Lightweight
                     
                     // Draws the title of the game
                     _spriteBatch.DrawString(titleFont, "LIGHTWEIGHT", new Vector2(windowWidth/2 - (titleFont.MeasureString("LIGHTWEIGHT").X / 2), 30), Color.Black);
-                    
                     break;
+
+                //Instruction menu
                 case MenuStates.InstructionMenu:
+
                     // Draws the back button onto the instructions screen and writes how to play the game
                     instructionsBack.Render(_spriteBatch, "", instructionsBack.Rectangle);
                     _spriteBatch.DrawString(buttonText, "- Use W/ A/ S/ D to move" +
@@ -393,12 +416,16 @@ namespace Lightweight
                         new Vector2(windowWidth / 2 - (titleFont.MeasureString("INSTRUCTIONS").X / 2), 30),
                         Color.Black);
                     break;
+
+                //Options menu
                 case MenuStates.OptionsMenu:
+
                     // Draws all of the Options buttons to the options screen
                     optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
                     godMode.Draw(_spriteBatch, buttonText, "GOD MODE");
                     readFile.Render(_spriteBatch, "READ FROM FILE", readFile.Rectangle);
 
+                    //Draws indication of file reading if on/off
                     if (LevelManager.Instance.IsLoaded == true) 
                     {
                         _spriteBatch.DrawString(buttonText, 
@@ -414,13 +441,15 @@ namespace Lightweight
                                 Color.Black);
                     }
                  
+                    //Draws options text
                     _spriteBatch.DrawString(titleFont, 
                         "OPTIONS",
                         new Vector2(windowWidth / 2 - 
                         (titleFont.MeasureString("OPTIONS").X / 2), 
                         30), Color.Black);
-
                     break;
+
+                //Gameplay
                 case MenuStates.Gameplay:
                     GraphicsDevice.Clear(Color.Black);
 
@@ -455,7 +484,11 @@ namespace Lightweight
                         Color.Black);
 
                     break;
+
+                //Wave complete screen
                 case MenuStates.WaveComplete:
+
+                    //Draws wave completion to screen
                     _spriteBatch.DrawString(buttonText,
                         String.Format("Completed Wave {0}!",
                         LevelManager.Instance.Wave),
@@ -463,17 +496,24 @@ namespace Lightweight
                         Color.Black);
                     waveComplete.Render(_spriteBatch, "CONTINUE", waveComplete.Rectangle); 
                     break;
+
+                //Pause menu
                 case MenuStates.Pause:
+
                     // Draws the buttons for the pause menu
                     pauseBack.Render(_spriteBatch, "BACK", pauseBack.Rectangle);
                     backToMenu.Render(_spriteBatch, "BACK TO MENU", backToMenu.Rectangle);
                     _spriteBatch.DrawString(titleFont, "PAUSED", new Vector2(windowWidth / 2 - (titleFont.MeasureString("PAUSED").X / 2), 30), Color.Black);
                     break;
+
+                //Game Over Screen
                 case MenuStates.GameOver:
                     GraphicsDevice.Clear(Color.DarkRed);
+
                     // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
                     
+
                     if(LevelManager.Instance.Wave == 0)
                     {
                         _spriteBatch.DrawString(buttonText, $"Waves Survived: {LevelManager.Instance.Wave}",
@@ -500,15 +540,21 @@ namespace Lightweight
         /// </summary>
         public void Reset()
         {
+            //Resets player position
             player.X = playerStartX;
             player.Y = playerStartY;
+
+            //Clears enemy and bullet list
             EnemyManager.Instance.Enemies.Clear();
             BulletManager.Instance.Bullets.Clear();
+
             // Changes health based on the GodMode setting
             if (!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
             }
+
+            //Resets wave and builds level
             LevelManager.Instance.Wave = 0;
             LevelManager.Instance.BuildLevel();
         }
@@ -518,19 +564,23 @@ namespace Lightweight
         /// </summary>
         public void Continue() 
         {
+            //Resets player position
             player.X = playerStartX;
             player.Y = playerStartY;
-            EnemyManager.Instance.Scraps.Clear();
-
+            
+            //Rebuilds level
             if (!(player.PlayerHealth <= 0))
             {
                 LevelManager.Instance.BuildLevel();
             }
+
             // Changes health based on the GodMode setting
             if (godMode.IsOn)
             {
                 player.PlayerHealth = 99999;
             }
+
+            //Resets player scraps
             player.Scraps = 10;
         }
 
