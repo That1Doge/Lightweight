@@ -427,8 +427,18 @@ namespace Lightweight
                     GraphicsDevice.Clear(Color.DarkRed);
                     // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
-                    _spriteBatch.DrawString(buttonText, $"waves Survived: {LevelManager.Instance.Wave}", 
-                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"waves Survived: {LevelManager.Instance.Wave}").X / 2), 250), Color.Black);
+                    
+                    if(LevelManager.Instance.Wave == 0)
+                    {
+                        _spriteBatch.DrawString(buttonText, $"Waves Survived: {LevelManager.Instance.Wave}",
+                       new Vector2(windowWidth / 2 - (buttonText.MeasureString($"Waves Survived: {LevelManager.Instance.Wave - 1}").X / 2), 250), Color.Black);
+                    }
+                    else
+                    {
+                        _spriteBatch.DrawString(buttonText, $"Waves Survived: {LevelManager.Instance.Wave - 1}",
+                        new Vector2(windowWidth / 2 - (buttonText.MeasureString($"Waves Survived: {LevelManager.Instance.Wave - 1}").X / 2), 250), Color.Black);
+                    }
+                    
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
                     break;
