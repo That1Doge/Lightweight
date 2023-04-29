@@ -44,6 +44,9 @@ namespace Lightweight
         int attempt = 0;
         int wave;
 
+        /// <summary>
+        /// Instance of level manager
+        /// </summary>
         public static LevelManager Instance 
         { 
             get 
@@ -53,12 +56,14 @@ namespace Lightweight
             }
         }
 
-
         /// <summary>
         /// Property that returns if board is loaded
         /// </summary>
         public bool IsLoaded { get { return isLoaded; } set { isLoaded = value; } } 
 
+        /// <summary>
+        /// Property that returns the wave numebr
+        /// </summary>
         public int Wave { get { return wave; } set { wave = value; } }
 
         /// <summary>
@@ -69,6 +74,10 @@ namespace Lightweight
         /// <summary>
         /// Property that returns list of walls
         public List<Wall> Walls { get { return walls; } }
+
+        /// <summary>
+        /// Constructor of level manager
+        /// </summary>
         public LevelManager()
         {
             windowWidth = Game1.WindowWidth;
@@ -78,6 +87,10 @@ namespace Lightweight
             wave = 0;
         }   
 
+        /// <summary>
+        /// Loads content inside of level manager
+        /// </summary>
+        /// <param name="content">COntent</param>
         public void LoadContent(ContentManager content)
         {
             topWallTexture = content.Load<Texture2D>("topwall");

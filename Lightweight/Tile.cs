@@ -19,6 +19,7 @@ namespace Lightweight
     /// </summary>
     internal class Tile : GameObject, ICollidable
     {
+        //Fields used in class
         bool isTrap;
         Rectangle hitbox;
 
@@ -31,10 +32,17 @@ namespace Lightweight
         /// Y pos property
         /// </summary>
         public int Y { get { return this.rectangle.Y; } set { this.rectangle.Y = value; } }
+
+        /// <summary>
+        /// Hitbox property
+        /// </summary>
         public Rectangle HitBox { get { return hitbox; } }
+
+        /// <summary>
+        /// Returns if tile is trap or not
+        /// </summary>
         public bool IsTrap { get { return isTrap; } set { isTrap = value; } }
 
-        public Texture2D TileTexture { get { return texture; } set { texture = value; } }
         /// <summary>
         /// Tile parameterized constructor
         /// </summary>
@@ -65,8 +73,14 @@ namespace Lightweight
             sb.Draw(this.texture, this.rectangle, Color.White);
         }
 
+        /// <summary>
+        /// Method that deals with trap intersection
+        /// </summary>
+        /// <param name="hitbox">Hitbox to check</param>
+        /// <returns>If tile has been intersected with or not</returns>
         public bool Intersect(Rectangle hitbox)
         {
+            //If tile is trap and itnersected with, return true
             if (this.HitBox.Intersects(hitbox) && isTrap)
             {
                 return true;

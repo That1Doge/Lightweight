@@ -19,7 +19,16 @@ namespace Lightweight
     /// </summary>
     internal interface ICollidable
     {
+        /// <summary>
+        /// Hitbox property
+        /// </summary>
        public Rectangle HitBox { get; }
+
+        /// <summary>
+        /// Intersect method to be overridden
+        /// </summary>
+        /// <param name="hitbox">Hitbox to be checked</param>
+        /// <returns>Returns if intersected or not</returns>
        public bool Intersect(Rectangle hitbox);
     }
 }

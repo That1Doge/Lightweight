@@ -33,6 +33,7 @@ namespace Lightweight
     /// </summary>
     public class PlayerController
     {
+        //Fields used in class
         private Vector2 direction;
         private PlayerState playerState;
         private bool isRolling;
@@ -40,34 +41,60 @@ namespace Lightweight
         private KeyboardState prevKb;
         private MouseState prevMouse;
         private MouseState mouse;
-
         private Player player;
+
+        /// <summary>
+        /// Property that returns player
+        /// </summary>
         public Player Player
         {
             get { return player; }
             set { player = value; }
         }
 
+        /// <summary>
+        /// Property that returns direction
+        /// </summary>
         public  Vector2 Direction { get { return direction; } }
+
+        /// <summary>
+        /// Property that returns player state
+        /// </summary>
         public PlayerState PlayerState { get { return playerState; } }
 
+        /// <summary>
+        /// Property that returns whether player is rolling
+        /// </summary>
         public bool IsRolling 
         { 
             get { return isRolling; } 
             set { isRolling = value; } 
         }
 
+        /// <summary>
+        /// Parameterized constructor
+        /// </summary>
+        /// <param name="player">Player the class is handling</param>
         public PlayerController(Player player)
         {
             this.player = player;
             playerState = PlayerState.FaceRight;
         }
 
+        /// <summary>
+        /// Method that deals with single key pressed
+        /// </summary>
+        /// <param name="key">key to be pressed a single time</param>
+        /// <returns>If key is pressed once or not</returns>
         public bool SingleKeyPress(Keys key)
         {
             return prevKb.IsKeyUp(key) && kb.IsKeyDown(key);
         }
 
+        /// <summary>
+        /// Update method for player controller
+        /// </summary>
+        /// <param name="gt"></param>
         public void Update(GameTime gt)
         {
             prevKb = kb;
