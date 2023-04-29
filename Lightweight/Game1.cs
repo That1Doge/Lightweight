@@ -309,7 +309,6 @@ namespace Lightweight
                 case MenuStates.WaveComplete:
                     if (waveComplete.ButtonClicked()) 
                     {
-                        BulletManager.Instance.Bullets.Clear();
                         Continue();
                         menuState = MenuStates.Gameplay;
                     }
@@ -484,7 +483,7 @@ namespace Lightweight
         {
             player.X = playerStartX;
             player.Y = playerStartY;
-            // EnemyManager.Instance.Scraps.Clear();
+            EnemyManager.Instance.Scraps.Clear();
 
             if (!(player.PlayerHealth <= 0))
             {
@@ -495,7 +494,7 @@ namespace Lightweight
             {
                 player.PlayerHealth = 99999;
             }
-            // player.Scraps = 10;
+            player.Scraps = 10;
             timer.Reset();
         }
 
