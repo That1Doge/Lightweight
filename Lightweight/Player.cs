@@ -10,10 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     /// <summary>
-    /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
     /// Player Class 
     /// Creates player
     /// </summary>

@@ -118,8 +118,7 @@ namespace Lightweight
                 Player.Shoot(new Vector2(Player.HitBox.X, Player.HitBox.Y), mousePosition, 10, 10);
             }
             
-
-
+            //If player moves while rolling, move in direction
             if (!isRolling) direction = Vector2.Zero;
             if (kb.GetPressedKeyCount() > 0 && !isRolling)
             {
@@ -128,23 +127,28 @@ namespace Lightweight
                 if (kb.IsKeyDown(Keys.A)) direction.X--;
                 if (kb.IsKeyDown(Keys.D)) direction.X++;
             }
-
             if(direction != Vector2.Zero) { direction = Vector2.Normalize(direction); }
 
+            //FSM that deals with the player movement
             switch (playerState)
             {
+                //Facing left
                 case PlayerState.FaceLeft:
+
+                    //If player goes up, left, or right, run left
                     if (kb.IsKeyDown(Keys.A)
                         || kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.S))
                     {
                         playerState = PlayerState.RunLeft;
                     }
+
+                    //If right, run right
                     else if (kb.IsKeyDown(Keys.D))
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    //else if ((kb.IsKeyDown(Keys.Space)
-                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    
+                    //Rolling right
                     else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
@@ -152,18 +156,24 @@ namespace Lightweight
                         player.Scraps--;
                     }
                     break;
+
+                //Facing right
                 case PlayerState.FaceRight:
+
+                    //Player going left
                     if (kb.IsKeyDown(Keys.A))
                     {
                         playerState = PlayerState.FaceLeft;
                     }
+
+                    //Going up right, down face run right
                     else if (kb.IsKeyDown(Keys.D) ||
                         kb.IsKeyDown(Keys.W) || kb.IsKeyDown(Keys.S))
                     {
                         playerState = PlayerState.RunRight;
                     }
-                    //else if ((kb.IsKeyDown(Keys.Space)
-                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+
+                    //Rolling right
                     else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
@@ -171,18 +181,23 @@ namespace Lightweight
                         player.Scraps--;
                     }
                     break;
+
+                //Running left
                 case PlayerState.RunLeft:
+
+                    //Player going right
                     if (kb.IsKeyDown(Keys.D))
                     {
                         playerState = PlayerState.FaceRight;
                     }
+                    //Player stops running
                     else if (!kb.IsKeyDown(Keys.A) &&
                         !kb.IsKeyDown(Keys.W) && !kb.IsKeyDown(Keys.S))
                     {
                         playerState = PlayerState.FaceLeft;
                     }
-                    //else if ((kb.IsKeyDown(Keys.Space) || kb.IsKeyDown(Keys.LeftShift))
-                    //    && player.Scraps > 0)
+                    
+                    //Rolling while running
                     else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollLeft;
@@ -190,18 +205,24 @@ namespace Lightweight
                         player.Scraps--;
                     }
                     break;
+
+                //Running left
                 case PlayerState.RunRight:
+
+                    //Facing left
                     if (kb.IsKeyDown(Keys.A))
                     {
                         playerState = PlayerState.FaceLeft;
                     }
+
+                    //Player stops running
                     else if (!kb.IsKeyDown(Keys.D) &&
                         !kb.IsKeyDown(Keys.W) && !kb.IsKeyDown(Keys.S))
                     {
                         playerState = PlayerState.FaceRight;
                     }
-                    //else if ((kb.IsKeyDown(Keys.Space)
-                    //    || kb.IsKeyDown(Keys.LeftShift)) && player.Scraps > 0)
+                    
+                    //Rolling while running
                     else if ((SingleKeyPress(Keys.Space) || SingleKeyPress(Keys.LeftShift)) && player.Scraps > 0)
                     {
                         playerState = PlayerState.RollRight;
@@ -209,13 +230,21 @@ namespace Lightweight
                         player.Scraps--;
                     }
                     break;
+
+                //Rolling left
                 case PlayerState.RollLeft:
+
+                    //Stops rolling
                     if (!isRolling)
                     {
                         playerState = PlayerState.FaceLeft;
                     }
                     break;
+
+                //Rolling right
                 case PlayerState.RollRight:
+
+                    //Stops rolling
                     if (!isRolling)
                     {
                         playerState = PlayerState.FaceRight;

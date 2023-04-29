@@ -7,6 +7,7 @@ using System;
 /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
 /// Bullet Class 
 /// Creates projectile bullet
+/// Lightweight
 /// </summary>
 public class Bullet : GameObject
 {

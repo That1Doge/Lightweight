@@ -37,7 +37,6 @@ namespace Lightweight
         //Fields used within class
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
         private static int windowWidth;
         private static int windowHeight;
         private MenuStates menuState;

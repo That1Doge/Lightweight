@@ -38,10 +38,7 @@ namespace Lightweight
         List<Wall> walls = new List<Wall>();
         Random rng = new Random();
         private static LevelManager instance;
-        bool loadedAlready;
         int trapChance;
-        int enemyChance;
-        int attempt = 0;
         int wave;
 
         /// <summary>
@@ -83,7 +80,6 @@ namespace Lightweight
             windowWidth = Game1.WindowWidth;
             windowHeight = Game1.WindowHeight;
             isLoaded = false;
-            loadedAlready = false;
             wave = 0;
         }   
 

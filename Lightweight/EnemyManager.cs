@@ -9,14 +9,17 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     /// <summary>
-    /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
     /// Enemy Manager Class 
     /// Creates Enemy Manager
     /// </summary>
-    
     internal class EnemyManager
     {
         //Fields used in method

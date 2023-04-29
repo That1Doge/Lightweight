@@ -19,16 +19,28 @@ namespace Lightweight
     /// </summary>
     internal class PlayerAnimator : Animator
     {
+        //Instance of player
         private Player player;
 
+        /// <summary>
+        /// Parameterized constructor
+        /// </summary>
+        /// <param name="player">Player</param>
         public PlayerAnimator(Player player) 
             : base()
         {
             this.player = player;
         }
 
+        /// <summary>
+        /// Update method for player animator
+        /// </summary>
+        /// <param name="gt">Gametime</param>
+        /// <param name="key">Key</param>
+        /// <param name="fps">fps</param>
         public void Update(GameTime gt, object key, float fps)
         {
+            //Animates the player
             if(animations.ContainsKey(key))
             {
                 animations[key].Start();
@@ -48,6 +60,11 @@ namespace Lightweight
             }
         }
 
+        /// <summary>
+        /// Draw method for player animator
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
+        /// <param name="pos">Position</param>
         public void Draw(SpriteBatch sb, Vector2 pos)
         {
             animations[lastKey].Draw(sb, pos);
