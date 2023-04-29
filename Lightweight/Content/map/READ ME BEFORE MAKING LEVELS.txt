@@ -1,0 +1,12 @@
+Hello!
+
+Game boards are 58*32. This is to reflect the fact that the border is drawn automatically, to avoid having enemies and traps spawn on the walls.
+
+The following is the format for making levels:
+
+X - Normal tile
+O - Trap Tile
+E - Normal Spawn with Enemy placement on top
+
+Please make sure to check you have the right format! Otherwise, there will be issues when loading.
+Additionally, in loaded mode, the waves will continue on the same board with randomized enemy spawns.

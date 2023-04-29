@@ -109,6 +109,9 @@
 #begin map/loadBoard.txt
 /copy:map/loadBoard.txt
 
+#begin map/READ ME BEFORE MAKING LEVELS.txt
+/copy:map/READ ME BEFORE MAKING LEVELS.txt
+
 #begin placeholder_trap.png
 /importer:TextureImporter
 /processor:TextureProcessor

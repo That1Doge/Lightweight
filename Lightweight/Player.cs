@@ -93,7 +93,7 @@ namespace Lightweight
         public float Speed { get { return speed; } set { speed = value; } }
 
         //Fields used in class
-        private Vector2 position = new Vector2(400, 240);
+        private Vector2 position = new Vector2(929, 496);
         private float speed;
         private PlayerAnimator anims;
 
