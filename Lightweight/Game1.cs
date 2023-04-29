@@ -433,11 +433,6 @@ namespace Lightweight
                         new Vector2(15, 50),
                         Color.Black);
 
-                    _spriteBatch.DrawString(buttonText,
-                        $"Y: {player.Y}",
-                        new Vector2(15, 500),
-                        Color.Black);
-
                     //Draws timer
                     _spriteBatch.DrawString(buttonText,
                         $"Time: {timer.ElapsedMilliseconds/1000}",
