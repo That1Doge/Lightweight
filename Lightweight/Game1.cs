@@ -57,7 +57,6 @@ namespace Lightweight
         private KeyboardState prevState;
         private Player player;
         private SpriteFont titleFont;
-        private Stopwatch timer;
         private int timeSurvived;
         private int playerStartX;
         private int playerStartY;
@@ -91,7 +90,6 @@ namespace Lightweight
             player = new Player();
             menuState = MenuStates.MainMenu;
             base.Initialize();
-            timer = new Stopwatch();
             playerStartX = (windowWidth / 2) - player.HitBox.Width;
             playerStartY = windowHeight / 2;
         }
@@ -278,9 +276,6 @@ namespace Lightweight
                     //Puts total time on gameover screen
                     if (player.PlayerHealth <= 0) 
                     {
-                        timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
-                        timer.Stop();
-
                         menuState = MenuStates.GameOver;
                     }
 
@@ -288,18 +283,11 @@ namespace Lightweight
                     if(Keyboard.GetState().IsKeyDown(Keys.Escape) && 
                         prevState.IsKeyUp(Keys.Escape))
                     {
-                        timer.Stop();
                         menuState = MenuStates.Pause;
                     }
                     if(Keyboard.GetState().IsKeyDown(Keys.M))
                     {
                         menuState = MenuStates.GameOver;
-                        timeSurvived = (int)(timer.ElapsedMilliseconds / 1000);
-                        timer.Stop();
-                    }
-                    if(!timer.IsRunning)
-                    {
-                        timer.Start();
                     }
                     if(EnemyManager.Instance.Enemies.Count == 0)
                     {
@@ -317,7 +305,6 @@ namespace Lightweight
                     if((Keyboard.GetState().IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
                         || pauseBack.ButtonClicked())
                     {
-                        timer.Start();
                         menuState = MenuStates.Gameplay;   
                     }
                     if(backToMenu.ButtonClicked())
@@ -416,15 +403,9 @@ namespace Lightweight
                         new Vector2(15, 50),
                         Color.Black);
 
-                    //Draws timer
-                    _spriteBatch.DrawString(buttonText,
-                        $"Time: {timer.ElapsedMilliseconds/1000}",
-                        new Vector2(15, 90),
-                        Color.Black);
-
                     _spriteBatch.DrawString(buttonText, 
                         $"Wave: {LevelManager.Instance.Wave}", 
-                        new Vector2(15, 130), 
+                        new Vector2(15, 90), 
                         Color.Black);
 
                     break;
@@ -446,8 +427,18 @@ namespace Lightweight
                     GraphicsDevice.Clear(Color.DarkRed);
                     // Draws the needed items for the game over screen 
                     _spriteBatch.DrawString(titleFont, "GAME OVER", new Vector2(windowWidth / 2 - (titleFont.MeasureString("GAME OVER").X / 2), 30), Color.Black);
-                    _spriteBatch.DrawString(buttonText, $"Time Survived: {timeSurvived} seconds", 
-                        new Vector2(windowWidth/2 - (buttonText.MeasureString($"Time Survived: {timeSurvived} seconds").X / 2), 250), Color.Black);
+                    
+                    if(LevelManager.Instance.Wave == 0)
+                    {
+                        _spriteBatch.DrawString(buttonText, $"Waves Survived: {LevelManager.Instance.Wave}",
+                       new Vector2(windowWidth / 2 - (buttonText.MeasureString($"Waves Survived: {LevelManager.Instance.Wave - 1}").X / 2), 250), Color.Black);
+                    }
+                    else
+                    {
+                        _spriteBatch.DrawString(buttonText, $"Waves Survived: {LevelManager.Instance.Wave - 1}",
+                        new Vector2(windowWidth / 2 - (buttonText.MeasureString($"Waves Survived: {LevelManager.Instance.Wave - 1}").X / 2), 250), Color.Black);
+                    }
+                    
                     menuButton.Render(_spriteBatch, "MENU", menuButton.Rectangle);
                     retryButton.Render(_spriteBatch, "RETRY", retryButton.Rectangle);
                     break;
@@ -475,7 +466,6 @@ namespace Lightweight
             LevelManager.Instance.Wave = 0;
             LevelManager.Instance.BuildLevel();
             player.Scraps = 10;
-            timer.Reset();
         }
 
 
@@ -495,7 +485,6 @@ namespace Lightweight
                 player.PlayerHealth = 99999;
             }
             player.Scraps = 10;
-            timer.Reset();
         }
 
     }
