@@ -119,6 +119,7 @@ namespace Lightweight
             }
             
             //If player moves while rolling, move in direction
+
             if (!isRolling) direction = Vector2.Zero;
             if (kb.GetPressedKeyCount() > 0 && !isRolling)
             {
