@@ -1,14 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
@@ -68,6 +61,9 @@ namespace Lightweight
         private Texture2D crossHair;
         private int playerStartX;
         private int playerStartY;
+        private double damageTimer;
+        private Tile currentTrapTile;
+        private int trapDamage;
         #endregion
 
         // singleton fields
@@ -124,6 +120,8 @@ namespace Lightweight
             base.Initialize();
             playerStartX = (windowWidth / 2) - player.HitBox.Width;
             playerStartY = windowHeight / 2;
+            damageTimer = 0;
+            currentTrapTile = null;
         }
 
         protected override void LoadContent()
@@ -329,15 +327,37 @@ namespace Lightweight
                     //If player hits trap
                     foreach (Tile tile in LevelManager.Instance.FloorTiles)
                     {
-                        int damage = 0;
-                        if (tile.Intersect(player.HitBox) && tile.IsTrap && !player.Controller.IsRolling)
+                        // checks if player is on the current trap
+                        if (tile.Intersect(player.HitBox) && 
+                            tile.IsTrap && !player.Controller.IsRolling)
                         {
-                            damage += 1;
-                            player.ITakeDamage(damage);
+                            // If this tile is a new trap and not the one the player was on before
+                            if (currentTrapTile != tile)
+                            {
+                                currentTrapTile = tile;
+                                damageTimer = 0;
+                                trapDamage = 5;
+                            }
+
+                            // reduces damage timer
+                            damageTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+
+                            // when damage timer hits 0, trap does damage and increases next damage
+                            if (damageTimer <= 0)
+                            {
+                                trapDamage += 1;
+                                player.ITakeDamage(trapDamage);
+                                damageTimer = 0.25;
+                            }
                         }
-                        else
+
+                        // If the player has left the current trap tile
+                        else if (currentTrapTile == tile) 
                         {
-                            damage = 0;
+                            currentTrapTile = null;
+
+                            // Reset the damage timer
+                            damageTimer = 0; 
                         }
                     }
 
