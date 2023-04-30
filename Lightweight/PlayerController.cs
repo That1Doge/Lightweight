@@ -78,7 +78,6 @@ namespace Lightweight
                 prevMouse.LeftButton == ButtonState.Released &
                 mouse.X >= 0 && mouse.X <= Game1.WindowWidth &&
                 mouse.Y >= 0 && mouse.Y <= Game1.WindowHeight)
-                // TODO: make it so you don't shoot by clicking outside the game window (see above commment)
             {
                 // get current mouse pos
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
@@ -87,8 +86,6 @@ namespace Lightweight
                 Player.Shoot(new Vector2(Player.HitBox.X, Player.HitBox.Y), mousePosition, 10, 10);
             }
             
-
-
             if (!isRolling) direction = Vector2.Zero;
             if (kb.GetPressedKeyCount() > 0 && !isRolling)
             {
