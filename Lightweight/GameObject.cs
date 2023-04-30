@@ -14,15 +14,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Lightweight
 {
+    /// <summary>
+    /// Class that creates a base game object
+    /// </summary>
     public abstract class GameObject
     {
+        //Fields within GameObject
         protected Texture2D texture;
         protected Vector2 position;
         protected Rectangle rectangle;
         protected int windowWidth;
         protected int windowHeight;
         
-
+        /// <summary>
+        /// Parameterised constructor that uses Vector2
+        /// </summary>
+        /// <param name="texture">Texture</param>
+        /// <param name="position">Position</param>
         public GameObject(Texture2D texture, Vector2 position)
         {
             this.texture = texture;
@@ -40,8 +48,15 @@ namespace Lightweight
             this.rectangle = rectangle;
         }
 
+        /// <summary>
+        /// Update Method to be overridden
+        /// </summary>
         public abstract void Update();
 
+        /// <summary>
+        /// Draw method to be overridden
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
         public abstract void Draw(SpriteBatch sb);
     }
 }

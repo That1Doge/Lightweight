@@ -10,6 +10,12 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Bullet Class 
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
     /// <summary>
@@ -23,7 +29,8 @@ namespace Lightweight
         Gameplay,
         WaveComplete,
         GameOver,
-        Pause
+        Pause,
+        Credits
     }
 
     public class Game1 : Game
@@ -31,13 +38,13 @@ namespace Lightweight
         //Fields used within class
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
         private static int windowWidth;
         private static int windowHeight;
         private MenuStates menuState;
         private MenuButton playButton;
         private MenuButton optionsButton;
         private MenuButton quitButton;
+        private MenuButton creditsButton;
         private MenuButton menuButton;
         private MenuButton retryButton;
         private MenuButton optionsBack;
@@ -134,11 +141,13 @@ namespace Lightweight
             EnemyManager.Instance.LoadSpriteSheets(Content);
 
             // Loads all of the Menu buttons
-            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
-                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
+            playButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth/2 - buttonTexture.Width * 2, 
+                windowHeight / 2 - buttonTexture.Height  * 3, buttonTexture.Width * 4, buttonTexture.Height * 2));
             optionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
-                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
+                windowHeight / 2, buttonTexture.Width * 4, buttonTexture.Height * 2));
             instructionsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
+                windowHeight / 2 + (buttonTexture.Height * 3), buttonTexture.Width * 4, buttonTexture.Height * 2));
+            creditsButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
                 windowHeight / 2 + (buttonTexture.Height * 6), buttonTexture.Width * 4, buttonTexture.Height * 2));
             quitButton = new MenuButton(buttonTexture, buttonText, buttonRectangle = new Rectangle(windowWidth / 2 - buttonTexture.Width * 2,
                 windowHeight / 2 + (buttonTexture.Height * 9), buttonTexture.Width * 4, buttonTexture.Height * 2));
@@ -220,6 +229,12 @@ namespace Lightweight
                     {
                         Exit();
                     }
+
+                    // Goes to the credits menu
+                    else if(creditsButton.ButtonClicked())
+                    {
+                        menuState = MenuStates.Credits;
+                    }
                     break;
 
                 //Instruction menu
@@ -263,6 +278,14 @@ namespace Lightweight
                     }
                     break;
 
+                // Credits menu
+                case MenuStates.Credits:
+                    if(optionsBack.ButtonClicked())
+                    {
+                        menuState = MenuStates.MainMenu;
+                    }
+
+                    break;
                 //Gameplay
                 case MenuStates.Gameplay:
                     player.Update(gameTime);
@@ -398,6 +421,7 @@ namespace Lightweight
                     playButton.Render(_spriteBatch, "PLAY", playButton.Rectangle);
                     optionsButton.Render(_spriteBatch, "OPTIONS", optionsButton.Rectangle);
                     instructionsButton.Render(_spriteBatch, "INSTRUCTIONS", instructionsButton.Rectangle);
+                    creditsButton.Render(_spriteBatch, "CREDITS", creditsButton.Rectangle);
                     quitButton.Render(_spriteBatch, "QUIT", quitButton.Rectangle);
 
                     // Draws the title of the game
@@ -455,6 +479,24 @@ namespace Lightweight
                         (titleFont.MeasureString("OPTIONS").X / 2),
                         30), Color.Black);
                     break;
+
+                // Credits Menu
+                case MenuStates.Credits:
+                    optionsBack.Render(_spriteBatch, "", optionsBack.Rectangle);
+                    _spriteBatch.DrawString(titleFont,
+                        "CREDITS",
+                        new Vector2(windowWidth / 2 -
+                        (titleFont.MeasureString("CREDITS").X / 2),
+                        30), Color.Black);
+
+                    _spriteBatch.DrawString(buttonText, "All assets from OpenGameArt," +
+                                                                          "\n   Wall and Floor Tiles by Buch" +
+                                                                          "\n   Character asset by CraftPix.net" +
+                                                                          "\n   Trap asset by thrashplay",
+                        new Vector2(windowWidth/2 - 260, 350), Color.Black);
+
+                    break;
+
 
                 //Gameplay
                 case MenuStates.Gameplay:

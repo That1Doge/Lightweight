@@ -7,6 +7,7 @@ using System;
 /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
 /// Bullet Class 
 /// Creates projectile bullet
+/// Lightweight
 /// </summary>
 public class Bullet : GameObject
 {
@@ -15,10 +16,19 @@ public class Bullet : GameObject
     /// </summary>
     private Vector2 direction;
 
+    /// <summary>
+    /// Hitbox texture
+    /// </summary>
     private Texture2D hitBoxTex;
 
+    /// <summary>
+    /// Source of bullet
+    /// </summary>
     private IShoot source;
 
+    /// <summary>
+    /// Property that returns source of bullet
+    /// </summary>
     public IShoot Source { get { return source; } }
 
     /// <summary>
@@ -26,8 +36,14 @@ public class Bullet : GameObject
     /// </summary>
     private int speed;
 
+    /// <summary>
+    /// Damage
+    /// </summary>
     private int damage;
 
+    /// <summary>
+    /// Hotbox of bullet
+    /// </summary>
     private Rectangle hitBox;
 
     /// <summary>
@@ -35,10 +51,19 @@ public class Bullet : GameObject
     /// </summary>
     private bool isAlive;
 
+    /// <summary>
+    /// Property that returns if bullet is alive
+    /// </summary>
     public bool IsAlive{ get { return isAlive; } }
 
+    /// <summary>
+    /// Property that returns hitbox of bullet
+    /// </summary>
     public Rectangle HitBox { get { return hitBox; } }
 
+    /// <summary>
+    /// Property that returns damage
+    /// </summary>
     public int Damage { get { return damage; } }
 
     /// <summary>
@@ -61,7 +86,7 @@ public class Bullet : GameObject
     /// Collision method for bullet
     /// </summary>
     /// <param name="target">Desired target</param>
-    /// <returns></returns>
+    /// <returns>Returns if intersected with or not</returns>
     public bool Intersect(Rectangle target)
     {
         // Check if pos is inside rectangle bounds

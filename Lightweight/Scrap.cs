@@ -6,18 +6,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+    /// <summary>
+    /// Class that creates a scrap
+    /// </summary>
     public class Scrap
     {
+        //Fields used in method
         private Vector2 pos;
         private Rectangle hitBox;
         private Animator anim;
         private int value;
         private double despawnTimer;
 
+        /// <summary>
+        /// Property that returns hitbox of scrap
+        /// </summary>
         public Rectangle HitBox { get { return hitBox; } }
 
+        /// <summary>
+        /// Parameterized constructor
+        /// </summary>
+        /// <param name="pos">Position of scrap</param>
+        /// <param name="anim">Animation</param>
+        /// <param name="despawnTimer">Deswpawn timer</param>
+        /// <param name="value">How many scrap points the scrap is worth</param>
         public Scrap(int value, Vector2 pos, Animator anim, double despawnTimer = 5)
         {
             this.pos = pos;
@@ -27,10 +46,18 @@ namespace Lightweight
             hitBox = new Rectangle((int)pos.X + 6, (int)pos.Y, 18, 22);
         }
 
+        /// <summary>
+        /// Update method for scrap
+        /// </summary>
+        /// <param name="gt">Gametime</param>
+        /// <param name="player">Player isntance</param>
         public void Update(GameTime gt, Player player)
         {
+            //Despawn timer
             despawnTimer -= gt.ElapsedGameTime.TotalSeconds;
             if(despawnTimer <= 0) { EnemyManager.Instance.RemoveScrap(this); }
+
+            //Remove scrap if player picks it up
             if (hitBox.Intersects(player.HitBox)) 
             {
                 player.Scraps += value;
@@ -40,6 +67,10 @@ namespace Lightweight
             anim.Update(gt, 0);
         }
 
+        /// <summary>
+        /// Draw method for scrap
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
         public void Draw(SpriteBatch sb) 
         {
             anim.Draw(sb, pos);

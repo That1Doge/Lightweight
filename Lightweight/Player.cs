@@ -10,10 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
+    /// <summary>
+    /// Player Class 
+    /// Creates player
+    /// </summary>
     public class Player : ITakeDamage, ICollidable, IShoot
-    {        //Fields used in class
+    {        
+        //Fields used in class
         int playerHealth;
         int playerDefense;
         int scraps;
@@ -24,7 +34,14 @@ namespace Lightweight
         private double immuneCounter;
         private PlayerController controller;
 
+        /// <summary>
+        /// Property that returns player controller
+        /// </summary>
         public PlayerController Controller { get { return controller; } }
+
+        /// <summary>
+        /// Property that returns bullet text
+        /// </summary>
         public Texture2D BulletTex
         { get { return bulletTex; } }
 
@@ -48,23 +65,44 @@ namespace Lightweight
             set { playerDefense = value; }
         }
         
+        /// <summary>
+        /// Property that returns player position
+        /// </summary>
         public Vector2 Position { get { return position; } }
 
         /// <summary>
         /// Returns hitbox of player (for collision)
         /// </summary>
         public Rectangle HitBox { get { return hitBox; } }
+
+        /// <summary>
+        /// Property that returns X value of position of player
+        /// </summary>
         public int X { get { return (int)position.X; } set { position.X = value; } }
+
+        /// <summary>
+        /// Property that returns Y value of position of player
+        /// </summary>
         public int Y { get { return (int)position.Y; } set { position.Y = value; } }
 
+        /// <summary>
+        /// Get/set property of scrap
+        /// </summary>
         public int Scraps { get { return scraps; } set { scraps = value; } }
 
+        /// <summary>
+        /// Get/set property of player speed
+        /// </summary>
         public float Speed { get { return speed; } set { speed = value; } }
 
-        private Vector2 position = new Vector2(400, 240);
+        //Fields used in class
+        private Vector2 position = new Vector2(929, 496);
         private float speed;
         private PlayerAnimator anims;
 
+        /// <summary>
+        /// Parameterised constructor of Player
+        /// </summary>
         public Player()
         {
             scraps = 10;
@@ -75,6 +113,10 @@ namespace Lightweight
             anims = new PlayerAnimator(this);
         }
 
+        /// <summary>
+        /// Method that loads all player animations
+        /// </summary>
+        /// <param name="content">Content</param>
         public void LoadAnims(ContentManager content)
         {
             anims.AddAnimation(PlayerState.RunRight, new Animation(
@@ -88,6 +130,10 @@ namespace Lightweight
             hitBoxTex = content.Load<Texture2D>("hitbox");
         }
 
+        /// <summary>
+        /// Update method of player
+        /// </summary>
+        /// <param name="gt">Gametime</param>
         public void Update(GameTime gt)
         {
             controller.Update(gt);
@@ -128,6 +174,10 @@ namespace Lightweight
             }
         }
 
+        /// <summary>
+        /// Draw method of player
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, position);
@@ -149,6 +199,7 @@ namespace Lightweight
                 immuneCounter = 0.5;
             }
 
+
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             if (scraps > 0) scraps--;
@@ -159,10 +210,13 @@ namespace Lightweight
         /// </summary>
         /// <param name="origin">Coordinates of the origin</param>
         /// <param name="target">Coordinates of the target</param>
-
+        /// <param name="speed">Speed value</param>
+        /// <param name="damage">Damage value</param>
         public void Shoot(Vector2 origin, Vector2 target, int speed, int damage)
         {
-            if (scraps == 0) { return; }
+            if(scraps == 0) { return; }
+
+            immuneCounter = 0.5;
 
             scraps--;
 

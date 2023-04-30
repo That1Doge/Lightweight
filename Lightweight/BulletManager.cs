@@ -6,11 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
+/// <summary>
+/// Class that manages bullets
+/// </summary>
 public class BulletManager
 {
-    /// <summary>
-    /// List of active bullets
-    /// </summary>
+    //Fields used in class
     private List<Bullet> bullets = new List<Bullet>();
     private Texture2D bulletTexture;
     private Texture2D hitBoxTex;
@@ -19,6 +25,9 @@ public class BulletManager
 
     public bool Freeze { get { return freeze; }set { freeze = value; } }
 
+    /// <summary>
+    /// Instance of bullet manager
+    /// </summary>
     public static BulletManager Instance
     {
         get
@@ -34,12 +43,18 @@ public class BulletManager
         hitBoxTex = content.Load<Texture2D>("hitbox");
     }
 
+    /// <summary>
+    /// Get/set property for list of bullets
+    /// </summary>
     public List<Bullet> Bullets
     {
         get { return bullets; }
         set { bullets = value; }
     }
 
+    /// <summary>
+    /// Get/set propety for bullet texture
+    /// </summary>
     public Texture2D BulletTexture
     {
         get { return bulletTexture; }
@@ -51,6 +66,10 @@ public class BulletManager
         bullets.Add(new Bullet(source, origin, direction, speed, damage, hitBoxTex));
     }
     
+    /// <summary>
+    /// Method that removes a bullet from bullet list
+    /// </summary>
+    /// <param name="bullet">Bullet instance</param>
     public void Remove(Bullet bullet)
     {
         bullets.Remove(bullet);
