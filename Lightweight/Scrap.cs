@@ -13,16 +13,18 @@ namespace Lightweight
         private Vector2 pos;
         private Rectangle hitBox;
         private Animator anim;
+        private int value;
         private double despawnTimer;
 
         public Rectangle HitBox { get { return hitBox; } }
 
-        public Scrap(Vector2 pos, Animator anim, double despawnTimer = 5)
+        public Scrap(int value, Vector2 pos, Animator anim, double despawnTimer = 5)
         {
             this.pos = pos;
             this.despawnTimer = despawnTimer;
             this.anim = anim;
-            this.hitBox = new Rectangle((int)pos.X + 6, (int)pos.Y, 18, 22);
+            this.value = value;
+            hitBox = new Rectangle((int)pos.X + 6, (int)pos.Y, 18, 22);
         }
 
         public void Update(GameTime gt, Player player)
@@ -31,11 +33,9 @@ namespace Lightweight
             if(despawnTimer <= 0) { EnemyManager.Instance.RemoveScrap(this); }
             if (hitBox.Intersects(player.HitBox)) 
             {
-                if (player.Scraps < player.MaxScraps)
-                {
-                    player.Scraps++;
-                    EnemyManager.Instance.RemoveScrap(this);
-                }
+                player.Scraps += value;
+                if(player.Scraps > player.MaxScraps) { player.Scraps = player.MaxScraps; }
+                EnemyManager.Instance.RemoveScrap(this);
             }
             anim.Update(gt, 0);
         }

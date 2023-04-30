@@ -30,13 +30,12 @@ namespace Lightweight
         private Rectangle hitBox;
         private Animator anims;
         private EnemyState animState;
-        private Texture2D hitBoxTex;
         private double shootTimer;
         private double shotImmune;
         private double damageTimer;
+        private int damage;
         private bool playerContact;
         private double startTimer;
-        private int enemyDefense;
 
         /// <summary>
         /// Property that returns enemy hitbox
@@ -59,15 +58,16 @@ namespace Lightweight
         /// <param name="pos">Position</param>
         /// <param name="anims">Animations</param>
         /// <param name="hitBoxTex">Hitbox texture</param>
-        public Enemy(Vector2 pos, Animator anims, Texture2D hitBoxTex)
+        public Enemy(int enemyHealth, Vector2 pos, Animator anims)
         {
             this.pos = pos;
             this.anims = anims;
             speed = 5;
             hitBox = new Rectangle((int)pos.X + 4, (int)pos.Y + 4, 25, 25);
-            this.hitBoxTex = hitBoxTex;
             shootTimer = 2;
             this.enemyHealth = enemyHealth;
+            damage = (LevelManager.Instance.Wave + 1) * 3;
+            if(damage > 30) { damage = 30; }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Lightweight
         /// </summary>
         /// <param name="damage">Amount of damage being taken</param>
         /// <param name="defense">Amount of defense</param>
-        public void ITakeDamage(int damage, int defense)
+        public void ITakeDamage(int damage)
         {
             enemyHealth -= damage;
             shotImmune = 0.5;
@@ -138,7 +138,7 @@ namespace Lightweight
                 {
                     if (shootTimer <= 0)
                     {
-                        Shoot(hitBox.Center.ToVector2(), player.Position, 10, 10);
+                        Shoot(hitBox.Center.ToVector2(), player.Position, 10, damage);
                         shootTimer = 1.5;
                     }
                     else
@@ -175,17 +175,6 @@ namespace Lightweight
         }
 
         /// <summary>
-        /// Method that 
-        /// </summary>
-        /// <param name="hitbox">Hitbox</param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public bool Intersect(Rectangle hitbox)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Method that deals with enemy shooting
         /// </summary>
         /// <param name="origin">Origin of bullet</param>
@@ -198,10 +187,7 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(this, origin, direction, speed, damage);
-
-            // implement bullets list and add bullet to list
-            BulletManager.Instance.Add(bullet);
+            BulletManager.Instance.Add(this, origin, direction, speed, damage);
         }
 
         /// <summary>
@@ -211,7 +197,6 @@ namespace Lightweight
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, pos);
-            sb.Draw(hitBoxTex, HitBox, Color.Red);
         }
     }
 }

@@ -98,11 +98,17 @@ namespace Lightweight
             hitBox.X = (int)position.X + 5;
             hitBox.Y = (int)position.Y + 10;
 
-            if (controller.SingleKeyPress(Keys.P)) scraps++;
-            if (controller.SingleKeyPress(Keys.O) && scraps > 0) scraps--;
+            if (controller.SingleKeyPress(Keys.Q) && Game1.Instance.GodMode) scraps++;
+            if (controller.SingleKeyPress(Keys.E) && scraps > 0) scraps--;
+            if(controller.SingleKeyPress(Keys.P) && Game1.Instance.GodMode)
+            {
+                EnemyManager.Instance.Freeze = !EnemyManager.Instance.Freeze;
+                BulletManager.Instance.Freeze = !BulletManager.Instance.Freeze;
+            }
+
             if (controller.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
-            speed = 1f/(scraps+2);
-            anims.Update(gt, controller.PlayerState, (1f / (scraps+2)) * 128);
+            speed = 1.25f/(scraps+2);
+            anims.Update(gt, controller.PlayerState, (1.25f / (scraps+2)) * 128);
 
             if(immuneCounter > 0)
             {
@@ -125,7 +131,10 @@ namespace Lightweight
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, position);
-            sb.Draw(hitBoxTex, hitBox, Color.Pink);
+            if (Game1.Instance.GodMode)
+            {
+                sb.Draw(hitBoxTex, hitBox, Color.Pink);
+            }
         }
 
         public void ITakeDamage(int damage)
@@ -134,12 +143,15 @@ namespace Lightweight
 
             int defense = scraps;
 
-            if (defense < damage) { playerHealth -= (damage - defense); }
+            if (defense <= damage) 
+            { 
+                playerHealth -= (damage - defense);
+                immuneCounter = 0.5;
+            }
 
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
             if (scraps > 0) scraps--;
-            immuneCounter = 0.5;
         }
 
         /// <summary>
@@ -158,10 +170,7 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(this, origin, direction, speed, damage);
-
-            // implement bullets list and add bullet to list
-            BulletManager.Instance.Add(bullet);
+            BulletManager.Instance.Add(this, origin, direction, speed, damage);
         }
     }
 }
