@@ -22,6 +22,8 @@ namespace Lightweight
     /// </summary>
     public class Enemy : ITakeDamage, ICollidable, IShoot
     {
+
+        //Fields used in class
         private int enemyHealth;
         private Vector2 pos;
         private float speed;
@@ -36,12 +38,28 @@ namespace Lightweight
         private double startTimer;
         private int enemyDefense;
 
+        /// <summary>
+        /// Property that returns enemy hitbox
+        /// </summary>
         public Rectangle HitBox { get { return hitBox; } }
+
+        /// <summary>
+        /// Property that returns animations
+        /// </summary>
         public Animator Anims { get { return anims; } }
 
+        /// <summary>
+        /// Property that returns enemy position
+        /// </summary>
         public Vector2 Pos { get { return pos; } }
 
-        public Enemy(int enemyHealth, Vector2 pos, Animator anims, Texture2D hitBoxTex)
+        /// <summary>
+        /// Parameterized constructor of enemy
+        /// </summary>
+        /// <param name="pos">Position</param>
+        /// <param name="anims">Animations</param>
+        /// <param name="hitBoxTex">Hitbox texture</param>
+        public Enemy(Vector2 pos, Animator anims, Texture2D hitBoxTex)
         {
             this.pos = pos;
             this.anims = anims;
@@ -52,30 +70,48 @@ namespace Lightweight
             this.enemyHealth = enemyHealth;
         }
 
-        public void ITakeDamage(int damage)
+        /// <summary>
+        /// Method that deals damage to enemies
+        /// </summary>
+        /// <param name="damage">Amount of damage being taken</param>
+        /// <param name="defense">Amount of defense</param>
+        public void ITakeDamage(int damage, int defense)
         {
             enemyHealth -= damage;
             shotImmune = 0.5;
+
+            //Kills enemy
             if (enemyHealth <= 0)
             {
                 Die();
             }
         }
 
+        /// <summary>
+        /// Update method
+        /// </summary>
+        /// <param name="gt">Gametime</param>
+        /// <param name="player">Player instance</param>
         public void Update(GameTime gt, Player player)
         {
+
             startTimer -= gt.ElapsedGameTime.TotalSeconds;
             Vector2 direction = new Vector2(player.HitBox.X, player.HitBox.Y) - pos;
             direction.Normalize();
+
+            //Updates animation state
             if (direction.X > 0) { animState = EnemyState.RunRight; }
             else { animState = EnemyState.RunLeft; }
             anims.Update(gt, animState);
+
+
             if (startTimer <= 0)
             {
                 pos += direction * speed * (float)gt.ElapsedGameTime.TotalSeconds * 10f;
                 hitBox.X = (int)pos.X + 4;
                 hitBox.Y = (int)pos.Y + 4;
 
+                //Damages player if enemy intersects
                 if (HitBox.Intersects(player.HitBox))
                 {
                     if (!playerContact)
@@ -130,16 +166,32 @@ namespace Lightweight
             }
         }
 
+        /// <summary>
+        /// Method that kills enemy
+        /// </summary>
         public void Die()
         {
             EnemyManager.Instance.KillEnemy(this);
         }
 
+        /// <summary>
+        /// Method that 
+        /// </summary>
+        /// <param name="hitbox">Hitbox</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public bool Intersect(Rectangle hitbox)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Method that deals with enemy shooting
+        /// </summary>
+        /// <param name="origin">Origin of bullet</param>
+        /// <param name="target">Position of target</param>
+        /// <param name="speed">Speed of bullet</param>
+        /// <param name="damage">Damage of bullet</param>
         public void Shoot(Vector2 origin, Vector2 target, int speed, int damage)
         {
             // calculate direction to mouse pos
@@ -151,6 +203,11 @@ namespace Lightweight
             // implement bullets list and add bullet to list
             BulletManager.Instance.Add(bullet);
         }
+
+        /// <summary>
+        /// Draws enemy to screen
+        /// </summary>
+        /// <param name="sb">Spritebatcj</param>
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, pos);
