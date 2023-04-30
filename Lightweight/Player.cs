@@ -147,6 +147,31 @@ namespace Lightweight
             // press E to drop scraps
             if (controller.SingleKeyPress(Keys.E) && scraps > 0) scraps--;
 
+            // adjust speed with scraps
+            speed = 1.25f / maxScraps * ((float)(maxScraps - scraps) + 1);
+            anims.Update(gt, controller.PlayerState, (1.25f / (scraps + 2)) * 128);
+
+            // reduces immune timer if is immune to damage
+            if (immuneCounter > 0)
+            {
+                immuneCounter -= gt.ElapsedGameTime.TotalSeconds;
+            }
+
+            // checks for collision with each bullet
+            for (int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
+            {
+                // if is in contact with bullet, not dodging, not immune, and didn't shoot it
+                // takes damage, and removes bullet
+                Bullet bullet = BulletManager.Instance.Bullets[i];
+                if (hitBox.Intersects(bullet.HitBox)
+                    && immuneCounter <= 0 && !controller.IsRolling &&
+                   bullet.Source != this)
+                {
+                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage);
+                    BulletManager.Instance.Remove(bullet);
+                }
+            }
+
             // god mode controls 
             if (Game1.Instance.GodMode)
             {
@@ -164,7 +189,7 @@ namespace Lightweight
                 }
 
                 // [Enter] spawns enemies at mouse cursor
-                if (controller.SingleKeyPress(Keys.Enter)) 
+                if (controller.SingleKeyPress(Keys.Enter))
                 {
                     EnemyManager.Instance.SpawnEnemies(1, Mouse.GetState().Position.ToVector2());
                 }
@@ -178,7 +203,13 @@ namespace Lightweight
                 // I sets health to max
                 if (controller.SingleKeyPress(Keys.I))
                 {
-                    playerHealth = int.MaxValue;
+                    playerHealth = 999999;
+                }
+
+                // stops player from dying:
+                if(playerHealth <= 1)
+                {
+                    playerHealth = 1;
                 }
             }
             else
@@ -186,30 +217,6 @@ namespace Lightweight
                 freezeDamage = false;
             }
 
-            // adjust speed with scraps
-            speed = 1.25f / maxScraps * ((float)(maxScraps - scraps) + 1);
-            anims.Update(gt, controller.PlayerState, (1.25f / (scraps+2)) * 128);
-
-            // reduces immune timer if is immune to damage
-            if(immuneCounter > 0)
-            {
-                immuneCounter -= gt.ElapsedGameTime.TotalSeconds;
-            }
-
-            // checks for collision with each bullet
-            for(int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
-            {
-                // if is in contact with bullet, not dodging, not immune, and didn't shoot it
-                // takes damage, and removes bullet
-                Bullet bullet = BulletManager.Instance.Bullets[i];
-                if (hitBox.Intersects(bullet.HitBox)
-                    && immuneCounter <= 0 && !controller.IsRolling && 
-                   bullet.Source != this)
-                {
-                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage);
-                    BulletManager.Instance.Remove(bullet);
-                }
-            }
         }
 
         /// <summary>
