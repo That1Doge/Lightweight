@@ -10,18 +10,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+
 namespace Lightweight
 {
-    public class Player : IMove, ITakeDamage, ICollidable
-    {        //Fields used in class
+    /// <summary>
+    /// Player Class 
+    /// Creates player
+    /// </summary>
+    public class Player : ITakeDamage, ICollidable, IShoot
+    {        
+        //Fields used in class
         int playerHealth;
         int playerDefense;
         int scraps;
+        int maxScraps;
         private Rectangle hitBox;
         private Texture2D hitBoxTex;
         private Texture2D bulletTex;
         private double immuneCounter;
+        private PlayerController controller;
 
+        /// <summary>
+        /// Property that returns player controller
+        /// </summary>
+        public PlayerController Controller { get { return controller; } }
+
+        /// <summary>
+        /// Property that returns bullet text
+        /// </summary>
         public Texture2D BulletTex
         { get { return bulletTex; } }
 
@@ -34,6 +54,8 @@ namespace Lightweight
             set { playerHealth = value; }
         }
 
+        public int MaxScraps { get { return maxScraps; } }
+
         /// <summary>
         /// A get and set property for the player defense
         /// </summary>
@@ -43,31 +65,58 @@ namespace Lightweight
             set { playerDefense = value; }
         }
         
+        /// <summary>
+        /// Property that returns player position
+        /// </summary>
         public Vector2 Position { get { return position; } }
 
         /// <summary>
         /// Returns hitbox of player (for collision)
         /// </summary>
         public Rectangle HitBox { get { return hitBox; } }
+
+        /// <summary>
+        /// Property that returns X value of position of player
+        /// </summary>
         public int X { get { return (int)position.X; } set { position.X = value; } }
+
+        /// <summary>
+        /// Property that returns Y value of position of player
+        /// </summary>
         public int Y { get { return (int)position.Y; } set { position.Y = value; } }
 
+        /// <summary>
+        /// Get/set property of scrap
+        /// </summary>
         public int Scraps { get { return scraps; } set { scraps = value; } }
 
+        /// <summary>
+        /// Get/set property of player speed
+        /// </summary>
         public float Speed { get { return speed; } set { speed = value; } }
 
-        private Vector2 position = new Vector2(400, 240);
+        //Fields used in class
+        private Vector2 position = new Vector2(929, 496);
         private float speed;
-        private PlayerAnimator anims = new PlayerAnimator();
+        private PlayerAnimator anims;
 
+        /// <summary>
+        /// Parameterised constructor of Player
+        /// </summary>
         public Player()
         {
             scraps = 10;
+            maxScraps = 30;
             playerHealth = 100;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
-            PlayerController.Player = this;
+            controller = new PlayerController(this);
+            anims = new PlayerAnimator(this);
         }
 
+        /// <summary>
+        /// Method that loads all player animations
+        /// </summary>
+        /// <param name="content">Content</param>
         public void LoadAnims(ContentManager content)
         {
             anims.AddAnimation(PlayerState.RunRight, new Animation(
@@ -81,63 +130,79 @@ namespace Lightweight
             hitBoxTex = content.Load<Texture2D>("hitbox");
         }
 
+        /// <summary>
+        /// Update method of player
+        /// </summary>
+        /// <param name="gt">Gametime</param>
         public void Update(GameTime gt)
         {
-            PlayerController.Update(gt);
+            controller.Update(gt);
 
-            position += PlayerController.Direction * this.Speed
+            position += controller.Direction * this.Speed
                 * (float)gt.ElapsedGameTime.TotalSeconds * 1000f;
 
             hitBox.X = (int)position.X + 5;
             hitBox.Y = (int)position.Y + 10;
 
-            if (PlayerController.SingleKeyPress(Keys.P)) scraps++;
-            if (PlayerController.SingleKeyPress(Keys.O) && scraps > 0) scraps--;
-            if (PlayerController.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
-            speed = 1f/(scraps+2);
-            anims.Update(gt, PlayerController.PlayerState, (1f / (scraps+2)) * 128);
+            if (controller.SingleKeyPress(Keys.Q) && Game1.Instance.GodMode) scraps++;
+            if (controller.SingleKeyPress(Keys.E) && scraps > 0) scraps--;
+            if(controller.SingleKeyPress(Keys.P) && Game1.Instance.GodMode)
+            {
+                EnemyManager.Instance.Freeze = !EnemyManager.Instance.Freeze;
+                BulletManager.Instance.Freeze = !BulletManager.Instance.Freeze;
+            }
+
+            if (controller.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
+            speed = 1.25f/(scraps+2);
+            anims.Update(gt, controller.PlayerState, (1.25f / (scraps+2)) * 128);
 
             if(immuneCounter > 0)
             {
                 immuneCounter -= gt.ElapsedGameTime.TotalSeconds;
             }
 
-            for(int i = 0; i < BulletManager.Bullets.Count; i++)
+            for(int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
             {
-                if (hitBox.Intersects(BulletManager.Bullets[i].HitBox) && immuneCounter <= 0 && !PlayerController.IsRolling)
+                Bullet bullet = BulletManager.Instance.Bullets[i];
+                if (hitBox.Intersects(bullet.HitBox)
+                    && immuneCounter <= 0 && !controller.IsRolling && 
+                   bullet.Source != this)
                 {
-                    ITakeDamage(BulletManager.Bullets[i].Damage, 0);
-                    BulletManager.Remove(BulletManager.Bullets[i]);
+                    ITakeDamage(BulletManager.Instance.Bullets[i].Damage);
+                    BulletManager.Instance.Remove(bullet);
                 }
             }
         }
 
+        /// <summary>
+        /// Draw method of player
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
         public void Draw(SpriteBatch sb)
         {
             anims.Draw(sb, position);
-            sb.Draw(hitBoxTex, hitBox, Color.Pink);
-        }
-
-        public bool Intersect(Rectangle rect)
-        {
-            if (hitBox.Intersects(rect))
+            if (Game1.Instance.GodMode)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                sb.Draw(hitBoxTex, hitBox, Color.Pink);
             }
         }
 
-        public void ITakeDamage(int damage, int defense)
+        public void ITakeDamage(int damage)
         {
-            if (PlayerController.IsRolling) { return; }
+            if (controller.IsRolling) { return; }
+
+            int defense = scraps;
+
+            if (defense <= damage) 
+            { 
+                playerHealth -= (damage - defense);
+                immuneCounter = 0.5;
+            }
+
+
             //damage taken is reduced by defense of player,
             //possibly modified by armor or similar attributes
-            this.playerHealth = playerHealth - (damage - defense);
-            if(scraps > 0) scraps--;
-            immuneCounter = 0.5;
+            if (scraps > 0) scraps--;
         }
 
         /// <summary>
@@ -145,7 +210,8 @@ namespace Lightweight
         /// </summary>
         /// <param name="origin">Coordinates of the origin</param>
         /// <param name="target">Coordinates of the target</param>
-
+        /// <param name="speed">Speed value</param>
+        /// <param name="damage">Damage value</param>
         public void Shoot(Vector2 origin, Vector2 target, int speed, int damage)
         {
             if(scraps == 0) { return; }
@@ -158,24 +224,7 @@ namespace Lightweight
             Vector2 direction = Vector2.Normalize(target - origin);
 
             // instantiate bullet at the player's pos with the calculated direction
-            Bullet bullet = new Bullet(origin, direction, speed, damage);
-
-            // implement bullets list and add bullet to list
-            BulletManager.Add(bullet);
+            BulletManager.Instance.Add(this, origin, direction, speed, damage);
         }
-
-        public void Move(Direction direction)
-        {
-            throw new NotImplementedException();
-        }
-
-        /*
-        public void Move(Direction dir)
-        {
-
-        }
-        */
-
-
     }
 }

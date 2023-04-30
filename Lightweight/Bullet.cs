@@ -7,6 +7,7 @@ using System;
 /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
 /// Bullet Class 
 /// Creates projectile bullet
+/// Lightweight
 /// </summary>
 public class Bullet : GameObject
 {
@@ -15,15 +16,34 @@ public class Bullet : GameObject
     /// </summary>
     private Vector2 direction;
 
+    /// <summary>
+    /// Hitbox texture
+    /// </summary>
     private Texture2D hitBoxTex;
+
+    /// <summary>
+    /// Source of bullet
+    /// </summary>
+    private IShoot source;
+
+    /// <summary>
+    /// Property that returns source of bullet
+    /// </summary>
+    public IShoot Source { get { return source; } }
 
     /// <summary>
     /// Speed of the bullet per frame
     /// </summary>
     private int speed;
 
+    /// <summary>
+    /// Damage
+    /// </summary>
     private int damage;
 
+    /// <summary>
+    /// Hotbox of bullet
+    /// </summary>
     private Rectangle hitBox;
 
     /// <summary>
@@ -31,10 +51,19 @@ public class Bullet : GameObject
     /// </summary>
     private bool isAlive;
 
+    /// <summary>
+    /// Property that returns if bullet is alive
+    /// </summary>
     public bool IsAlive{ get { return isAlive; } }
 
+    /// <summary>
+    /// Property that returns hitbox of bullet
+    /// </summary>
     public Rectangle HitBox { get { return hitBox; } }
 
+    /// <summary>
+    /// Property that returns damage
+    /// </summary>
     public int Damage { get { return damage; } }
 
     /// <summary>
@@ -42,13 +71,14 @@ public class Bullet : GameObject
     /// </summary>
     /// <param name="position">The pos at which to instantiate the bullet</param>
     /// <param name="direction">The direction for the bullet to travel in</param>
-    public Bullet(Vector2 position, Vector2 direction, int speed,int damage) : base(BulletManager.BulletTexture, position)
+    public Bullet(IShoot source, Vector2 position, Vector2 direction, int speed,int damage, Texture2D hitBoxTex) : base(BulletManager.Instance.BulletTexture, position)
     {
         this.direction = direction;
         this.speed = speed;
         this.damage = damage;
+        this.source = source;
         isAlive = true;
-        hitBoxTex = texture;
+        this.hitBoxTex = hitBoxTex;
         hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, texture.Width, texture.Height);
     }
 
@@ -56,7 +86,7 @@ public class Bullet : GameObject
     /// Collision method for bullet
     /// </summary>
     /// <param name="target">Desired target</param>
-    /// <returns></returns>
+    /// <returns>Returns if intersected with or not</returns>
     public bool Intersect(Rectangle target)
     {
         // Check if pos is inside rectangle bounds
@@ -78,8 +108,8 @@ public class Bullet : GameObject
     /// </summary>
     public override void Update()
     {
-        // don't update if bullet isn't active
-        if (!isAlive) return;
+        // remove if bullet isn't active
+        if (!isAlive) BulletManager.Instance.Remove(this);
 
         // update the bullet's pos in the given direction
         position += direction * speed;
@@ -108,7 +138,5 @@ public class Bullet : GameObject
             texture, 
             position, 
             Color.White);
-
-        spriteBatch.Draw(hitBoxTex, hitBox, Color.Red);
     }
 }

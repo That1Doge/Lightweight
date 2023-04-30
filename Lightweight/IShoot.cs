@@ -11,22 +11,22 @@ using System.Threading.Tasks;
 /// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
 /// Lightweight
 /// </summary>
-
 namespace Lightweight
 {
     /// <summary>
     /// Shoot interface 
     /// This object can shoot
     /// </summary>
-    internal interface IShoot
+    public interface IShoot
     {
         /// <summary>
         /// Instantiate a new bullet object at this object's pos
         /// moving in the direction of the target object
         /// </summary>
-        /// <param name="texture">The texture to apply to the bullet</param>
         /// <param name="origin">The pos for the bullet to move towards</param>
         /// <param name="target">The pos for the bullet to move towards</param>
-        public void Shoot(Texture2D texture, Vector2 origin, Vector2 target);
+        /// <param name="speed">how fast the bullet moves</param>
+        /// <param name="damage">How much damage the bullet will do</param>
+        public void Shoot(Vector2 origin, Vector2 target, int speed, int damage);
     }
 }

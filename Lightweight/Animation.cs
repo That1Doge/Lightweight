@@ -6,8 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Samay Shah, Derek Kasmark, Dominic Lucarini, Ryan Noyes
+/// Lightweight
+/// </summary>
+/// 
 namespace Lightweight
 {
+    /// <summary>
+    /// Animation class
+    /// </summary>
     public class Animation
     {
         // texture data
@@ -42,6 +50,14 @@ namespace Lightweight
         // flip
         private SpriteEffects flip;
 
+        /// <summary>
+        /// Parameterized constructor for animation class
+        /// </summary>
+        /// <param name="spriteSheet">Spritesheet</param>
+        /// <param name="numFrames">Number of frames</param>
+        /// <param name="flip">Flip</param>
+        /// <param name="loop">Loop</param>
+        /// <param name="fps">Frames per second</param>
         public Animation(Texture2D spriteSheet, int numFrames,
             SpriteEffects flip = SpriteEffects.None, bool loop = true, float fps = 24)
         {
@@ -62,12 +78,28 @@ namespace Lightweight
             }
         }
 
+        /// <summary>
+        /// Start method
+        /// </summary>
         public void Start() { active = true; }
+
+        /// <summary>
+        /// Stop method
+        /// </summary>
         public void Stop() { active = false; }
+
+        /// <summary>
+        /// Reset Method
+        /// </summary>
         public void Reset() { frame = 0; totalTime = 0; }
 
+        /// <summary>
+        /// Update method for animation
+        /// </summary>
+        /// <param name="gt">Gametime</param>
         public void Update(GameTime gt)
         {
+            //Animation
             if(!active) return;
             frameTime = 1 / fps;
             totalTime += (float)gt.ElapsedGameTime.TotalSeconds;
@@ -83,6 +115,11 @@ namespace Lightweight
             }
         }
 
+        /// <summary>
+        /// Draw method for animation class
+        /// </summary>
+        /// <param name="sb">Spritebatch</param>
+        /// <param name="pos">Position</param>
         public void Draw(SpriteBatch sb, Vector2 pos)
         {
             sb.Draw(

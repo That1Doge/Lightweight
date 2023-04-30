@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 namespace Lightweight
 {
-
+    /// <summary>
+    /// Class that deals with walls
+    /// </summary>
     internal class Wall : GameObject, ICollidable
     {
         //Field used in class
