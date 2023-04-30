@@ -36,6 +36,7 @@ namespace Lightweight
     public class Game1 : Game
     {
         //Fields used within class
+        #region fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private static int windowWidth;
@@ -67,6 +68,9 @@ namespace Lightweight
         private Texture2D crossHair;
         private int playerStartX;
         private int playerStartY;
+        #endregion
+
+        // singleton fields
         private static Game1 instance;
 
         public static Game1 Instance
@@ -81,12 +85,12 @@ namespace Lightweight
         /// <summary>
         /// Property that gets the window width
         /// </summary>
-        public static int WindowWidth { get { return windowWidth; } }
+        public int WindowWidth { get { return windowWidth; } }
 
         /// <summary>
         /// Property that gets the window height
         /// </summary>
-        public static int WindowHeight { get { return windowHeight; } }
+        public int WindowHeight { get { return windowHeight; } }
 
         /// <summary>
         /// Property that returns the menu state
@@ -325,9 +329,15 @@ namespace Lightweight
                     //If player hits trap
                     foreach (Tile tile in LevelManager.Instance.FloorTiles)
                     {
+                        int damage = 0;
                         if (tile.Intersect(player.HitBox) && tile.IsTrap && !player.Controller.IsRolling)
                         {
-                            player.PlayerHealth -= 1;
+                            damage += 5;
+                            player.ITakeDamage(damage);
+                        }
+                        else
+                        {
+                            damage = 0;
                         }
                     }
 

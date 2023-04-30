@@ -33,6 +33,7 @@ namespace Lightweight
         private Texture2D bulletTex;
         private double immuneCounter;
         private PlayerController controller;
+        private bool freezeDamage;
 
         /// <summary>
         /// Property that returns player controller
@@ -136,33 +137,70 @@ namespace Lightweight
         /// <param name="gt">Gametime</param>
         public void Update(GameTime gt)
         {
+            // updates movement
             controller.Update(gt);
-
-            position += controller.Direction * this.Speed
+            position += controller.Direction * speed
                 * (float)gt.ElapsedGameTime.TotalSeconds * 1000f;
-
             hitBox.X = (int)position.X + 5;
             hitBox.Y = (int)position.Y + 10;
 
-            if (controller.SingleKeyPress(Keys.Q) && Game1.Instance.GodMode) scraps++;
+            // press E to drop scraps
             if (controller.SingleKeyPress(Keys.E) && scraps > 0) scraps--;
-            if(controller.SingleKeyPress(Keys.P) && Game1.Instance.GodMode)
+
+            // god mode controls 
+            if (Game1.Instance.GodMode)
             {
-                EnemyManager.Instance.Freeze = !EnemyManager.Instance.Freeze;
-                BulletManager.Instance.Freeze = !BulletManager.Instance.Freeze;
+                // P freezes enemies and bullets
+                if (controller.SingleKeyPress(Keys.P))
+                {
+                    EnemyManager.Instance.Freeze = !EnemyManager.Instance.Freeze;
+                    BulletManager.Instance.Freeze = !BulletManager.Instance.Freeze;
+                }
+
+                // O turns on/off damage
+                if (controller.SingleKeyPress(Keys.O))
+                {
+                    freezeDamage = !freezeDamage;
+                }
+
+                // [Enter] spawns enemies at mouse cursor
+                if (controller.SingleKeyPress(Keys.Enter)) 
+                {
+                    EnemyManager.Instance.SpawnEnemies(1, Mouse.GetState().Position.ToVector2());
+                }
+
+                // Q increases scraps
+                if (controller.SingleKeyPress(Keys.Q))
+                {
+                    scraps++;
+                }
+
+                // I sets health to max
+                if (controller.SingleKeyPress(Keys.I))
+                {
+                    playerHealth = int.MaxValue;
+                }
+            }
+            else
+            {
+                freezeDamage = false;
             }
 
-            if (controller.SingleKeyPress(Keys.Enter)) EnemyManager.Instance.SpawnEnemies(1, Vector2.Zero);
-            speed = 1.25f/(scraps+2);
+            // adjust speed with scraps
+            speed = 1.25f / maxScraps * ((float)(maxScraps - scraps) + 1);
             anims.Update(gt, controller.PlayerState, (1.25f / (scraps+2)) * 128);
 
+            // reduces immune timer if is immune to damage
             if(immuneCounter > 0)
             {
                 immuneCounter -= gt.ElapsedGameTime.TotalSeconds;
             }
 
+            // checks for collision with each bullet
             for(int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
             {
+                // if is in contact with bullet, not dodging, not immune, and didn't shoot it
+                // takes damage, and removes bullet
                 Bullet bullet = BulletManager.Instance.Bullets[i];
                 if (hitBox.Intersects(bullet.HitBox)
                     && immuneCounter <= 0 && !controller.IsRolling && 
@@ -189,19 +227,21 @@ namespace Lightweight
 
         public void ITakeDamage(int damage)
         {
-            if (controller.IsRolling) { return; }
+            // does nothing if player is rolling or has frozen damage
+            if (controller.IsRolling || freezeDamage) { return; }
 
+            // sets defens to scraps
             int defense = scraps;
 
+            // if defense <= damage, reduces damage by defense and health
+            // by leftover damage, and sets temporary immunity to damage for 0.5 seconds
             if (defense <= damage) 
             { 
                 playerHealth -= (damage - defense);
                 immuneCounter = 0.5;
             }
 
-
-            //damage taken is reduced by defense of player,
-            //possibly modified by armor or similar attributes
+            //reduces scraps
             if (scraps > 0) scraps--;
         }
 

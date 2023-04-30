@@ -30,6 +30,7 @@ namespace Lightweight
         private Rectangle hitBox;
         private Animator anims;
         private EnemyState animState;
+        private double shotRate;
         private double shootTimer;
         private double shotImmune;
         private double damageTimer;
@@ -58,15 +59,16 @@ namespace Lightweight
         /// <param name="pos">Position</param>
         /// <param name="anims">Animations</param>
         /// <param name="hitBoxTex">Hitbox texture</param>
-        public Enemy(int enemyHealth, int speed, Vector2 pos, Animator anims)
+        public Enemy(int enemyHealth, int speed, double shotRate, Vector2 pos, Animator anims)
         {
             this.pos = pos;
             this.anims = anims;
             this.enemyHealth = enemyHealth;
             this.speed = speed;
+            this.shotRate = shotRate;
 
             hitBox = new Rectangle((int)pos.X + 4, (int)pos.Y + 4, 25, 25);
-            shootTimer = 2;
+            shootTimer = shotRate;
             damage = (LevelManager.Instance.Wave + 1) * 3;
             if(damage > 30) { damage = 30; }
         }
@@ -122,14 +124,14 @@ namespace Lightweight
                     playerContact = true;
                 }
 
-                // starts counting down before next damage
+                // starts counting down before next damage (same amount of time as shotTimer)
                 damageTimer -= gt.ElapsedGameTime.TotalSeconds;
 
                 // 'hits' the player and starts damage timer for next 'hit'
                 if (damageTimer <= 0)
                 {
                     player.ITakeDamage(5);
-                    damageTimer = 0.5;
+                    damageTimer = shotRate;
                 }
             }
             else
@@ -145,7 +147,7 @@ namespace Lightweight
                 if (shootTimer <= 0)
                 {
                     Shoot(hitBox.Center.ToVector2(), player.Position, 10, damage);
-                    shootTimer = 1.5;
+                    shootTimer = shotRate;
                 }
                 else
                 {

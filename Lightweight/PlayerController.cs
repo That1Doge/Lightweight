@@ -107,9 +107,9 @@ namespace Lightweight
             // if LMB clicked, shoot bullet at mouse pos
             if (mouse.LeftButton == ButtonState.Pressed &&
                 prevMouse.LeftButton == ButtonState.Released &
-                mouse.X >= 0 && mouse.X <= Game1.WindowWidth &&
-                mouse.Y >= 0 && mouse.Y <= Game1.WindowHeight)
-                // TODO: make it so you don't shoot by clicking outside the game window (see above commment)
+                mouse.X >= 0 && mouse.X <= Game1.Instance.WindowWidth &&
+                mouse.Y >= 0 && mouse.Y <= Game1.Instance.WindowWidth)
+
             {
                 // get current mouse pos
                 Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);

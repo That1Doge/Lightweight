@@ -86,11 +86,19 @@ namespace Lightweight
         /// <param name="pos">Position of where to stawn them</param>
         public void SpawnEnemies(int numSpawn, Vector2 pos)
         {
+            // sets enemy speed, firing rate, and health
+            double enemyShotRate = 2.0 - LevelManager.Instance.Wave / 10;
+            int enemyHealth = LevelManager.Instance.Wave * 10;
+            int enemySpeed = LevelManager.Instance.Wave + 1;
+
+            // minum shot timer of 0.5, and max speed of 8
+            if (enemyShotRate < 0.5) enemyShotRate = 0.5;
+            if(enemySpeed > 8) enemySpeed = 8;
+
             //Spawns enemies based on parameters (enemies are faster and have more health every wave)
             for(int i = 0; i < numSpawn; i++)
             {
-                enemies.Add(new Enemy(LevelManager.Instance.Wave * 10, LevelManager.Instance.Wave + 1, 
-                    pos, new Animator(enemyAnims)));
+                enemies.Add(new Enemy(enemyHealth, enemySpeed, enemyShotRate, pos, new Animator(enemyAnims)));
             }
         }
 

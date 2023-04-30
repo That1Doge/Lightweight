@@ -77,8 +77,8 @@ namespace Lightweight
         /// </summary>
         public LevelManager()
         {
-            windowWidth = Game1.WindowWidth;
-            windowHeight = Game1.WindowHeight;
+            windowWidth = Game1.Instance.WindowWidth;
+            windowHeight = Game1.Instance.WindowHeight;
             isLoaded = false;
             wave = 0;
         }   

@@ -117,8 +117,8 @@ public class Bullet : GameObject
         hitBox.Y = (int)position.Y;
 
         // if the bullet has gone off-screen, remove from game
-        if (position.X < 0 || position.X > Game1.WindowWidth ||
-            position.Y < 0 || position.Y > Game1.WindowHeight)
+        if (position.X < 0 || position.X > Game1.Instance.WindowWidth ||
+            position.Y < 0 || position.Y > Game1.Instance.WindowHeight)
         {
             isAlive = false;
         }

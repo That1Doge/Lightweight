@@ -60,14 +60,5 @@ namespace Lightweight
             }
         }
 
-        /// <summary>
-        /// Draw method for player animator
-        /// </summary>
-        /// <param name="sb">Spritebatch</param>
-        /// <param name="pos">Position</param>
-        public void Draw(SpriteBatch sb, Vector2 pos)
-        {
-            animations[lastKey].Draw(sb, pos);
-        }
     }
 }
