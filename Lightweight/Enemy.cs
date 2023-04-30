@@ -58,14 +58,15 @@ namespace Lightweight
         /// <param name="pos">Position</param>
         /// <param name="anims">Animations</param>
         /// <param name="hitBoxTex">Hitbox texture</param>
-        public Enemy(int enemyHealth, Vector2 pos, Animator anims)
+        public Enemy(int enemyHealth, int speed, Vector2 pos, Animator anims)
         {
             this.pos = pos;
             this.anims = anims;
-            speed = 5;
+            this.enemyHealth = enemyHealth;
+            this.speed = speed;
+
             hitBox = new Rectangle((int)pos.X + 4, (int)pos.Y + 4, 25, 25);
             shootTimer = 2;
-            this.enemyHealth = enemyHealth;
             damage = (LevelManager.Instance.Wave + 1) * 3;
             if(damage > 30) { damage = 30; }
         }
@@ -94,74 +95,83 @@ namespace Lightweight
         /// <param name="player">Player instance</param>
         public void Update(GameTime gt, Player player)
         {
-
+            // waits [startTimer] time before moving
             startTimer -= gt.ElapsedGameTime.TotalSeconds;
             Vector2 direction = new Vector2(player.HitBox.X, player.HitBox.Y) - pos;
             direction.Normalize();
+            if(startTimer > 0) { return; }
 
             //Updates animation state
             if (direction.X > 0) { animState = EnemyState.RunRight; }
             else { animState = EnemyState.RunLeft; }
             anims.Update(gt, animState);
 
+            // moves towards player
+            pos += direction * speed * (float)gt.ElapsedGameTime.TotalSeconds * 10f;
+            hitBox.X = (int)pos.X + 4;
+            hitBox.Y = (int)pos.Y + 4;
 
-            if (startTimer <= 0)
+            //Damages player if enemy intersects
+            if (HitBox.Intersects(player.HitBox))
             {
-                pos += direction * speed * (float)gt.ElapsedGameTime.TotalSeconds * 10f;
-                hitBox.X = (int)pos.X + 4;
-                hitBox.Y = (int)pos.Y + 4;
-
-                //Damages player if enemy intersects
-                if (HitBox.Intersects(player.HitBox))
+                // hits player for 10dmg on first contact
+                if (!playerContact)
                 {
-                    if (!playerContact)
-                    {
-                        player.ITakeDamage(10);
-                        damageTimer = 0.5;
-                        playerContact = true;
-                    }
+                    player.ITakeDamage(10);
+                    damageTimer = 0.5;
+                    playerContact = true;
+                }
 
-                    damageTimer -= gt.ElapsedGameTime.TotalSeconds;
+                // starts counting down before next damage
+                damageTimer -= gt.ElapsedGameTime.TotalSeconds;
 
-                    if (damageTimer <= 0)
-                    {
-                        player.ITakeDamage(5);
-                        damageTimer = 0.5;
-                    }
+                // 'hits' the player and starts damage timer for next 'hit'
+                if (damageTimer <= 0)
+                {
+                    player.ITakeDamage(5);
+                    damageTimer = 0.5;
+                }
+            }
+            else
+            {
+                // when not in contact with player, sets contact to false
+                playerContact = false;
+            }
+
+            // if not in contact with player, starts to shoot at player
+            if (!playerContact)
+            {
+                // waits [shoot timer] seconds before shooting at player
+                if (shootTimer <= 0)
+                {
+                    Shoot(hitBox.Center.ToVector2(), player.Position, 10, damage);
+                    shootTimer = 1.5;
                 }
                 else
                 {
-                    playerContact = false;
+                    shootTimer -= gt.ElapsedGameTime.TotalSeconds;
                 }
+            }
 
-                if (!playerContact)
-                {
-                    if (shootTimer <= 0)
-                    {
-                        Shoot(hitBox.Center.ToVector2(), player.Position, 10, damage);
-                        shootTimer = 1.5;
-                    }
-                    else
-                    {
-                        shootTimer -= gt.ElapsedGameTime.TotalSeconds;
-                    }
-                }
+            // if is immortal (takes no damage after getting hit for [immune timer] seconds)
+            if (shotImmune > 0)
+            {
+                // counts down how long enemy is immune to damage
+                shotImmune -= gt.ElapsedGameTime.TotalSeconds;
+            }
 
-                if (shotImmune > 0)
+            // checks collisions with bullets
+            for (int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
+            {
+                // if not immune to damage and if didn't shoot the bullet
+                // removes bullet from bullet manager
+                Bullet bullet = BulletManager.Instance.Bullets[i];
+                if (hitBox.Intersects(bullet.HitBox)
+                    && bullet.Source != this
+                    && shotImmune <= 0)
                 {
-                    shotImmune -= gt.ElapsedGameTime.TotalSeconds;
-                }
-
-                for (int i = 0; i < BulletManager.Instance.Bullets.Count; i++)
-                {
-                    Bullet bullet = BulletManager.Instance.Bullets[i];
-                    if (hitBox.Intersects(bullet.HitBox) 
-                        && bullet.Source != this 
-                        && shotImmune <= 0)
-                    {
-                        BulletManager.Instance.Remove(bullet);
-                        ITakeDamage(bullet.Damage);
-                    }
+                    BulletManager.Instance.Remove(bullet);
+                    ITakeDamage(bullet.Damage);
                 }
             }
         }

@@ -86,10 +86,11 @@ namespace Lightweight
         /// <param name="pos">Position of where to stawn them</param>
         public void SpawnEnemies(int numSpawn, Vector2 pos)
         {
-            //Spawns enemies based on parameters
+            //Spawns enemies based on parameters (enemies are faster and have more health every wave)
             for(int i = 0; i < numSpawn; i++)
             {
-                enemies.Add(new Enemy(LevelManager.Instance.Wave * 10,pos, new Animator(enemyAnims)));
+                enemies.Add(new Enemy(LevelManager.Instance.Wave * 10, LevelManager.Instance.Wave + 1, 
+                    pos, new Animator(enemyAnims)));
             }
         }
 
