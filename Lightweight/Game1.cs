@@ -332,7 +332,7 @@ namespace Lightweight
                         int damage = 0;
                         if (tile.Intersect(player.HitBox) && tile.IsTrap && !player.Controller.IsRolling)
                         {
-                            damage += 5;
+                            damage += 1;
                             player.ITakeDamage(damage);
                         }
                         else
@@ -634,13 +634,7 @@ namespace Lightweight
             {
                 LevelManager.Instance.BuildLevel();
             }
-
-            // Changes health based on the GodMode setting
-            if (godMode.IsOn)
-            {
-                player.Scraps = 10;
-            }
-
+            player.Scraps = 10;
         }
     }
 }
