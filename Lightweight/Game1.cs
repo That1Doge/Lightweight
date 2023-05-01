@@ -632,7 +632,7 @@ namespace Lightweight
             if (!godMode.IsOn)
             {
                 player.PlayerHealth = 100;
-                player.Scraps = 10;
+                player.Scraps = 15;
             }
 
             //Resets wave and builds level
@@ -658,7 +658,7 @@ namespace Lightweight
             {
                 LevelManager.Instance.BuildLevel();
             }
-            player.Scraps = 10;
+            player.Scraps = 15;
         }
     }
 }

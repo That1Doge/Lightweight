@@ -106,7 +106,7 @@ namespace Lightweight
         /// </summary>
         public Player()
         {
-            scraps = 10;
+            scraps = 15;
             maxScraps = 30;
             playerHealth = 100;
             hitBox = new Rectangle((int)position.X + 5, (int)position.Y + 10, 31, 44);
