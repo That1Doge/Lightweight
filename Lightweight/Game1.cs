@@ -649,6 +649,10 @@ namespace Lightweight
             player.X = playerStartX;
             player.Y = playerStartY;
 
+            //Clears enemy and bullet list
+            EnemyManager.Instance.Enemies.Clear();
+            BulletManager.Instance.Bullets.Clear();
+
             // Rebuilds level
             if (!(player.PlayerHealth <= 0))
             {

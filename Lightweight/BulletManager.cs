@@ -75,6 +75,14 @@ public class BulletManager
         bullets.Remove(bullet);
     }
 
+    /// <summary>
+    /// Removes all active player and enemy bullets from the game
+    /// </summary>
+    public void Clear()
+    {
+        bullets.Clear();
+    }
+
     public void Update(GameTime gt)
     {
         if(!Game1.Instance.GodMode) freeze = false;
